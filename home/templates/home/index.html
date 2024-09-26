@@ -4,22 +4,66 @@
 {% block page_header %}
     <div class="container header-container">
         <div class="row">
-            <div class="col"></div>
+          <div id="header-text" class="col text-center">
+            <div class="col"><h1>COFFEE AND HONEY</h1></div>
+            <div class="col"><h2>Your local independent coffee shop</h2></div>
+          </div>
         </div>
     </div>
 {% endblock %}
 
 {% block content %}
-    <h1 class="display-4 text-success">COFFEE HONEY CAKE</h1>
-        <div class="container">
-            <div class="row">
-                <div class="col-7 col-md-6 my-auto">
-                    <h1 class="display-4 logo-font text-black">COFFEE AND HONEY</h1>
-                    <h2 class="display-4 logo-font text-black">coffee - honey - cake</h2>
-                </div>
-                <div class="my-5">
-                    <a href="" class="shop-now-button btn btn-lg rounded-0 text-uppercase py-3">Explore Our Shop</a>
-                </div>
-            </div>
+<div class="container">
+    <!-- Mobile Small: Each section takes up full width -->
+    <!-- Mobile Medium/Tablet: Use different layout -->
+    
+    <!-- Coffee Section -->
+    <div class="row">
+      <div class="col-12 col-md-6"> <!-- Full width on small screens, half on medium -->
+        <div class="section" id="coffee">
+          <!-- Content for coffee -->
+           <h1>COFFEE</h1>
         </div>
+      </div>
+  
+      <!-- Honey Section -->
+      <div class="col-12 col-md-6"> <!-- Full width on small screens, half on medium -->
+        <div class="section" id="honey">
+          <!-- Content for honey -->
+          <h1>HONEY</h1>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Visit Us Section -->
+    <div class="row">
+      <div class="col-12"> <!-- Full width for all screen sizes -->
+        <div class="section" id="visit-us">
+          <!-- Content for Visit Us -->
+          <h1>VISIT US</h1>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Function Room Section -->
+    <div class="row">
+      <div class="col-12"> <!-- Full width for all screen sizes -->
+        <div class="section" id="function-room">
+          <!-- Content for Function Room -->
+          <h1>FUNCTION ROOM</h1>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Hive Tour Booking Section -->
+    <div class="row">
+      <div class="col-12"> <!-- Full width on small, could adjust on larger -->
+        <div class="section" id="hive-tour">
+          <!-- Content for Hive Tour Booking -->
+          <h1>HIVE TOUR</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 {% endblock %}

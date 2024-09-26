@@ -3,12 +3,34 @@ html {
 }
 
 body {
-    background: url('/media/homepage.webp') no-repeat center center fixed;
+    background: url('') no-repeat center center fixed;
     background-size: cover;
     height: calc(100vh - 164px);
     color: #555;
     font-family: 'Solitreo';
 }
+
+.header-container {
+    padding: 20px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    font: black;
+    text-align: center;
+    background-color: #f8f9fa;
+    background-color: white;
+}
+
+.section {
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    text-align: left;
+  }
+
+  #main-nav {
+    padding: 20px;
+  }
 
 /* from Bulma */
 .icon {
@@ -56,6 +78,15 @@ body {
     border: 1px solid black !important;
 }
 
+/* The footer */
+footer {
+    background-color: whitesmoke;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    width: 100%;
+  }
+
 /* -------------------------------- Media Queries */
 
 /* Slightly larger container on xl screens */
@@ -77,5 +108,32 @@ body {
 
     .header-container {
         padding-top: 164px;
+    }
+}
+
+/* Fix navbar position for larger screens (laptops and desktops) */
+@media (min-width: 992px) {
+    .header-text-section {
+        margin-top: 60px; /* Adjust as per the height of your fixed-top header */
+        z-index: 100;
+    }
+
+    .navbar {
+        margin-top: 0; /* Make sure the navbar is placed immediately below the header text */
+    }
+
+    .navbar-collapse {
+        justify-content: center;
+    }
+}
+
+/* Ensure mobile view is unaffected */
+@media (max-width: 991px) {
+    .header-text-section {
+        display: none;
+    }
+
+    .navbar {
+        margin-top: 0;
     }
 }
