@@ -3,17 +3,21 @@ html {
 }
 
 body {
+    background: url('') no-repeat center center fixed;
+    background-size: cover;
+    height: calc(100vh - 164px);
     color: #555;
     font-family: 'Solitreo';
-    background-color: olive;
 }
 
 .header-container {
     padding: 20px;
+    margin-top: 50px;
     margin-bottom: 20px;
     font: black;
     text-align: center;
-    background-color: whitesmoke;
+    background-color: #f8f9fa;
+    background-color: white;
 }
 
 .section {
