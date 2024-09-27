@@ -15,14 +15,16 @@ body {
     background-color: whitesmoke;
 }
 
-#home-container {
-    margin-top: 200px;
-}
-
 #navbar {
     margin-bottom: 20px;
     background-color: whitesmoke;
 }
+
+#home-container {
+    margin-top: 200px;
+}
+
+
 
 .section {
     padding: 20px;
