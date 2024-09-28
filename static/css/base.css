@@ -24,8 +24,6 @@ body {
     margin-top: 200px;
 }
 
-
-
 .section {
     padding: 20px;
     margin-bottom: 20px;
@@ -38,6 +36,17 @@ body {
     width: 100%;  /* or set a specific width */
     height: auto; /* The height will adjust based on the width */
 }
+
+.overlay {
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    background: goldenrod;
+    z-index: 0;
+}
+
 
 /* from Bulma */
 .icon {
