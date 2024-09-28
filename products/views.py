@@ -2,22 +2,20 @@ from django.shortcuts import render, get_object_or_404
 from .models import Category, Product, ProductVariant, Service
 
 
-# Create your views here.
-
-# All products view with filtering 
+# All products plus filtering by category & name  
 
 def all_products(request):
     """ A view to display all products, plus sort and search queries """
     
-    category = request.GET.get('category', None)  # Get category from URL query parameters
-    product_name = request.GET.get('name', None)  # Get product name from URL query parameters
+    category = request.GET.get('category', None) 
+    product_name = request.GET.get('name', None)
 
     if category:
-        products = Product.objects.filter(category__name__icontains=category)  # Filter by category name
+        products = Product.objects.filter(category__name__icontains=category)  # Filter by category
     elif product_name:
-        products = Product.objects.filter(name__icontains=product_name)  # Filter by product name
+        products = Product.objects.filter(name__icontains=product_name)  # Filter by product
     else:
-        products = Product.objects.all()  # Show all products if no filter is selected
+        products = Product.objects.all()
 
     context = {
         'products': products,
@@ -26,6 +24,7 @@ def all_products(request):
     }
 
     return render(request, 'products/products.html', context)
+
 
 # Product Detail Page
 
