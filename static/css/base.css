@@ -9,7 +9,6 @@ body {
 }
 
 .header-container {
-    padding: 5px;
     font: black;
     text-align: center;
     background-color: whitesmoke;
@@ -29,10 +28,23 @@ body {
     text-decoration: underline;
 }
 
-#navbar {
-    margin: 0;
-    background-color: whitesmoke;
+#shopping-bag {
+        position: absolute;
+        top: 10px; /* adjust the distance from the top */
+        right: 20px; /* adjust the distance from the right */
 }
+
+#navbar .navbar-nav {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: whitesmoke;
+  }
+  
+.navbar {
+      margin-bottom: 0;
+      background-color: whitesmoke;
+  }
 
 #home-container {
     margin-top: 200px;

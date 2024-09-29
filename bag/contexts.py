@@ -11,27 +11,48 @@ def bag_contents(request):
     bag = request.session.get('bag', {})
 
     for item_id, item_data in bag.items():
-        if isinstance(item_data, int):
-            product = get_object_or_404(Product, pk=item_id)
-            total += item_data * product.price
-            product_count += item_data
-            bag_items.append({
-                'item_id': item_id,
-                'quantity': item_data,
-                'product': product,
-            })
+        product = get_object_or_404(Product, pk=item_id)
+
+        # Handling variants or no-variants cases
+        if product.variants.exists():
+            # Handle variant-specific logic
+            if isinstance(item_data, int):
+                variant = product.variants.first()
+                if variant and variant.price:
+                    total += item_data * variant.price
+                    bag_items.append({
+                        'item_id': item_id,
+                        'quantity': item_data,
+                        'product': product,
+                        'variant': variant,
+                    })
+                else:
+                    print(f"Error: No price found for variant {variant}")
+            else:
+                for size, quantity in item_data['items_by_size'].items():
+                    variant = product.variants.get(weight=size)
+                    if variant and variant.price:
+                        total += quantity * variant.price
+                        bag_items.append({
+                            'item_id': item_id,
+                            'quantity': quantity,
+                            'product': product,
+                            'variant': variant,
+                            'size': size,
+                        })
+                    else:
+                        print(f"Error: No price found for variant {variant}")
         else:
-            product = get_object_or_404(Product, pk=item_id)
-            for size, quantity in item_data['items_by_size'].items():
-                total += quantity * product.price
-                product_count += quantity
+            # Handle products without variants
+            if product.price:
+                total += item_data * product.price
                 bag_items.append({
                     'item_id': item_id,
-                    'quantity': quantity,
+                    'quantity': item_data,
                     'product': product,
-                    'size': size,
                 })
-
+            else:
+                print(f"Error: No price found for product {product.name}")
 
     if total < settings.FREE_DELIVERY_THRESHOLD:
         delivery = total * Decimal(settings.STANDARD_DELIVERY_PERCENTAGE / 100)
@@ -42,7 +63,7 @@ def bag_contents(request):
     
     grand_total = delivery + total
 
-    context= {
+    context = {
         'bag_items': bag_items,
         'total': total,
         'product_count': product_count,

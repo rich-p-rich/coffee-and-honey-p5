@@ -45,63 +45,69 @@
 
     <title>COFFEE AND HONEY {% block extra_title %}{% endblock %}</title>
 </head>
+
 <body>
-  <header class="container-fluid fixed-top">
-      <!-- Header -->
-      <div class="row">
-          <!-- Header Text -->
-          <div id="header-text" class="col-12 text-center header-container py-2">
-              <a href="{% url 'home' %}">
-                  <h1>COFFEE AND HONEY</h1>
-                  <h2>Your local independent coffee shop</h2>
-              </a>
-          </div>
+    <!-- Header -->
+    <header class="container-fluid fixed-top header-container">
+        <div class="row align-items-center">
+            <div id="header-text" class="col-12 text-center py-2">
+                <a href="{% url 'home' %}">
+                    <h1>COFFEE AND HONEY</h1>
+                    <h2>Your local independent coffee shop</h2>
+                </a>
+            </div>
+        </div>
 
-          <!-- Navbar -->
-          <div id="navbar" class="container-fluid">
-              <nav class="navbar navbar-expand-lg navbar-light w-100">
-                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav"
-                      aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
-                      <span class="navbar-toggler-icon"></span>
-                  </button>
-                  {% include 'includes/main-nav.html' %}
-              </nav>
-          </div>
-      </div>
-      <div class="col-12 col-lg-4 my-auto py-1 py-lg-0">
+    <!--Navbar -->
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav"
+                aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            {% include 'includes/main-nav.html' %}
+        </div>
+    </nav>
+</header>
 
-          <ul class="list-inline list-unstyled text-center text-lg-right my-0">
-              <li class="list-inline-item">
-                  <a class="{% if grand_total %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link"
-                      href="{% url 'view_bag' %}">
-                      <div class="text-center">
-                          <div><i class="fas fa-shopping-bag fa-lg"></i></div>
-                          <p class="my-0">
-                              {% if grand_total %}
-                              ${{ grand_total|floatformat:2 }}
-                              {% else %}
-                              $0.00
-                              {% endif %}
-                          </p>
-                      </div>
-                  </a>
-              </li>
-          </ul>
-      </div>
-  </header>
+    <!-- Shopping bag -->
+    <div class="container-fluid mt-5">
+        <div class="row justify-content-end">
+            <div class="col-auto text-right py-2">
+                <ul class="list-inline list-unstyled my-0">
+                    <li class="list-inline-item">
+                        <a class="{% if grand_total %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link"
+                            href="{% url 'view_bag' %}">
+                            <div class="text-center">
+                                <div><i class="fas fa-shopping-bag fa-lg"></i></div>
+                                <p class="my-0">
+                                    {% if grand_total %}
+                                    ${{ grand_total|floatformat:2 }}
+                                    {% else %}
+                                    $0.00
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
-  {% if messages %}
-      <div class="message-container"></div>
-  {% endif %}
+    {% if messages %}
+    <div class="message-container"></div>
+    {% endif %}
 
-  {% block page_header %}
-  {% endblock %}
+    {% block page_header %}
+    {% endblock %}
 
-  {% block content %}
-  {% endblock %}
+    {% block content %}
+    {% endblock %}
 
-  {% block postloadjs %}
-  {% endblock %}
+    {% block postloadjs %}
+    {% endblock %}
 
 </body>
+
 </html>
