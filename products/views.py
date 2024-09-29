@@ -5,7 +5,7 @@ from .models import Category, Product, ProductVariant, Service
 # All products plus filtering by category & name  
 
 def all_products(request):
-    """ A view to display all products, plus sort and search queries """
+    """ A view to show all products, including sorting and search queries """
     
     category = request.GET.get('category', None) 
     product_name = request.GET.get('name', None)

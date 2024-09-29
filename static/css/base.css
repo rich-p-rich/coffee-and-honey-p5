@@ -51,6 +51,7 @@ body {
     height: auto; /* The height will adjust based on the width */
 }
 
+/*
 .overlay {
     height: 100%;
     width: 100%;
@@ -60,7 +61,11 @@ body {
     background: goldenrod;
     z-index: 0;
 }
+*/
 
+#bag-page {
+    background-color: antiquewhite;
+}
 
 /* from Bulma */
 .icon {

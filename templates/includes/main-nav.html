@@ -1,7 +1,7 @@
 <div class="collapse navbar-collapse" id="main-nav">
     <ul class="navbar-nav align-items-center w-auto mx-auto">
         <li class="nav-item nav-item mx-3">
-            <a class="logo-font font-weight-bold nav-link" href="{% url 'all_products' %}">
+            <a class="logo-font font-weight-bold nav-link" href="{% url 'products' %}">
                 All Products
             </a>
         </li>
@@ -11,10 +11,10 @@
                 Coffee: beans and ground
             </a>
             <div class="dropdown-menu border-0" aria-labelledby="coffee-link">
-                <a href="{% url 'all_products' %}?name=arabica" class="dropdown-item">Arabica</a>
-                <a href="{% url 'all_products' %}?name=robusta" class="dropdown-item">Robusta</a>
-                <a href="{% url 'all_products' %}?name=espresso" class="dropdown-item">Epresso Blend</a>
-                <a href="{% url 'all_products' %}?category=coffee" class="dropdown-item">All Coffee</a>
+                <a href="{% url 'products' %}?name=arabica" class="dropdown-item">Arabica</a>
+                <a href="{% url 'products' %}?name=robusta" class="dropdown-item">Robusta</a>
+                <a href="{% url 'products' %}?name=espresso" class="dropdown-item">Epresso Blend</a>
+                <a href="{% url 'products' %}?category=coffee" class="dropdown-item">All Coffee</a>
             </div>
         </li>
 
@@ -24,10 +24,10 @@
                 Honey
             </a>
             <div class="dropdown-menu border-0" aria-labelledby="honey-link">
-                <a href="{% url 'all_products' %}?name=flower" class="dropdown-item">Flower Honey</a>
-                <a href="{% url 'all_products' %}?name=forest" class="dropdown-item">Forest Honey</a>
-                <a href="{% url 'all_products' %}?name=heather" class="dropdown-item">Heather Honey</a>
-                <a href="{% url 'all_products' %}?category=honey" class="dropdown-item">All Honey</a>    
+                <a href="{% url 'products' %}?name=flower" class="dropdown-item">Flower Honey</a>
+                <a href="{% url 'products' %}?name=forest" class="dropdown-item">Forest Honey</a>
+                <a href="{% url 'products' %}?name=heather" class="dropdown-item">Heather Honey</a>
+                <a href="{% url 'products' %}?category=honey" class="dropdown-item">All Honey</a>    
             </div>
         </li>
         <li class="nav-item dropdown nav-item mx-3">
