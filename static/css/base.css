@@ -29,8 +29,6 @@ body {
 }
 
 #shopping-bag {
-        position: absolute;
-        top: 10px; /* adjust the distance from the top */
         right: 20px; /* adjust the distance from the right */
 }
 
@@ -41,13 +39,8 @@ body {
     background-color: whitesmoke;
   }
   
-.navbar {
-      margin-bottom: 0;
-      background-color: whitesmoke;
-  }
-
 #home-container {
-    margin-top: 200px;
+    margin-top: 350px;
 }
 
 .section {
