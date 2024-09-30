@@ -32,6 +32,14 @@ body {
         right: 20px; /* adjust the distance from the right */
 }
 
+.pdp-page {
+    margin-top: 250px;
+}
+
+#shopping-bag-page {
+    margin-top: 450px;
+}
+
 #navbar .navbar-nav {
     display: flex;
     justify-content: center;
@@ -68,9 +76,6 @@ body {
 }
 */
 
-#bag-page {
-    background-color: antiquewhite;
-}
 
 /* from Bulma */
 .icon {

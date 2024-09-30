@@ -1,10 +1,20 @@
 ![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
 
-Welcome Richard Ricot,
+Welcome to my project 5: Coffee and Honey
 
-This is the Code Institute student template for Gitpod. We have preinstalled all of the tools you need to get started. It's perfectly ok to use this template as the basis for your project submissions.
+Background. 
+I have long been a fan of coffee shops where you can enjoy decent coffee and cake, maybe a freshly made sandwich, and while away some time either reading a book
+or simply staring out of the window. I am as happy in a good chain or franchise as I am in an independent, but a good independent coffee shop
+will always hold a special place in my heart. Sadly, I have seen several such independents go out of business because the margins are so fine 
+and the competition is so tough. However I have also seen many independents try to expand their businesses by selling or offering extras, from function rooms in which yoga classes
+or toddler groups are held, selling cups and teapots or even installing a bookstore. Some ideas have worked and some have not, but I thought this would be 
+an interesting project to take on for P5: how could an independent coffee shop establish an online presence that would help it:
 
-You can safely delete this README.md file or change it for your own project. Please do read it at least once, though! It contains some important information about Gitpod and the extensions we use. Some of this information has been updated since the video content was created. The last update to this file was: **June 18, 2024**
+- expand its business by becoming better known locally 
+- make money by selling products online  
+
+These are therefore the aims of my P5 project website Coffee and Honey.
+
 
 ## Gitpod Reminders
 
