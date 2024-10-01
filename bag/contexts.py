@@ -55,10 +55,10 @@ def bag_contents(request):
                 print(f"Error: No price found for product {product.name}")
 
     if total < settings.FREE_DELIVERY_THRESHOLD:
-        delivery = total * Decimal(settings.STANDARD_DELIVERY_PERCENTAGE / 100)
+        delivery = Decimal(settings.STANDARD_DELIVERY_PRICE)
         free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
     else:
-        delivery = 0
+        delivery = Decimal(0)
         free_delivery_delta = 0
     
     grand_total = delivery + total

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Category, Product, ProductVariant, Service
-
+from djmoney.models.fields import MoneyField
 
 # All products plus filtering by category & name  
 
