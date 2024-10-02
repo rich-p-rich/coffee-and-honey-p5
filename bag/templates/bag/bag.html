@@ -35,26 +35,27 @@
                         </thead>
 
                         {% for item in bag_items %}
-                            <tr>
-                                <td class="p-3 w-25">
-                                    <img class="img-fluid rounded" src="{{ item.product.image.url }}">
-                                </td>
-                                <td class="py-3">
-                                    <p class="my-0"><strong>{{ item.product.name }}</strong></p>
-                                    <p class="my-0"><strong>Size: </strong>{% if item.product.has_sizes %}{{ item.size|upper }}{% else %}N/A{% endif %}</p>
-                                    <p class="my-0 small text-muted">SKU: {{ item.product.sku|upper }}</p>
-                                </td>
-                                <td class="py-3">
-                                    <p class="my-0">${{ item.product.price }}</p>
-                                </td>
-                                <td class="py-3 w-25">
-                                    <p class="my-0">{{ item.quantity }}</p>
-                                </td>
-                                <td class="py-3">
-                                    <p class="my-0">${{ item.product.price }}</p>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td class="p-3 w-25">
+                                <img class="img-fluid rounded" src="{{ item.product.image.url }}">
+                            </td>
+                            <td class="py-3">
+                                <p class="my-0"><strong>{{ item.product.name }}</strong></p>
+                        
+                                <!-- Check if the product has a size (variant weight) -->
+                                {% if item.size %}
+                                    <p class="my-0"><strong>Size:</strong> {{ item.size }}g</p>  <!-- Display size in grams -->
+                                {% endif %}
+                                
+                                <p class="my-0"><small class="text-muted">SKU: {{ item.product.sku|upper }}</small></p>
+                            </td>
+                            <td class="py-3">${{ item.price }}</td> <!-- Display variant price -->
+                            <td class="py-3">{{ item.quantity }}</td>
+                            <td class="py-3">${{ item.subtotal|floatformat:2 }}</td> <!-- Display subtotal -->
+                        </tr>
                         {% endfor %}
+                        
+                        
                         <tr>
                             <td colspan="5" class="pt-5 text-right">
                                 <h6><strong>Bag Total: ${{ total|floatformat:2 }}</strong></h6>

@@ -23,7 +23,7 @@ class Product(models.Model):
     name = models.CharField(max_length=254)
     description = models.TextField()
     price = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)  # For products without variants
-    strength_rating = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True)  # for the coffee
+    strength_rating = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True)  # For the coffee
     extra_services = models.ManyToManyField('Service', blank=True)  # Allows multiple services: bean grinding and gift wrapping
     rating = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     image_url = models.URLField(max_length=1024, null=True, blank=True)
