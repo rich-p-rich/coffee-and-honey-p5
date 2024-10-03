@@ -16,6 +16,21 @@ body {
     background-color: whitesmoke;
 }
 
+.message-container {
+    position: fixed;
+    top: 72px;
+    right: 15px;
+    z-index: 99999999999;
+}
+
+.customer-toast {
+    overflow: visible;
+}
+
+.toast-capper {
+    height: 2px;
+}
+
 .section {
     padding: 20px;
     margin-bottom: 20px;
