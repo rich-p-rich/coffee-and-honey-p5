@@ -26,6 +26,7 @@ def view_bag(request):
                 total += subtotal
                 bag_items.append({
                     'product': product,
+                    'item_id': item_id, 
                     'size': variant.weight,
                     'quantity': quantity,
                     'price': price,
@@ -39,6 +40,7 @@ def view_bag(request):
             total += subtotal
             bag_items.append({
                 'product': product,
+                'item_id': item_id, 
                 'quantity': quantity,
                 'price': price,
                 'subtotal': subtotal
@@ -52,6 +54,7 @@ def view_bag(request):
             total += subtotal
             bag_items.append({
                 'product': product,
+                'item_id': item_id, 
                 'quantity': quantity,
                 'price': price,
                 'subtotal': subtotal
