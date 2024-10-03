@@ -56,8 +56,15 @@ def bag_contents(request):
             # Handle products without variants
             print(f"DEBUG: {product.name} has no variants")
             if product.price:
-                total += Decimal(item_data) * Decimal(product.price)
-                print(f"DEBUG: Added {item_data} * {product.price} to total: {total}")
+                if isinstance(item_data, dict):
+                    quantity = item_data.get('quantity', 1)
+
+                else:
+                    quantity = item_data
+
+                total += Decimal(quantity) * Decimal(product.price)
+                print(f"DEBUG: Added {quantity} * {product.price} to total: {total}")
+
                 bag_items.append({
                     'item_id': item_id,
                     'quantity': item_data,
