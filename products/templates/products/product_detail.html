@@ -37,9 +37,9 @@
                     <div class="form-row">
                         {% if product.variants.exists %}
                         <label for="variant">Choose a variant:</label>
-                        <select name="variant_id" id="variant" class="form-control">
+                        <select name="product_size" id="variant" class="form-control">
                             {% for variant in product.variants.all %}
-                            <option value="{{ variant.id }}">{{ variant.weight }}g - ${{ variant.price }}</option>
+                            <option value="{{ variant.weight }}">{{ variant.weight }}g - ${{ variant.price }}</option>
                             {% endfor %}
                         </select>
                         {% else %}

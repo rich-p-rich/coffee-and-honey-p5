@@ -4,7 +4,6 @@ from django.shortcuts import get_object_or_404
 from products.models import Product, ProductVariant
 
 def bag_contents(request):
-
     bag_items = []
     total = 0
     product_count = 0
@@ -13,7 +12,6 @@ def bag_contents(request):
     for item_id, item_data in bag.items():
         product = get_object_or_404(Product, pk=item_id)
 
-        # Handling variants or no-variants cases
         if product.variants.exists():
             # Handle variant-specific logic
             if isinstance(item_data, int):
@@ -29,23 +27,37 @@ def bag_contents(request):
                 else:
                     print(f"Error: No price found for variant {variant}")
             else:
-                for size, quantity in item_data['items_by_size'].items():
-                    variant = product.variants.get(weight=size)
-                    if variant and variant.price:
-                        total += quantity * variant.price
-                        bag_items.append({
-                            'item_id': item_id,
-                            'quantity': quantity,
-                            'product': product,
-                            'variant': variant,
-                            'size': size,
-                        })
-                    else:
-                        print(f"Error: No price found for variant {variant}")
+                for size, data in item_data['items_by_size'].items():
+                    print(f"DEBUG: size={size}, quantity={data['quantity']}, item_data['items_by_size']={item_data['items_by_size']}")
+
+                    quantity = data['quantity']
+
+                    try:
+                        variant = product.variants.get(weight=size)
+                        print(f"DEBUG: Variant found: {variant}, Price: {variant.price}")
+
+                        if variant and variant.price:
+                            # Ensure price is handled as a Decimal
+                            total += Decimal(quantity) * Decimal(variant.price)
+                            print(f"DEBUG: Added {quantity} * {variant.price} to total: {total}")
+
+                            bag_items.append({
+                                'item_id': item_id,
+                                'quantity': quantity,
+                                'product': product,
+                                'variant': variant,
+                                'size': size,
+                            })
+                        else:
+                            print(f"Error: No price found for variant {variant}")
+                    except ProductVariant.DoesNotExist:
+                        print(f"Error: No variant found for size {size}")
         else:
             # Handle products without variants
+            print(f"DEBUG: {product.name} has no variants")
             if product.price:
-                total += item_data * product.price
+                total += Decimal(item_data) * Decimal(product.price)
+                print(f"DEBUG: Added {item_data} * {product.price} to total: {total}")
                 bag_items.append({
                     'item_id': item_id,
                     'quantity': item_data,
@@ -57,11 +69,14 @@ def bag_contents(request):
     if total < settings.FREE_DELIVERY_THRESHOLD:
         delivery = Decimal(settings.STANDARD_DELIVERY_PRICE)
         free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
+        print(f"DEBUG: Delivery cost applied: {delivery}, Free delivery delta: {free_delivery_delta}")
     else:
         delivery = Decimal(0)
         free_delivery_delta = 0
-    
+        print("DEBUG: Free delivery applied")
+
     grand_total = delivery + total
+    print(f"DEBUG: Grand total: {grand_total}")
 
     context = {
         'bag_items': bag_items,
@@ -72,5 +87,8 @@ def bag_contents(request):
         'free_delivery_threshold': settings.FREE_DELIVERY_THRESHOLD,
         'grand_total': grand_total,
     }
+
+    # Print the final context for confirmation
+    print("DEBUG: Final bag context:", context)
 
     return context

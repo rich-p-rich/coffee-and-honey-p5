@@ -11,6 +11,7 @@ def view_bag(request):
     bag = request.session.get('bag', {})
     bag_items = []
     total = 0
+    print("Session data:", bag)
 
     for item_id, item_data in bag.items():
         product = get_object_or_404(Product, pk=item_id)
@@ -18,13 +19,14 @@ def view_bag(request):
         # Check if the item has 'items_by_size' (for products with sizes)
         if isinstance(item_data, dict) and 'items_by_size' in item_data:
             for size, details in item_data['items_by_size'].items():
+                variant = get_object_or_404(ProductVariant, product=product, weight=size)
                 price = float(details['price'])
                 quantity = details['quantity']
                 subtotal = price * quantity
                 total += subtotal
                 bag_items.append({
                     'product': product,
-                    'size': size,
+                    'size': variant.weight,
                     'quantity': quantity,
                     'price': price,
                     'subtotal': subtotal
@@ -69,49 +71,52 @@ def add_to_bag(request, item_id):
     product = get_object_or_404(Product, pk=item_id)
     quantity = int(request.POST.get('quantity'))
     redirect_url = request.POST.get('redirect_url')
-    size = None
-    price = None  # Add price variable
 
+    # Print request.POST to see if 'product_size' is being posted
+    print("POST data:", request.POST)
+
+    size = None
+    price = None
+
+    # Fetch the variant if a size is selected
     if 'product_size' in request.POST:
         size = request.POST['product_size']
-        # Fetch the correct variant based on the size
         variant = get_object_or_404(ProductVariant, product=product, weight=size)
         price = variant.price
+    else:
+        print("No size posted for this product.")
 
+    # Get the current shopping bag from the session
     bag = request.session.get('bag', {})
 
+    # Handle products with sizes (variants)
     if size:
-        if item_id in list(bag.keys()):
-            if isinstance(bag[item_id], dict):  # Check if the item is stored as a dictionary
-                if size in bag[item_id]['items_by_size'].keys():
+        if item_id in bag and isinstance(bag[item_id], dict):
+            if 'items_by_size' in bag[item_id]:
+                if size in bag[item_id]['items_by_size']:
                     bag[item_id]['items_by_size'][size]['quantity'] += quantity
-                    messages.success(request, f'Updated size {size.upper()} {product.name} quantity to {bag[item_id]["items_by_size"][size]["quantity"]}')
                 else:
-                    bag[item_id]['items_by_size'][size] = {'quantity': quantity, 'price': str(price)}  # Store price in the session
-                    messages.success(request, f'Added size {size.upper()} {product.name} to your bag')
+                    bag[item_id]['items_by_size'][size] = {'quantity': quantity, 'price': str(price)}
             else:
-                # If bag[item_id] is not a dict, replace it with a dict to handle sizes
-                bag[item_id] = {'items_by_size': {size: {'quantity': quantity, 'price': str(price)}}}
-                messages.success(request, f'Added size {size.upper()} {product.name} to your bag')
+                bag[item_id]['items_by_size'] = {size: {'quantity': quantity, 'price': str(price)}}
         else:
             bag[item_id] = {'items_by_size': {size: {'quantity': quantity, 'price': str(price)}}}
-            messages.success(request, f'Added size {size.upper()} {product.name} to your bag')
+    
+    # Handle products without sizes
     else:
-        if item_id in list(bag.keys()):
-            if isinstance(bag[item_id], dict):
-                # If it's a dict, update the quantity without size
-                bag[item_id]['quantity'] += quantity
-            else:
-                # If it's an int, just update the quantity
-                bag[item_id] += quantity
-            messages.success(request, f'Updated {product.name} quantity to {bag[item_id]}')
+        if item_id in bag and isinstance(bag[item_id], dict):
+            bag[item_id]['quantity'] += quantity
+        elif item_id in bag:
+            bag[item_id] += quantity
         else:
-            # Handle non-size items by adding just the quantity
-            bag[item_id] = quantity
-            messages.success(request, f'Added {product.name} to your bag')
+            bag[item_id] = {'quantity': quantity, 'price': str(product.price)}
 
+    # Update the session with the modified bag
     request.session['bag'] = bag
+    print("Bag after adding:", bag)  # Print the updated bag structure
+
     return redirect(redirect_url)
+
 
 
 def adjust_bag(request, item_id):
