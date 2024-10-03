@@ -73,14 +73,17 @@ def bag_contents(request):
             else:
                 print(f"Error: No price found for product {product.name}")
 
-    if total < settings.FREE_DELIVERY_THRESHOLD:
-        delivery = Decimal(settings.STANDARD_DELIVERY_PRICE)
-        free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
-        print(f"DEBUG: Delivery cost applied: {delivery}, Free delivery delta: {free_delivery_delta}")
+    # Check to see if bag is empty before calculating delivery
+    if total > 0:
+        if total < settings.FREE_DELIVERY_THRESHOLD:
+            delivery = Decimal(settings.STANDARD_DELIVERY_PRICE)
+            free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
+        else:
+            delivery = Decimal(0)
+            free_delivery_delta = 0
     else:
         delivery = Decimal(0)
         free_delivery_delta = 0
-        print("DEBUG: Free delivery applied")
 
     grand_total = delivery + total
     print(f"DEBUG: Grand total: {grand_total}")
