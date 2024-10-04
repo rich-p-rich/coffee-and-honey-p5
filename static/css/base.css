@@ -27,8 +27,8 @@ body {
 
 .header-container {
     margin: 0;
+    padding-top: 10px;
     padding: 10px;
-    font: black;
     text-align: center;
     background-color: whitesmoke;
     background-repeat: no-repeat;
@@ -36,7 +36,7 @@ body {
 }
 
 #header-text {
-    color: gray; 
+    color: black; 
     text-align: center; 
 }
 
@@ -61,12 +61,21 @@ body {
     margin-top: 450px;
 }
 
+#navbar-container {
+    background-color: whitesmoke;
+}
+
 #navbar .navbar-nav {
     display: flex;
     justify-content: center;
     width: 100%;
     background-color: whitesmoke;
   }
+
+#main-nav {
+    background-color: whitesmoke;
+    text-align: left;
+}
   
 #home-container {
     margin-top: 350px;
@@ -83,6 +92,10 @@ body {
 .home-section-img {
     width: 100%;  /* or set a specific width */
     height: auto; /* The height will adjust based on the width */
+}
+
+.card {
+    width: 100%; 
 }
 
 /*
@@ -155,11 +168,34 @@ footer {
 
 /* -------------------------------- Media Queries */
 
-@media (min-width: 370px) {
+@media (max-width: 370px){
     .product-container {
-        margin-top: 160px; /* Adjust as per the height of your fixed-top header */
+        margin-top: 275px; /* To push the product page below the head */
+    }
+}  
+
+@media (min-width: 370px) and (max-width: 479px) {
+    .product-container {
+        margin-top: 250px; /* To push the product page below the head */
+    }
+}  
+
+@media (min-width: 480px) {
+    .product-container {
+        margin-top: 170px; /* To push the product page below the head */
     }
 }
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .col-md-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    .offset-1 {
+        margin-left: 0;  /* Remove the offset for tablets */
+    }
+}
+
 
 /* Slightly larger container on xl screens */
 @media (min-width: 1200px) {
@@ -177,16 +213,11 @@ footer {
         left: 0;
         z-index: 1030;
     }
-
-    .header-container {
-        padding-top: 164px;
-    }
 }
 
 /* Fix navbar position for larger screens (laptops and desktops) */
 @media (min-width: 992px) {
     .header-text-section {
-        margin-top: 60px; /* Adjust as per the height of your fixed-top header */
         z-index: 100;
     }
 
@@ -207,5 +238,33 @@ footer {
 
     .navbar {
         margin-top: 0;
+    }
+}
+
+/* For large laptops */
+@media (min-width: 1025px) and (max-width: 1200px) {
+    .product-container {
+        max-width: 85%; /* Adjust to fit the screen */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (min-width: 1440px) {
+    .product-container {
+        max-width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .card-img-top {
+        object-fit: cover;
+        width: 100%;
+        height: auto;
     }
 }
