@@ -3,15 +3,22 @@
 {% load bag_tools %}
 
 {% block page_header %}
-    <div class="container header-container">
-        <div class="row">
-            <div class="col"></div>
-        </div>
+<div class="container header-container">
+    <div class="row">
+        <div class="col"></div>
     </div>
+</div>
 {% endblock %}
 
 {% block content %}
-    <div id="bag-page" class="container mb-2 ">
+    <div class="bag-container  mb-2 ">
+        <div class="row">
+        </div>
+    </div>
+
+    
+    <div class="overlay"></div>
+    <div class="container mb-2">
         <div class="row">
             <div class="col">
                 <hr>
@@ -19,19 +26,19 @@
                 <hr>
             </div>
         </div>
+    
 
         <div class="row">
-            <div class="col">
+            <div id="shopping-bag" class="col">
                 {% if bag_items %}
-                    <div class="table-responsive rounded">
-                        <table class="table table-sm table-borderless">
-                            <thead class="text-black">
+                <div class="table-responsive rounded">
+                    <table class="table table-sm table-borderless">
+                        <thead class="text-black">
                                 <tr>
-                                    <th scope="col">Product Info</th>
-                                    <th scope="col"></th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col">Qty</th>
-                                    <th scope="col">Subtotal</th>
+                                    <th scope="col" class="col-2">Product Info</th>
+                                    <th scope="col" class="col-1">Price</th>
+                                    <th scope="col" class="col-1">Qty</th>
+                                    <th scope="col" class="col-2">Subtotal</th>
                                 </tr>
                             </thead>
 
@@ -132,7 +139,6 @@
                 {% endif %}
             </div>
         </div>
-    </div>
 {% endblock %}
 
 {% block postloadjs %}
