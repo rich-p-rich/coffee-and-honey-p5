@@ -39,8 +39,12 @@ def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
 
+    print("DEBUG: Starting checkout view")
+
     if request.method == 'POST':
+        print("DEBUG: Handling POST request")
         bag = request.session.get('bag', {})
+        print(f"DEBUG: Bag contents: {bag}")
 
         form_data = {
             'full_name': request.POST['full_name'],
@@ -53,25 +57,38 @@ def checkout(request):
             'street_address2': request.POST['street_address2'],
             'county': request.POST['county'],
         }
+        print(f"DEBUG: Form data received: {form_data}")
 
         order_form = OrderForm(form_data)
+        print(f"DEBUG: Order form initialized: {order_form}")
+
         if order_form.is_valid():
+            print("DEBUG: Order form is valid")
             order = order_form.save(commit=False)
             pid = request.POST.get('client_secret').split('_secret')[0]
+            print(f"DEBUG: Payment Intent ID (pid): {pid}")
+
             order.stripe_pid = pid
             order.original_bag = json.dumps(bag)
             order.save()
+            print(f"DEBUG: Order saved: {order}")
+
             for item_id, item_data in bag.items():
                 try:
                     product = Product.objects.get(id=item_id)
+                    print(f"DEBUG: Product found: {product}")
+
                     if isinstance(item_data, int):
+                        print(f"DEBUG: Item data is an integer: {item_data}")
                         order_line_item = OrderLineItem(
                             order=order,
                             product=product,
                             quantity=item_data,
                         )
                         order_line_item.save()
+                        print(f"DEBUG: Order line item saved: {order_line_item}")
                     else:
+                        print(f"DEBUG: Item data contains sizes: {item_data['items_by_size']}")
                         for size, quantity in item_data['items_by_size'].items():
                             order_line_item = OrderLineItem(
                                 order=order,
@@ -80,27 +97,32 @@ def checkout(request):
                                 product_size=size,
                             )
                             order_line_item.save()
+                            print(f"DEBUG: Order line item saved: {order_line_item}")
                 except Product.DoesNotExist:
+                    print("DEBUG: Product.DoesNotExist error occurred")
                     messages.error(request, (
                         "One of the products in your bag wasn't "
                         "found in our database. "
                         "Please call us for assistance!")
                     )
                     order.delete()
+                    print("DEBUG: Order deleted")
                     return redirect(reverse('view_bag'))
 
             # Save the info to the user's profile if all is well
             request.session['save_info'] = 'save-info' in request.POST
-            return redirect(reverse('checkout_success',
-                                    args=[order.order_number]))
+            print("DEBUG: Redirecting to checkout_success")
+            return redirect(reverse('checkout_success', args=[order.order_number]))
         else:
+            print("DEBUG: Order form is invalid")
             messages.error(request, ('There was an error with your form. '
                                      'Please double check your information.'))
     else:
+        print("DEBUG: Handling GET request")
         bag = request.session.get('bag', {})
         if not bag:
-            messages.error(request,
-                           "There's nothing in your bag at the moment")
+            print("DEBUG: Bag is empty")
+            messages.error(request, "There's nothing in your bag at the moment")
             return redirect(reverse('products'))
 
         current_bag = bag_contents(request)
@@ -111,11 +133,13 @@ def checkout(request):
             amount=stripe_total,
             currency=settings.STRIPE_CURRENCY,
         )
+        print(f"DEBUG: Stripe PaymentIntent created with amount: {stripe_total}")
 
-        # Attempt to prefill the form with any info
-        # the user maintains in their profile
+        # Initialize an empty order form for GET requests
+        order_form = OrderForm()
 
     if not stripe_public_key:
+        print("DEBUG: Stripe public key missing")
         messages.warning(request, ('Stripe public key is missing. '
                                    'Did you forget to set it in '
                                    'your environment?'))
@@ -127,6 +151,7 @@ def checkout(request):
         'client_secret': intent.client_secret,
     }
 
+    print(f"DEBUG: Final context: {context}")
     return render(request, template, context)
 
 
