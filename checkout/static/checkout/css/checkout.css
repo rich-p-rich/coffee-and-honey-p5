@@ -1,9 +1,11 @@
 .checkout-container {
+  font-family: 'Roboto', sans-serif;
   padding-top: 150px;
   background-color: whitesmoke;
 }
 
 .order-sum {
+  font-family: 'Roboto', sans-serif;
   margin-top: 50px;
   margin-bottom: 20px;
   padding-top: 20px;
@@ -16,6 +18,7 @@ checkout-overlay {
 
 .StripeElement,
 .stripe-style-input {
+  font-family: 'Roboto', sans-serif;
   box-sizing: border-box;
   height: 40px;
   padding: 10px 12px;
@@ -31,10 +34,12 @@ checkout-overlay {
 .stripe-style-input:focus,
 .stripe-style-input:active {
   box-shadow: 0 1px 3px 0 #cfd7df;
+  font-family: 'Roboto', sans-serif;
 }
 
 .StripeElement--webkit-autofill {
   background-color: #fefde5 !important;
+  font-family: 'Roboto', sans-serif;
 }
 
 .stripe-style-input::placeholder {
