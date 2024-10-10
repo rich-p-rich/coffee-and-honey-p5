@@ -8,6 +8,8 @@ from django_countries.fields import CountryField
 
 from products.models import Product
 
+from decimal import Decimal
+
 
 class Order(models.Model):
     order_number = models.CharField(max_length=32, null=False, editable=False)
@@ -41,10 +43,13 @@ class Order(models.Model):
         accounting for delivery costs.
         """
         self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0
+
+        # Ensure delivery cost is also a Decimal
         if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
-            self.delivery_cost = self.order_total * settings.STANDARD_DELIVERY_PERCENTAGE / 100
+            self.delivery_cost = Decimal(settings.STANDARD_DELIVERY_PRICE)
         else:
-            self.delivery_cost = 0
+            self.delivery_cost = Decimal(0)
+
         self.grand_total = self.order_total + self.delivery_cost
         self.save()
 
@@ -73,8 +78,30 @@ class OrderLineItem(models.Model):
         Override the original save method to set the lineitem total
         and update the order total.
         """
-        self.lineitem_total = self.product.price * self.quantity
+        # Debugging print statements
+        print(f"DEBUG: Product price type: {type(self.product.price)}")
+        print(f"DEBUG: Product price value: {self.product.price}")
+        print(f"DEBUG: Quantity type: {type(self.quantity)}")
+        print(f"DEBUG: Quantity value: {self.quantity}")
+
+        # Extract quantity from the dict if it's a dict
+        if isinstance(self.quantity, dict):
+            print("DEBUG: Extracting quantity from the dictionary")
+            self.quantity = self.quantity.get('quantity', 1)  # Default to 1 if 'quantity' key is missing
+        
+        print(f"DEBUG: Corrected quantity: {self.quantity}")
+        
+        # If the product has variants, use the variant price
+        if self.product.variants.exists():
+            variant = self.product.variants.get(weight=self.product_size)
+            print(f"DEBUG: Retrieved variant: {variant} with price: {variant.price}")
+            self.lineitem_total = variant.price * self.quantity
+        else:
+            # Fallback to base product price if no variants
+            if self.product.price is None:
+                raise ValueError(f"Product {self.product} has no price set.")
+            self.lineitem_total = self.product.price * self.quantity
+
         super().save(*args, **kwargs)
 
-    def __str__(self):
-        return f'SKU {self.product.sku} on order {self.order.order_number}'
+

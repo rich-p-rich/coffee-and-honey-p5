@@ -45,6 +45,7 @@ def checkout(request):
         print("DEBUG: Handling POST request")
         bag = request.session.get('bag', {})
         print(f"DEBUG: Bag contents: {bag}")
+        print(f"DEBUG: Bag data in session: {bag}")
 
         form_data = {
             'full_name': request.POST['full_name'],
@@ -57,7 +58,9 @@ def checkout(request):
             'street_address2': request.POST['street_address2'],
             'county': request.POST['county'],
         }
-        print(f"DEBUG: Form data received: {form_data}")
+        
+        # Add print statement to inspect form data
+        print(f"DEBUG: POST form data: {form_data}")
 
         order_form = OrderForm(form_data)
         print(f"DEBUG: Order form initialized: {order_form}")
@@ -65,8 +68,14 @@ def checkout(request):
         if order_form.is_valid():
             print("DEBUG: Order form is valid")
             order = order_form.save(commit=False)
+            
+            # Add print statement to inspect the client secret
+            print(f"DEBUG: Client secret from POST: {request.POST.get('client_secret')}")
+
             pid = request.POST.get('client_secret').split('_secret')[0]
-            print(f"DEBUG: Payment Intent ID (pid): {pid}")
+            
+            # Add print statement to inspect the extracted PID
+            print(f"DEBUG: PID extracted: {pid}")
 
             order.stripe_pid = pid
             order.original_bag = json.dumps(bag)
@@ -79,25 +88,32 @@ def checkout(request):
                     print(f"DEBUG: Product found: {product}")
 
                     if isinstance(item_data, int):
+                        # Handling products without sizes (simple products)
                         print(f"DEBUG: Item data is an integer: {item_data}")
                         order_line_item = OrderLineItem(
                             order=order,
                             product=product,
-                            quantity=item_data,
+                            quantity=item_data,  # Quantity is already an integer here
                         )
                         order_line_item.save()
                         print(f"DEBUG: Order line item saved: {order_line_item}")
                     else:
+                        # Handling products with sizes (variants)
                         print(f"DEBUG: Item data contains sizes: {item_data['items_by_size']}")
-                        for size, quantity in item_data['items_by_size'].items():
+                        for size, size_data in item_data['items_by_size'].items():
+                            quantity = size_data['quantity']  # Extract just the quantity from the dictionary
+                            price = size_data['price']  # (Optional) Extract price if needed
+                            print(f"DEBUG: Correct quantity: {quantity}, Price: {price}")
+
                             order_line_item = OrderLineItem(
                                 order=order,
                                 product=product,
-                                quantity=quantity,
-                                product_size=size,
+                                quantity=quantity,  # Now using the extracted quantity
+                                product_size=size,  # Size of the product
                             )
                             order_line_item.save()
                             print(f"DEBUG: Order line item saved: {order_line_item}")
+
                 except Product.DoesNotExist:
                     print("DEBUG: Product.DoesNotExist error occurred")
                     messages.error(request, (
