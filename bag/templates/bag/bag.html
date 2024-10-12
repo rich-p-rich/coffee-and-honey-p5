@@ -92,7 +92,6 @@
                                     </div>
                                 </div>
 
-
                                 <a class="update-link text-info"><small>Update</small></a>
                             </form>
 
@@ -161,7 +160,7 @@
     <script type="text/javascript">
         // Update quantity on click
         $('.update-link').click(function (e) {
-            var form = $(this).prev('.update-form');
+            var form = $(this).closest('.update-form');
             form.submit();
         })
 
