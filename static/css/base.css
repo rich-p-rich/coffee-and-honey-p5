@@ -75,6 +75,13 @@ body {
     text-align: left;
 }
 
+/* Sign-in/out or Log-in/out pages */
+
+.sign-in-out-container {
+    margin-top: 250px;
+}
+
+
 /* Home page */
 
 #home-container {
@@ -97,7 +104,6 @@ body {
 .card {
     width: 100%; 
 }
-
 
 /* Product detail page 
 .pdp-page {
