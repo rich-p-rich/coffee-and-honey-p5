@@ -118,6 +118,10 @@ def add_to_bag(request, item_id):
     request.session['bag'] = bag
     print("Bag after adding:", bag)  # Print the updated bag structure
 
+    # Toast message container
+    print(f"DEBUG TOAST: Adding success message for product: {product.name}")
+    messages.success(request, f'Added {product.name} to your bag')
+
     return redirect(redirect_url)
 
 
