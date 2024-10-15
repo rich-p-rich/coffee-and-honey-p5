@@ -96,43 +96,60 @@
         </nav>
     </header>
 
-
-    {% if messages %}
-        <div class="message-container">
-            {% for message in messages %}
-                {% with message.level as level %}
-                    {% if level == 40 %}
-                        <script>
-                            console.log("DEBUG TOAST: Error toast included!");
-                        </script>
-                        {% include 'includes/toasts/toast_error.html' %}
-                    {% elif level == 30 %}
-                        <script>
-                            console.log("DEBUG TOAST: Warning toast included!");
-                        </script>
-                        {% include 'includes/toasts/toast_warning.html' %}
-                    {% elif level == 25 %}
-                        <script>
-                            console.log("DEBUG TOAST: Success toast included!");
-                        </script>
-                        {% include 'includes/toasts/toast_success.html' %}
-                    {% else %}
-                        <script>
-                            console.log("DEBUG TOAST: Info toast included!");
-                        </script>
-                        {% include 'includes/toasts/toast_info.html' %}
-                    {% endif %}
-                {% endwith %}
-            {% endfor %}
+    <!-- Message to confirm login status 
+    <div id="login-status" class="main-bg">
+        <div>
+            {% if user.is_authenticated %}
+            <p class="text-end m-3">Welcome {{ user.username }}</p>
+            {% else %}
+            <p class="text-end m-3">You are not logged in; log in <a href="{% url 'account_login' %}">here.</a></p>
+            {% endif %}
         </div>
+    </div> -->
+
+    <!--Toast messages -->
+    {% if messages %}
+    <div class="message-container">
+        {% for message in messages %}
+        {% with message.level as level %}
+        {% if level == 40 %}
+        <script>
+            console.log("DEBUG TOAST: Error toast included!");
+        </script>
+        {% include 'includes/toasts/toast_error.html' %}
+        {% elif level == 30 %}
+        <script>
+            console.log("DEBUG TOAST: Warning toast included!");
+        </script>
+        {% include 'includes/toasts/toast_warning.html' %}
+        {% elif level == 25 %}
+        <script>
+            console.log("DEBUG TOAST: Success toast included!");
+        </script>
+        {% include 'includes/toasts/toast_success.html' %}
+        {% else %}
+        <script>
+            console.log("DEBUG TOAST: Info toast included!");
+        </script>
+        {% include 'includes/toasts/toast_info.html' %}
+        {% endif %}
+        {% endwith %}
+        {% endfor %}
+    </div>
     {% endif %}
+
 
 
     {% block page_header %}
     {% endblock %}
 
-    {% block content %}
-    {% endblock %}
+
+
+    <main class="flex-grow-1 d-flex flex-column">
+        {% block content %}
+        <!-- Content Goes here -->
+        {% endblock content %}
+    </main>
 
     {% block postloadjs %}
     <script type="text/javascript">

@@ -68,6 +68,13 @@ def checkout(request):
         if order_form.is_valid():
             print("DEBUG: Order form is valid")
             order = order_form.save(commit=False)
+
+            if 'pick_up' in request.POST:
+                order.pick_up = True
+                # Confirmation message
+                messages.success(request, 'You have selected to pick up your order in our cafe.')
+            else:
+                order.pick_up = False
             
             # Add print statement to inspect the client secret
             print(f"DEBUG: Client secret from POST: {request.POST.get('client_secret')}")
