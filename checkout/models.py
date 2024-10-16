@@ -16,32 +16,86 @@ class Order(models.Model):
     order_number = models.CharField(max_length=32, null=False, editable=False)
     user_profile = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, 
                                         null=True, blank=True, related_name='orders')
-    full_name = models.CharField(max_length=50, null=False, blank=False)
-    email = models.EmailField(max_length=254, null=False, blank=False)
-    phone_number = models.CharField(max_length=20, null=False, blank=False)
-    country = CountryField(blank_label='Country *', null=False, blank=False)
-    postcode = models.CharField(max_length=20, null=True, blank=True)
-    town_or_city = models.CharField(max_length=40, null=False, blank=False)
-    street_address1 = models.CharField(max_length=80, null=False, blank=False)
-    street_address2 = models.CharField(max_length=80, null=True, blank=True)
-    county = models.CharField(max_length=80, null=True, blank=True)
-    date = models.DateTimeField(auto_now_add=True)
+    billing_full_name = models.CharField(max_length=50, null=False, blank=False)
+    billing_email = models.EmailField(max_length=254, null=False, blank=False)
+    billing_phone_number = models.CharField(max_length=20, null=False, blank=False)
+    billing_country = CountryField(blank_label='Country *', null=False, blank=False)
+    billing_postcode = models.CharField(max_length=20, null=True, blank=True)
+    billing_town_or_city = models.CharField(max_length=40, null=False, blank=False)
+    billing_street_address1 = models.CharField(max_length=80, null=False, blank=False)
+    billing_street_address2 = models.CharField(max_length=80, null=True, blank=True)
+    billing_county = models.CharField(max_length=80, null=True, blank=True)
+    different_delivery_address = models.BooleanField(default=False) # Default is billing address == shipping address
     pick_up = models.BooleanField(default=False) # Customer picks up the order in the cafe
     delivery_cost = models.DecimalField(max_digits=6, decimal_places=2, null=False, default=0)
+        # If customer chooses pick-up, delivery_cost will be set to 0 in delivery_options
+    date = models.DateTimeField(auto_now_add=True)
     order_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
     grand_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
     original_bag = models.TextField(null=False, blank=False, default='')
     stripe_pid = models.CharField(max_length=254, null=False, blank=False, default='')
 
-    def set_delivery_cost(self):
+    def delivery_options(self, form=None, user=None):
         """
-        Set delivery costs to 0 if customer choses to pick-up their order
+        Define delivery / pick-up options and set delivery costs
         """
         if self.pick_up:
+            # If the customer chooses to pick up in the cafe, set delivery cost to 0
             self.delivery_cost = 0
-        else:
+
+        elif self.different_delivery_address:
+            # If customer want to ship to a saved address in their profile
+            if user and user.profile.saved_addresses.exists():
+                saved_address = user.profile.saved_addresses.last()  # Or use another selection logic
+                self.copy_address(
+                    saved_address.name,
+                    saved_address.street_address1,
+                    saved_address.street_address2,
+                    saved_address.town_or_city,
+                    saved_address.county,
+                    saved_address.postcode,
+                    saved_address.country
+                )
+            # If customer is entering a new / unsaved delivery address
+            elif form:
+                self.copy_address(
+                    form.cleaned_data['delivery_name'],
+                    form.cleaned_data['delivery_street_address1'],
+                    form.cleaned_data['delivery_street_address2'],
+                    form.cleaned_data['delivery_town_or_city'],
+                    form.cleaned_data['delivery_county'],
+                    form.cleaned_data['delivery_postcode'],
+                    form.cleaned_data['delivery_country']
+                )
             self.delivery_cost = calculate_delivery_cost(self.order_total)
+
+        else:
+            # If billing address == delivery address, copy billing address to delivery fields
+            self.copy_address(
+                self.billing_full_name,
+                self.billing_street_address1,
+                self.billing_street_address2,
+                self.billing_town_or_city,
+                self.billing_county,
+                self.billing_postcode,
+                self.billing_country
+            )
+            self.delivery_cost = calculate_delivery_cost(self.order_total)
+        
         self.save()
+
+
+    def copy_address(self, name, street1, street2, town, county, postcode, country):
+        """
+        Helper method to copy address fields to delivery address fields
+        """
+        self.delivery_name = name
+        self.delivery_street_address1 = street1
+        self.delivery_street_address2 = street2
+        self.delivery_town_or_city = town
+        self.delivery_county = county
+        self.delivery_postcode = postcode
+        self.delivery_country = country
 
     def _generate_order_number(self):
         """
@@ -56,7 +110,7 @@ class Order(models.Model):
         """
         self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0
 
-        # Ensure delivery cost is also a Decimal
+        # Ensure delivery cost is also a decimal
         if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
             self.delivery_cost = Decimal(settings.STANDARD_DELIVERY_PRICE)
         else:
