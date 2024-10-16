@@ -48,18 +48,18 @@ def checkout(request):
         print(f"DEBUG: Bag data in session: {bag}")
 
         form_data = {
-            'full_name': request.POST['full_name'],
-            'email': request.POST['email'],
-            'phone_number': request.POST['phone_number'],
-            'country': request.POST['country'],
-            'postcode': request.POST['postcode'],
-            'town_or_city': request.POST['town_or_city'],
-            'street_address1': request.POST['street_address1'],
-            'street_address2': request.POST['street_address2'],
-            'county': request.POST['county'],
-        }
+            'billing_full_name': request.POST['billing_full_name'],
+            'billing_email': request.POST['billing_email'],
+            'billing_phone_number': request.POST['billing_phone_number'],
+            'billing_country': request.POST['billing_country'],
+            'billing_postcode': request.POST['billing_postcode'],
+            'billing_town_or_city': request.POST['billing_town_or_city'],
+            'billing_street_address1': request.POST['billing_street_address1'],
+            'billing_street_address2': request.POST['billing_street_address2'],
+            'billing_county': request.POST['billing_county'],
+}
         
-        # Add print statement to inspect form data
+        # Inspect form data
         print(f"DEBUG: POST form data: {form_data}")
 
         order_form = OrderForm(form_data)
@@ -75,13 +75,21 @@ def checkout(request):
                 messages.success(request, 'You have selected to pick up your order in our cafe.')
             else:
                 order.pick_up = False
+                order.delivery_name = form.cleaned_data['delivery_name']
+                order.delivery_street_address1 = form.cleaned_data['delivery_street_address1']
+                order.delivery_street_address2 = form.cleaned_data['delivery_street_address2']
+                order.delivery_town_or_city = form.cleaned_data['delivery_town_or_city']
+                order.delivery_county= form.cleaned_data['delivery_county']
+                order.delivery_postcode= form.cleaned_data['delivery_postcode']
+                order.delivery_country= form.cleaned_data['delivery_country']
+                order.delivery_cost = calculate_delivery_cost(order.order_total)
             
-            # Add print statement to inspect the client secret
+            # Inspect the client secret
             print(f"DEBUG: Client secret from POST: {request.POST.get('client_secret')}")
 
             pid = request.POST.get('client_secret').split('_secret')[0]
             
-            # Add print statement to inspect the extracted PID
+            # Inspect the extracted PID
             print(f"DEBUG: PID extracted: {pid}")
 
             order.stripe_pid = pid
@@ -109,7 +117,7 @@ def checkout(request):
                         print(f"DEBUG: Item data contains sizes: {item_data['items_by_size']}")
                         for size, size_data in item_data['items_by_size'].items():
                             quantity = size_data['quantity']  # Extract just the quantity from the dictionary
-                            price = size_data['price']  # (Optional) Extract price if needed
+                            price = size_data['price']  # Extract price if needed
                             print(f"DEBUG: Correct quantity: {quantity}, Price: {price}")
 
                             order_line_item = OrderLineItem(
@@ -194,13 +202,13 @@ def checkout_success(request, order_number):
         # Save the user's info
         if save_info:
             profile_data = {
-                'default_phone_number': order.phone_number,
-                'default_country': order.country,
-                'default_postcode': order.postcode,
-                'default_town_or_city': order.town_or_city,
-                'default_street_address1': order.street_address1,
-                'default_street_address2': order.street_address2,
-                'default_county': order.county,
+                'default_phone_number': order.billing_phone_number,
+                'default_country': order.billing_country,
+                'default_postcode': order.billing_postcode,
+                'default_town_or_city': order.billing_town_or_city,
+                'default_street_address1': order.billing_street_address1,
+                'default_street_address2': order.billing_street_address2,
+                'default_county': order.billing_county,
             }
             user_profile_form = UserProfileForm(profile_data, instance=profile)
             if user_profile_form.is_valid():
