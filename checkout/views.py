@@ -35,6 +35,10 @@ def cache_checkout_data(request):
         return HttpResponse(content=e, status=400)
 
 
+def calculate_delivery_cost(order_total):
+        return settings.STANDARD_DELIVERY_PRICE  # Price defined in settings.py
+
+
 def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
@@ -69,19 +73,20 @@ def checkout(request):
             print("DEBUG: Order form is valid")
             order = order_form.save(commit=False)
 
-            if 'pick_up' in request.POST:
+            if 'pickup' in request.POST:
                 order.pick_up = True
+                order.delivery_cost = settings.PICKUP_DELIVERY_PRICE
                 # Confirmation message
                 messages.success(request, 'You have selected to pick up your order in our cafe.')
             else:
                 order.pick_up = False
-                order.delivery_name = form.cleaned_data['delivery_name']
-                order.delivery_street_address1 = form.cleaned_data['delivery_street_address1']
-                order.delivery_street_address2 = form.cleaned_data['delivery_street_address2']
-                order.delivery_town_or_city = form.cleaned_data['delivery_town_or_city']
-                order.delivery_county= form.cleaned_data['delivery_county']
-                order.delivery_postcode= form.cleaned_data['delivery_postcode']
-                order.delivery_country= form.cleaned_data['delivery_country']
+                order.delivery_name = order_form.cleaned_data['delivery_name']
+                order.delivery_street_address1 = order_form.cleaned_data['delivery_street_address1']
+                order.delivery_street_address2 = order_form.cleaned_data['delivery_street_address2']
+                order.delivery_town_or_city = order_form.cleaned_data['delivery_town_or_city']
+                order.delivery_county= order_form.cleaned_data['delivery_county']
+                order.delivery_postcode= order_form.cleaned_data['delivery_postcode']
+                order.delivery_country= order_form.cleaned_data['delivery_country']
                 order.delivery_cost = calculate_delivery_cost(order.order_total)
             
             # Inspect the client secret

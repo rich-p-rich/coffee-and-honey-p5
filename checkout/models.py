@@ -119,10 +119,7 @@ class Order(models.Model):
         self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0
 
         # Ensure delivery cost is also a decimal
-        if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
-            self.delivery_cost = Decimal(settings.STANDARD_DELIVERY_PRICE)
-        else:
-            self.delivery_cost = Decimal(0)
+        self.delivery_cost = Decimal(0)
 
         self.grand_total = self.order_total + self.delivery_cost
         self.save()
