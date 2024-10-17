@@ -8,7 +8,11 @@ class OrderForm(forms.ModelForm):
         fields = ['billing_full_name', 'billing_email', 'billing_phone_number',
                   'billing_street_address1', 'billing_street_address2',
                   'billing_town_or_city', 'billing_postcode', 'billing_country',
-                  'billing_county']
+                  'billing_county', 
+                  # delivery address fields
+                  'delivery_name', 'delivery_street_address1', 'delivery_street_address2',
+                  'delivery_town_or_city', 'delivery_postcode', 'delivery_country',
+                  'delivery_county']
 
     def __init__(self, *args, **kwargs):
         """
@@ -25,6 +29,13 @@ class OrderForm(forms.ModelForm):
             'billing_street_address1': 'Street Address 1',
             'billing_street_address2': 'Street Address 2',
             'billing_county': 'County, State, or Locality',
+            'delivery_name': 'Recipient Name',
+            'delivery_street_address1': 'Delivery Address 1',
+            'delivery_street_address2': 'Delivery Address 2',
+            'delivery_town_or_city': 'Delivery City or Town',
+            'delivery_postcode': 'Delivery Postal Code',
+            'delivery_country': 'Delivery Country',
+            'delivery_county': 'Delivery County or Locality',
         }
 
         self.fields['billing_full_name'].widget.attrs['autofocus'] = True

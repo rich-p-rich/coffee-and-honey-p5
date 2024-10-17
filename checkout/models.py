@@ -27,8 +27,16 @@ class Order(models.Model):
     billing_county = models.CharField(max_length=80, null=True, blank=True)
     different_delivery_address = models.BooleanField(default=False) # Default is billing address == shipping address
     pick_up = models.BooleanField(default=False) # Customer can choose to pick up the order in the cafe rather than have it shipped
+    # Delivery fields for different billing / delivery address
+    delivery_name = models.CharField(max_length=50, null=True, blank=True)
+    delivery_street_address1 = models.CharField(max_length=80, null=True, blank=True)
+    delivery_street_address2 = models.CharField(max_length=80, null=True, blank=True)
+    delivery_town_or_city = models.CharField(max_length=40, null=True, blank=True)
+    delivery_county = models.CharField(max_length=80, null=True, blank=True)
+    delivery_postcode = models.CharField(max_length=20, null=True, blank=True)
+    delivery_country = CountryField(blank_label='Country *', null=True, blank=True)
     delivery_cost = models.DecimalField(max_digits=6, decimal_places=2, null=False, default=0)
-        # If customer chooses pick-up, delivery_cost will be set to 0 in delivery_options
+    # If customer chooses pick-up, delivery_cost will be set to 0 in delivery_options
     date = models.DateTimeField(auto_now_add=True)
     order_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
     grand_total = models.DecimalField(max_digits=10, decimal_places=2, null=False, default=0)
