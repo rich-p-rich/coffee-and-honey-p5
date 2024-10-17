@@ -65,34 +65,58 @@ form.addEventListener('submit', function(ev) {
     var url = '/checkout/cache_checkout_data/';
 
     $.post(url, postData).done(function () {
+        const isPickup = $('#pickup').is(':checked'); // For pick-up in cafe
+        const isDifferentDelivery = $('#different-delivery-address').is(':checked'); // For different delivery address
+    
+        let billingDetails = {
+            name: $.trim(form.billing_full_name.value),
+            phone: $.trim(form.billing_phone_number.value),
+            email: $.trim(form.billing_email.value),
+            address: {
+                line1: $.trim(form.billing_street_address1.value),
+                line2: $.trim(form.billing_street_address2.value),
+                city: $.trim(form.billing_town_or_city.value),
+                country: $.trim(form.billing_country.value),
+                state: $.trim(form.billing_county.value),
+                postal_code: $.trim(form.billing_postcode.value)
+            }
+        };
+    
+        let shippingDetails;
+    
+        if (isPickup) {
+            // If the order is for pickup, we do not need to provide shipping details.
+            shippingDetails = null;
+        } else if (isDifferentDelivery) {
+            // If the customer is using a different delivery address, get those fields
+            shippingDetails = {
+                name: $.trim(form.delivery_name.value),
+                phone: $.trim(form.delivery_phone_number.value), // Add this field to your form if necessary
+                address: {
+                    line1: $.trim(form.delivery_street_address1.value),
+                    line2: $.trim(form.delivery_street_address2.value),
+                    city: $.trim(form.delivery_town_or_city.value),
+                    country: $.trim(form.delivery_country.value),
+                    postal_code: $.trim(form.delivery_postcode.value),
+                    state: $.trim(form.delivery_county.value)
+                }
+            };
+        } else {
+            // If the delivery address is the same as the billing address
+            shippingDetails = {
+                name: billingDetails.name,
+                phone: billingDetails.phone,
+                address: billingDetails.address
+            };
+        }
+    
+        // Confirm the card payment with Stripe
         stripe.confirmCardPayment(clientSecret, {
             payment_method: {
                 card: card,
-                billing_details: {
-                    name: $.trim(form.full_name.value),
-                    phone: $.trim(form.phone_number.value),
-                    email: $.trim(form.email.value),
-                    address:{
-                        line1: $.trim(form.street_address1.value),
-                        line2: $.trim(form.street_address2.value),
-                        city: $.trim(form.town_or_city.value),
-                        country: $.trim(form.country.value),
-                        state: $.trim(form.county.value),
-                    }
-                }
+                billing_details: billingDetails
             },
-            shipping: {
-                name: $.trim(form.full_name.value),
-                phone: $.trim(form.phone_number.value),
-                address: {
-                    line1: $.trim(form.street_address1.value),
-                    line2: $.trim(form.street_address2.value),
-                    city: $.trim(form.town_or_city.value),
-                    country: $.trim(form.country.value),
-                    postal_code: $.trim(form.postcode.value),
-                    state: $.trim(form.county.value),
-                }
-            },
+            shipping: shippingDetails // This can be null or an object based on the logic above
         }).then(function(result) {
             if (result.error) {
                 var errorDiv = document.getElementById('card-errors');

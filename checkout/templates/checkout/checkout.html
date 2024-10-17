@@ -115,7 +115,7 @@
                 </fieldset>
 
                 <!-- Delivery Address Section (only displayed if "Deliver to Address" is selected) -->
-                <fieldset class="rounded px-3 mb-5 d-none" id="delivery-address">
+                <fieldset class="rounded px-3 mb-5 d-none" id="different-delivery-address">
                     <legend class="fieldset-label small text-black px-2 w-auto">Delivery Address</legend>
                     {{ order_form.delivery_name | as_crispy_field }}
                     {{ order_form.delivery_street_address1 | as_crispy_field }}
