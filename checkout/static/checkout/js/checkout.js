@@ -1,32 +1,47 @@
+// This code is for the pick-up & delivery options
+
 document.addEventListener('DOMContentLoaded', function () {
     const pickupOption = document.getElementById('pickup');
-    const deliveryOption = document.getElementById('delivery');
-    const deliveryAddress = document.getElementById('delivery-address');
-    const saveDeliveryInfo = document.getElementById('save-delivery-info');
+    const deliveryBillingOption = document.getElementById('delivery-billing-address');
+    const btn_deliveryDifferentOption = document.getElementById('delivery-different-address');
+    const billingAddressSection = document.getElementById('billing-address');
+    const differentDeliveryAddress = document.getElementById('different-delivery-address');
 
-    // Hide the delivery address and save option if "Pick-Up" is selected
+    function toggleAddressFields() {
+        // Show billing address section for all options, if it exists
+        if (billingAddressSection) {
+            billingAddressSection.classList.remove('d-none');
+        }
+
+        if (pickupOption && pickupOption.checked) {
+            // Hide delivery address for pick-up if it exists
+            if (differentDeliveryAddress) {
+                differentDeliveryAddress.classList.add('d-none');
+            }
+        } else if (deliveryBillingOption && deliveryBillingOption.checked) {
+            // Hide delivery address for billing address delivery if it exists
+            if (differentDeliveryAddress) {
+                differentDeliveryAddress.classList.add('d-none');
+            }
+        } else if (btn_deliveryDifferentOption && btn_deliveryDifferentOption.checked) {
+            // Show delivery address for different address delivery if it exists
+            if (differentDeliveryAddress) {
+                differentDeliveryAddress.classList.remove('d-none');
+            }
+        }
+    }
+
+    // Event Listeners for order type change, with checks to ensure elements exist
     if (pickupOption) {
-        pickupOption.addEventListener('change', function () {
-            if (this.checked) {
-                deliveryAddress.classList.add('d-none');
-                saveDeliveryInfo.classList.add('d-none');
-            }
-        });
+        pickupOption.addEventListener('change', toggleAddressFields);
+    }
+    if (deliveryBillingOption) {
+        deliveryBillingOption.addEventListener('change', toggleAddressFields);
+    }
+    if (btn_deliveryDifferentOption) {
+        btn_deliveryDifferentOption.addEventListener('change', toggleAddressFields);
     }
 
-    // Show the delivery address and save option if "Delivery" is selected
-    if (deliveryOption) {
-        deliveryOption.addEventListener('change', function () {
-            if (this.checked) {
-                deliveryAddress.classList.remove('d-none');
-                saveDeliveryInfo.classList.remove('d-none');
-            }
-        });
-    }
-
-    // Initially hide or show based on the default checked radio
-    if (pickupOption && pickupOption.checked) {
-        deliveryAddress.classList.add('d-none');
-        saveDeliveryInfo.classList.add('d-none');
-    }
+    // Set initial state on page load
+    toggleAddressFields();
 });

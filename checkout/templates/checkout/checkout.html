@@ -81,19 +81,24 @@
                 <fieldset class="rounded px-3 mb-5">
                     <legend class="fieldset-label small text-black px-2 w-auto">Order Type</legend>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="order_type" id="pickup" value="pickup"
-                            checked>
+                        <input class="form-check-input" type="radio" name="order_type" id="pickup" value="pickup" checked>
                         <label class="form-check-label" for="pickup">
                             Pick up at Coffee and Honey
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="order_type" id="delivery" value="delivery">
-                        <label class="form-check-label" for="delivery">
-                            Delivery
+                        <input class="form-check-input" type="radio" name="order_type" id="delivery-billing-address" value="delivery-billing">
+                        <label class="form-check-label" for="delivery-billing-address">
+                            Delivery to billing address
                         </label>
                     </div>
-                </fieldset>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="order_type" id="delivery-different-address" value="delivery-different">
+                        <label class="form-check-label" for="delivery-different-address">
+                            Delivery to a different address
+                        </label>
+                    </div>
+                </fieldset>               
 
                 <!-- Details Section (always displayed) -->
                 <fieldset class="rounded px-3 mb-5">
