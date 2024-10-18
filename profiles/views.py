@@ -4,11 +4,13 @@ from django.shortcuts import render
 
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from .models import UserProfile, RecipientAddresses
 from .forms import UserProfileForm, RecipientAddressesForm
 
 from checkout.models import Order
 
+@login_required
 def profile(request):
     """ Display the user's profile. """
     profile = get_object_or_404(UserProfile, user=request.user)
@@ -31,6 +33,7 @@ def profile(request):
 
     return render(request, template, context)
 
+@login_required
 def order_history(request, order_number):
     order = get_object_or_404(Order, order_number=order_number)
 
@@ -47,6 +50,7 @@ def order_history(request, order_number):
 
     return render(request, template, context)
 
+@login_required
 def saved_addresses(request):
     """
     - View all recipient addresses saved to the user's profile
@@ -75,6 +79,7 @@ def saved_addresses(request):
     
     return render(request, 'profiles/saved_addresses.html', context)
 
+@login_required
 def edit_address(request, address_id):
     """
     Edit a saved recipient address.
@@ -97,7 +102,7 @@ def edit_address(request, address_id):
     
     return render(request, 'profiles/edit_address.html', context)
 
-
+@login_required
 def delete_address(request, address_id):
     """
     Delete a saved recipient address.
