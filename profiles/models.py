@@ -37,3 +37,20 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
         UserProfile.objects.create(user=instance)
     # Existing users: just save the profile
     instance.userprofile.save()
+    
+class RecipientAddresses(models.Model):
+    """
+    This saved additional delivery addresses in the user's profile for shipping
+    to family, friends, etc 
+    """
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='saved_addresses')
+    recipient_name = models.CharField(max_length=50)
+    recipient_street_address1 = models.CharField(max_length=80)
+    recipient_street_address2 = models.CharField(max_length=80, null=True, blank=True)
+    recipient_town_or_city = models.CharField(max_length=40)
+    recipient_county = models.CharField(max_length=80, null=True, blank=True)
+    recipient_postcode = models.CharField(max_length=20, null=True, blank=True)
+    recipient_country = models.CharField(max_length=40, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.street_address1}, {self.town_or_city}"
