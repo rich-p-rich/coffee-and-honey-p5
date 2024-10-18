@@ -88,6 +88,21 @@ def checkout(request):
                 order.delivery_postcode= order_form.cleaned_data['delivery_postcode']
                 order.delivery_country= order_form.cleaned_data['delivery_country']
                 order.delivery_cost = calculate_delivery_cost(order.order_total)
+
+                # Save the address to the user's profile if requested
+                if 'save-address' in request.POST and request.user.is_authenticated:
+                    recipient_address = RecipientAddresses(
+                        user_profile=request.user.userprofile,
+                        recipient_name=order.delivery_name,
+                        recipient_street_address1=order.delivery_street_address1,
+                        recipient_street_address2=order.delivery_street_address2,
+                        recipient_town_or_city=order.delivery_town_or_city,
+                        recipient_county=order.delivery_county,
+                        recipient_postcode=order.delivery_postcode,
+                        recipient_country=order.delivery_country,
+                    )
+                    recipient_address.save()
+                    messages.success(request, 'Delivery address saved to your profile.')
             
             # Inspect the client secret
             print(f"DEBUG: Client secret from POST: {request.POST.get('client_secret')}")
