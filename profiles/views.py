@@ -4,9 +4,8 @@ from django.shortcuts import render
 
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
-
-from .models import UserProfile
-from .forms import UserProfileForm
+from .models import UserProfile, RecipientAddresses
+from .forms import UserProfileForm, RecipientAddressesForm
 
 from checkout.models import Order
 
@@ -32,7 +31,6 @@ def profile(request):
 
     return render(request, template, context)
 
-
 def order_history(request, order_number):
     order = get_object_or_404(Order, order_number=order_number)
 
@@ -48,3 +46,63 @@ def order_history(request, order_number):
     }
 
     return render(request, template, context)
+
+def saved_addresses(request):
+    """
+    - View all recipient addresses saved to the user's profile
+    - Save a new recipient address to the user's profile
+    """
+    user_profile = request.user.userprofile
+    
+    if request.method == 'POST':
+        form = RecipientAddressesForm(request.POST)
+        if form.is_valid():
+            recipient_address = form.save(commit=False)
+            recipient_address.user_profile = user_profile
+            recipient_address.save()
+            messages.success(request, 'New address added successfully.')
+            return redirect('saved_addresses')
+    else:
+        form = RecipientAddressesForm()
+
+    # Display all saved addresses
+    addresses = RecipientAddresses.objects.filter(user_profile=user_profile)
+
+    context = {
+        'form': form,
+        'addresses': addresses,
+    }
+    
+    return render(request, 'profiles/saved_addresses.html', context)
+
+def edit_address(request, address_id):
+    """
+    Edit a saved recipient address.
+    """
+    address = get_object_or_404(RecipientAddresses, id=address_id, user_profile=request.user.userprofile)
+    
+    if request.method == 'POST':
+        form = RecipientAddressesForm(request.POST, instance=address)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Address successfully updated.')
+            return redirect('saved_addresses')
+    else:
+        form = RecipientAddressesForm(instance=address)
+    
+    context = {
+        'form': form,
+        'address': address,
+    }
+    
+    return render(request, 'profiles/edit_address.html', context)
+
+
+def delete_address(request, address_id):
+    """
+    Delete a saved recipient address.
+    """
+    address = get_object_or_404(RecipientAddresses, id=address_id, user_profile=request.user.userprofile)
+    address.delete()
+    messages.success(request, 'Recipient address deleted successfully.')
+    return redirect('saved_addresses')
