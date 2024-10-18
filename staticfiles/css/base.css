@@ -1,34 +1,122 @@
-html {
+/* For Checkout CSS: go to checkout/static/checkout/css/checkoutcss */
+
+/* Asterisk wildcard selector to override default browser styles */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* General styles */
+html, body {
     height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
 }
 
 body {
     color: #555;
     font-family: 'Solitreo';
-    background-color: goldenrod;
+    background-color: goldenrod
 }
 
+/* Header */
 .header-container {
-    padding: 20px;
-    margin-bottom: 20px;
-    font: black;
+    margin: 0;
+    padding-top: 10px;
+    padding: 10px;
     text-align: center;
+    background-color: whitesmoke;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#header-text {
+    color: black; 
+    text-align: center; 
+}
+
+#header-text a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#header-text a:hover {
+    text-decoration: underline;
+}
+
+#shopping-bag {
+        right: 20px; /* Bag image in header only: adjusts the distance from the right margin */
+}
+
+/* Navbar */
+#navbar-container {
     background-color: whitesmoke;
 }
 
+#navbar .navbar-nav {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    background-color: whitesmoke;
+    
+  }
+
+.nav-link {
+    color:#000;
+}
+
+#main-nav {
+    background-color: whitesmoke;
+    text-align: left;
+}
+
+/* Sign-in/out or Log-in/out pages */
+.sign-in-out-container {
+    margin-top: 250px;
+}
+
+/*Logged in status message: welcome NAME or you are logged out
+#login-status {
+    width: 100%; 
+    margin-top: 250px;
+    margin-bottom: 10px;
+    padding: 2px 0;
+    line-height: normal;
+    height: 24px;
+    background-color: whitesmoke;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }*/
+
+/* Message container for Toasts etc */
 .message-container {
     position: fixed;
     top: 72px;
     right: 15px;
-    z-index: 99999999999;
-}
+    z-index: 9999999999999999;
+} 
 
-.customer-toast {
+.custom-toast {
     overflow: visible;
 }
 
 .toast-capper {
     height: 2px;
+}
+
+
+/* Home page */
+#home-container {
+    margin-top: 350px;
 }
 
 .section {
@@ -40,13 +128,44 @@ body {
   }
 
 .home-section-img {
-    width: 100%;  /* or set a specific width */
-    height: auto; /* The height will adjust based on the width */
+    width: 100%;  
+    height: auto;
 }
 
-  #main-nav {
-    padding: 20px;
-  }
+.card {
+    width: 100%; 
+}
+
+/* Product detail page 
+.pdp-page {
+    margin-top: 250px;
+}
+
+Bag template */ 
+.bag-container {
+    padding-top: 200px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#shopping-bag {
+    margin-left: 30px;
+    margin-right: 20px;
+}
+
+.overlay {
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    background: goldenrod;
+    z-index: 0;
+}
+
+
+
+
 
 /* from Bulma */
 .icon {
@@ -105,6 +224,35 @@ footer {
 
 /* -------------------------------- Media Queries */
 
+@media (max-width: 370px){
+    .product-container {
+        margin-top: 275px; /* To push the product page below the head */
+    }
+}  
+
+@media (min-width: 370px) and (max-width: 479px) {
+    .product-container {
+        margin-top: 250px; /* To push the product page below the head */
+    }
+}  
+
+@media (min-width: 480px) {
+    .product-container {
+        margin-top: 170px; /* To push the product page below the head */
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .col-md-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    .offset-1 {
+        margin-left: 0;  /* Remove the offset for tablets */
+    }
+}
+
+
 /* Slightly larger container on xl screens */
 @media (min-width: 1200px) {
   .container {
@@ -121,16 +269,11 @@ footer {
         left: 0;
         z-index: 1030;
     }
-
-    .header-container {
-        padding-top: 164px;
-    }
 }
 
 /* Fix navbar position for larger screens (laptops and desktops) */
 @media (min-width: 992px) {
     .header-text-section {
-        margin-top: 60px; /* Adjust as per the height of your fixed-top header */
         z-index: 100;
     }
 
@@ -151,5 +294,33 @@ footer {
 
     .navbar {
         margin-top: 0;
+    }
+}
+
+/* For large laptops */
+@media (min-width: 1025px) and (max-width: 1200px) {
+    .product-container {
+        max-width: 85%; /* Adjust to fit the screen */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (min-width: 1440px) {
+    .product-container {
+        max-width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .card-img-top {
+        object-fit: cover;
+        width: 100%;
+        height: auto;
     }
 }
