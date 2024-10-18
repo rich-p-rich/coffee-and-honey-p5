@@ -131,14 +131,14 @@
                     {{ order_form.delivery_country | as_crispy_field }}
 
                     <!-- Save Delivery Information Option -->
-                    <div class="form-check form-check-inline float-right mr-0" id="save-delivery-info">
+                    <div class="form-check form-check-inline float-right mr-0" id="save-delivery-question">
                         {% if user.is_authenticated %}
-                        <label class="form-check-label" for="id-save-info">Save this delivery information to my
+                        <label class="form-check-label" for="id-save-address">Save this delivery information to my
                             profile</label>
-                        <input class="form-check-input ml-2 mr-0" type="checkbox" id="id-save-info" name="save-info"
+                        <input class="form-check-input ml-2 mr-0" type="checkbox" id="id-save-address" name="save-address"
                             checked>
                         {% else %}
-                        <label class="form-check-label" for="id-save-info">
+                        <label class="form-check-label" for="id-save-address">
                             <a class="text-info" href="{% url 'account_signup' %}">Create an account</a> or
                             <a class="text-info" href="{% url 'account_login' %}">login</a> to save this information
                         </label>

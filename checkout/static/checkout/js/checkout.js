@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const btn_deliveryDifferentOption = document.getElementById('delivery-different-address');
     const billingAddressSection = document.getElementById('billing-address');
     const differentDeliveryAddress = document.getElementById('different-delivery-address');
+    
 
     function toggleAddressFields() {
         // Show billing address section for all delivery options
@@ -45,3 +46,17 @@ document.addEventListener('DOMContentLoaded', function () {
     // Set initial state on page load
     toggleAddressFields();
 });
+
+const saveAddressCheckbox = document.getElementById('id-save-address');
+
+function toggleSaveAddressOption() {
+    if (saveAddressCheckbox && saveAddressCheckbox.checked) {
+        console.log("The user wants to save this address.");
+    } else {
+        console.log("The user does not want to save this address.");
+    }
+}
+
+if (saveAddressCheckbox) {
+    saveAddressCheckbox.addEventListener('change', toggleSaveAddressOption);
+}
