@@ -18,10 +18,9 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: white;
+    background-color: goldenrod;
     font-family: 'Red Hat Display', sans-serif;
     color: #080000;
-    background-color: whitesmoke;
 }
 
 /* Header */
@@ -89,10 +88,10 @@ body {
     margin-top: 250px;
 }
 
-/*Logged in status message: welcome NAME or you are logged out
+/*Logged in status message: welcome NAME or you are logged out*/
 #login-status {
     width: 100%; 
-    margin-top: 250px;
+    margin-top: 10px;
     margin-bottom: 10px;
     padding: 2px 0;
     line-height: normal;
@@ -101,8 +100,8 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-  }*/
-
+  }
+  
 /* Message container for Toasts etc */
 .message-container {
     position: fixed;
@@ -220,15 +219,34 @@ Bag template */
 }
 
 /* The footer */
+/* The footer */
 footer {
     background-color: whitesmoke;
     display: flex;
     justify-content: center;
     padding: 10px;
     width: 100%;
+    z-index: 20;
+  }
+  
+  #social-networks {
+      display: flex;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      align-items: center;
+      justify-content: center;
+  }
+  
+  #social-networks li {
+      margin-right: 20px;  
+  }
+  
+  #social-networks li:last-child {
+      margin-right: 0;  
   }
 
-/* -------------------------------- Media Queries */
+/* Media Queries */
 
 @media (max-width: 370px){
     .product-container {
@@ -259,74 +277,3 @@ footer {
 }
 
 
-/* Slightly larger container on xl screens */
-/* @media (min-width: 1200px) {
-  .container {
-    max-width: 80%;
-  }
-}
-
-/* fixed top navbar only on medium and up */
-/* @media (min-width: 992px) {
-    .fixed-top-desktop-only {
-        position: fixed;
-        top: 0;
-        right: 0;
-        left: 0;
-        z-index: 1030;
-    }
-}
-
-/* Fix navbar position for larger screens (laptops and desktops) */
-/*  @media (min-width: 992px) {
-    .header-text-section {
-        z-index: 100;
-    }
-
-    .navbar {
-        margin-top: 0; /* Make sure the navbar is placed immediately below the header text */
-   /*  }
-
-    .navbar-collapse {
-        justify-content: center;
-    }
-}
-
-/* Ensure mobile view is unaffected */
-/*  @media (max-width: 991px) {
-    .header-text-section {
-        display: none;
-    }
-
-    .navbar {
-        margin-top: 0;
-    }
-}
-
-/* For large laptops */
-/* @media (min-width: 1025px) and (max-width: 1200px) {
-    .product-container {
-        max-width: 85%; /* Adjust to fit the screen */
-      /*   margin-left: auto;
-        margin-right: auto;
-    } */
-
-   /*  .card-img-top {
-        width: 100%;
-        height: auto;
-    }
-} */
-
-/*  @media (min-width: 1440px) {
-    .product-container {
-        max-width: 80%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .card-img-top {
-        object-fit: cover;
-        width: 100%;
-        height: auto;
-    }
-}
