@@ -19,7 +19,10 @@ def profile(request):
         form = UserProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
+            print(f"DEBUG: Profile form saved. Data: {form.cleaned_data}")
             messages.success(request, 'Profile updated successfully')
+        else:
+            print("DEBUG: Profile form is invalid:", form.errors)
 
     form = UserProfileForm(instance=profile)
     orders = profile.orders.all()
@@ -78,6 +81,30 @@ def saved_addresses(request):
     }
     
     return render(request, 'profiles/saved_addresses.html', context)
+
+@login_required
+def add_address(request, address_id):
+    """
+    Add an address to the profile.
+    """
+    address = get_object_or_404(RecipientAddresses, id=address_id, user_profile=request.user.userprofile)
+    
+    if request.method == 'POST':
+        form = RecipientAddressesForm(request.POST, instance=address)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Address successfully added.')
+            return redirect('saved_addresses')
+    else:
+        form = RecipientAddressesForm(instance=address)
+    
+    context = {
+        'form': form,
+        'address': address,
+    }
+    
+    return render(request, 'profiles/add_address.html', context)
+
 
 @login_required
 def edit_address(request, address_id):

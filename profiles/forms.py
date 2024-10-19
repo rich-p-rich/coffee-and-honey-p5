@@ -39,6 +39,7 @@ class RecipientAddressesForm(forms.ModelForm):
         model = RecipientAddresses
         fields = [
             'recipient_name', 
+            'recipient_phone_number',
             'recipient_street_address1', 
             'recipient_street_address2',
             'recipient_town_or_city', 
@@ -54,6 +55,7 @@ class RecipientAddressesForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         placeholders = {
             'recipient_name': 'Recipient Name',
+            'recipient_phone_number': 'Recipient Phone Number',
             'recipient_street_address1': 'Street Address 1',
             'recipient_street_address2': 'Street Address 2',
             'recipient_town_or_city': 'Town or City',
@@ -62,7 +64,7 @@ class RecipientAddressesForm(forms.ModelForm):
             'recipient_country': 'Country',
         }
 
-        self.fields['default_phone_number'].widget.attrs['autofocus'] = True
+        self.fields['recipient_phone_number'].widget.attrs['autofocus'] = True
         for field in self.fields:
             if field != 'default_country':
                 if self.fields[field].required:

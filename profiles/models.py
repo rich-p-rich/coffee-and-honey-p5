@@ -45,6 +45,7 @@ class RecipientAddresses(models.Model):
     """
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='saved_addresses')
     recipient_name = models.CharField(max_length=50)
+    recipient_phone_number = models.CharField(max_length=20, null=True, blank=True)
     recipient_street_address1 = models.CharField(max_length=80)
     recipient_street_address2 = models.CharField(max_length=80, null=True, blank=True)
     recipient_town_or_city = models.CharField(max_length=40)
