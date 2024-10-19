@@ -6,14 +6,6 @@
 <link rel="stylesheet" href="{% static 'checkout/css/checkout.css' %}">
 {% endblock %}
 
-{% block page_header %}
-<div class="container one checkout-container">
-    <div class="row">
-        <div class="col"></div>
-    </div>
-</div>
-{% endblock %}
-
 {% block content %}
 <div class="checkout-overlay"></div>
 <div class="container order-sum">
@@ -27,13 +19,13 @@
 
     <div class="row">
         <div class="order-sum col-12 col-lg-6 order-lg-last mb-5">
-            <p class="text-muted">Order Summary ({{ product_count }})</p>
+            <p>Order Summary</p>
             <div class="row">
                 <div class="col-7 offset-2">
                     <p class="mb-1 mt-0 small text-muted">Item</p>
                 </div>
                 <div class="col-3 text-right">
-                    <p class="mb-1 mt-0 small text-muted">Subtotal</p>
+                    <p class="my-0 small text-muted">€{{ item.subtotal|floatformat:2 }}</p>
                 </div>
             </div>
             {% for item in bag_items %}
@@ -50,12 +42,17 @@
                 <div class="col-7">
                     <p class="my-0"><strong>{{ item.product.name }}</strong></p>
                     <p class="my-0 small">Size:
-                        {% if item.product.has_sizes %}{{ item.size|upper }}{% else %}N/A{% endif %}</p>
+                        {% if item.variant %}
+                        {{ item.variant.weight }}g
+                        {% else %}
+                        N/A
+                        {% endif %}
+                    </p>
                     <p class="my-0 small text-muted">Qty: {{ item.quantity }}</p>
-                </div>
-                <div class="col-3 text-right">
-                    <p class="my-0 small text-muted">€{{ item.product.price | calc_subtotal:item.quantity }}</p>
-                </div>
+                    </div>
+                    <div class="col-3 text-right">
+                        <p class="my-0 small text-muted">€{{ item.product.price | calc_subtotal:item.quantity }}</p>
+                    </div>
             </div>
             {% endfor %}
             <hr class="my-0">

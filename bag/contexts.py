@@ -23,6 +23,7 @@ def bag_contents(request):
                         'quantity': item_data,
                         'product': product,
                         'variant': variant,
+                        'subtotal': Decimal(variant.price) * Decimal(quantity),
                     })
                 else:
                     print(f"Error: No price found for variant {variant}")
@@ -47,6 +48,7 @@ def bag_contents(request):
                                 'product': product,
                                 'variant': variant,
                                 'size': size,
+                                'subtotal': Decimal(variant.price) * Decimal(quantity),
                             })
                         else:
                             print(f"Error: No price found for variant {variant}")
@@ -69,6 +71,7 @@ def bag_contents(request):
                     'item_id': item_id,
                     'quantity': item_data,
                     'product': product,
+                    'subtotal': Decimal(variant.price) * Decimal(quantity),
                 })
             else:
                 print(f"Error: No price found for product {product.name}")
