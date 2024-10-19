@@ -77,7 +77,7 @@ def checkout(request):
                 order.pick_up = True
                 order.delivery_cost = settings.PICKUP_DELIVERY_PRICE
                 # Confirmation message
-                messages.success(request, 'You have selected to pick up your order in our cafe.')
+                messages.success(request, 'You have chosen to pick up your order from Coffee and Honey.')
             else:
                 order.pick_up = False
                 order.delivery_name = order_form.cleaned_data['delivery_name']
