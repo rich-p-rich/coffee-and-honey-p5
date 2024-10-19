@@ -33,7 +33,7 @@ body {
     padding-top: 10px;
     padding: 10px;
     text-align: center;
-    background-color: whitesmoke;
+    background-color: white;
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -53,29 +53,38 @@ body {
 }
 
 #shopping-bag {
-        right: 20px; /* Bag image in header only: adjusts the distance from the right margin */
+        right: 20px; /* Bag image in header only; nothing to do with actual bag */
 }
 
 /* Navbar */
-#navbar-container {
-    background-color: whitesmoke;
-}
 
 #navbar .navbar-nav {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     width: 100%;
-    background-color: whitesmoke;
-    
-  }
+}
 
-.nav-link {
+.navbar {
+    margin-bottom: 0;
+    background-color: white !important;
     color:#000;
 }
 
-#main-nav {
-    background-color: whitesmoke;
-    text-align: left;
+.nav-item {
+    padding: 0.5rem 1.5rem;
+    color:black; 
+}
+
+.navbar-collapse {
+    display: flex;
+    justify-content: space-between;
+    background-color: white !important; 
+    color: black; 
+    width: 100%;
+}
+
+.dropdown-menu {
+    background-color: white; 
 }
 
 /* Sign-in/out or Log-in/out pages */
@@ -254,14 +263,14 @@ footer {
 
 
 /* Slightly larger container on xl screens */
-@media (min-width: 1200px) {
+/* @media (min-width: 1200px) {
   .container {
     max-width: 80%;
   }
 }
 
 /* fixed top navbar only on medium and up */
-@media (min-width: 992px) {
+/* @media (min-width: 992px) {
     .fixed-top-desktop-only {
         position: fixed;
         top: 0;
@@ -272,14 +281,14 @@ footer {
 }
 
 /* Fix navbar position for larger screens (laptops and desktops) */
-@media (min-width: 992px) {
+/*  @media (min-width: 992px) {
     .header-text-section {
         z-index: 100;
     }
 
     .navbar {
         margin-top: 0; /* Make sure the navbar is placed immediately below the header text */
-    }
+   /*  }
 
     .navbar-collapse {
         justify-content: center;
@@ -287,7 +296,7 @@ footer {
 }
 
 /* Ensure mobile view is unaffected */
-@media (max-width: 991px) {
+/*  @media (max-width: 991px) {
     .header-text-section {
         display: none;
     }
@@ -298,20 +307,20 @@ footer {
 }
 
 /* For large laptops */
-@media (min-width: 1025px) and (max-width: 1200px) {
+/* @media (min-width: 1025px) and (max-width: 1200px) {
     .product-container {
         max-width: 85%; /* Adjust to fit the screen */
-        margin-left: auto;
+      /*   margin-left: auto;
         margin-right: auto;
-    }
+    } */
 
-    .card-img-top {
+   /*  .card-img-top {
         width: 100%;
         height: auto;
     }
-}
+} */
 
-@media (min-width: 1440px) {
+/*  @media (min-width: 1440px) {
     .product-container {
         max-width: 80%;
         margin-left: auto;

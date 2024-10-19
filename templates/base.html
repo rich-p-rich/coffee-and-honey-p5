@@ -51,6 +51,7 @@
 <body>
     <!-- Header -->
     <header class="container-fluid fixed-top header-container">
+        <!-- Header Text -->
         <div class="row align-items-center">
             <div id="header-text" class="col-12 text-center py-2">
                 <a href="{% url 'home' %}">
@@ -60,37 +61,33 @@
             </div>
         </div>
 
-        <!--Navbar -->
-        <nav id="navbar-container" class="navbar navbar-expand-lg navbar-light">
-            <div class="navbar container-fluid d-flex justify-content-between">
-                <!-- Toggler button -->
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav"
-                    aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <!-- Toggler Button -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
-                <!-- Main navigation -->
+        
+                <!-- Include Main Navigation -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 {% include 'includes/main-nav.html' %}
-
+                </div>    
                 <!-- Shopping bag -->
                 <div id="shopping-bag" class="d-flex align-items-center">
-                    <ul class="list-inline list-unstyled my-0">
-                        <li class="list-inline-item">
-                            <a class="{% if grand_total %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link"
-                                href="{% url 'view_bag' %}">
-                                <div class="text-center">
-                                    <div><i class="fas fa-shopping-bag fa-lg"></i></div>
-                                    <p class="my-0">
-                                        {% if grand_total %}
-                                        ${{ grand_total|floatformat:2 }}
-                                        {% else %}
-                                        $0.00
-                                        {% endif %}
-                                    </p>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
+                    <a class="{% if grand_total %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link"
+                        href="{% url 'view_bag' %}">
+                        <div class="text-center">
+                            <i class="fas fa-shopping-bag fa-lg"></i>
+                            <p class="my-0">
+                                {% if grand_total %}
+                                    ${{ grand_total|floatformat:2 }}
+                                {% else %}
+                                    $0.00
+                                {% endif %}
+                            </p>
+                        </div>
+                    </a>
                 </div>
             </div>
         </nav>

@@ -1,68 +1,53 @@
-<div class="collapse navbar-collapse" id="main-nav">
-    <ul class="navbar-nav align-items-center w-auto mx-auto">
-        <li class="nav-item nav-item mx-3">
-            <a class="logo-font font-weight-bold nav-link" href="{% url 'products' %}">
-                All Products
-            </a>
-        </li>
-        <li class="nav-item dropdown nav-item mx-3">
-            <a class="logo-font font-weight-bold nav-link mr-5" href="#" id="coffee-link"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Coffee
-            </a>
-            <div class="dropdown-menu border-0" aria-labelledby="coffee-link">
-                <a href="{% url 'products' %}?name=arabica" class="dropdown-item">Arabica</a>
-                <a href="{% url 'products' %}?name=robusta" class="dropdown-item">Robusta</a>
-                <a href="{% url 'products' %}?name=espresso" class="dropdown-item">Epresso Blend</a>
-                <a href="{% url 'products' %}?category=coffee" class="dropdown-item">All Coffee</a>
-            </div>
-        </li>
-
-        <li class="nav-item dropdown nav-item mx-3">
-            <a class="logo-font font-weight-bold nav-link mr-5" href="#" id="honey-link"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Honey
-            </a>
-            <div class="dropdown-menu border-0" aria-labelledby="honey-link">
-                <a href="{% url 'products' %}?name=flower" class="dropdown-item">Flower Honey</a>
-                <a href="{% url 'products' %}?name=forest" class="dropdown-item">Forest Honey</a>
-                <a href="{% url 'products' %}?name=heather" class="dropdown-item">Heather Honey</a>
-                <a href="{% url 'products' %}?category=honey" class="dropdown-item">All Honey</a>    
-            </div>
-        </li>
-        <li class="nav-item dropdown nav-item mx-3">
-            <a class="logo-font font-weight-bold nav-link" href="#" id="bookings-link" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Bookings
-            </a>
-            <div class="dropdown-menu border-0" aria-labelledby="bookings-link">
-                <a href="" class="dropdown-item">Reserve a table</a>
-                <a href="" class="dropdown-item">Book our function room</a>
-                <a href="" class="dropdown-item">Bee Hive Tour</a>
-            </div>
-        </li>
-        <li class="nav-item dropdown nav-item mx-3">
-            <a class="logo-font font-weight-bold nav-link" href="#" id="account-link" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Account
-            </a>
-            <div class="dropdown-menu" aria-labelledby="account-link">
-                {% if request.user.is_authenticated %}
+<ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+    <li class="nav-item">
+        <a class="nav-link font-weight-bold" href="{% url 'products' %}">All Products</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link font-weight-bold dropdown-toggle" href="#" id="coffee-link"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Coffee</a>
+        <div class="dropdown-menu" aria-labelledby="coffee-link">
+            <a href="{% url 'products' %}?name=arabica" class="dropdown-item">Arabica</a>
+            <a href="{% url 'products' %}?name=robusta" class="dropdown-item">Robusta</a>
+            <a href="{% url 'products' %}?name=espresso" class="dropdown-item">Espresso Blend</a>
+            <a href="{% url 'products' %}?category=coffee" class="dropdown-item">All Coffee</a>
+        </div>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link font-weight-bold dropdown-toggle" href="#" id="honey-link"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Honey</a>
+        <div class="dropdown-menu" aria-labelledby="honey-link">
+            <a href="{% url 'products' %}?name=flower" class="dropdown-item">Flower Honey</a>
+            <a href="{% url 'products' %}?name=forest" class="dropdown-item">Forest Honey</a>
+            <a href="{% url 'products' %}?name=heather" class="dropdown-item">Heather Honey</a>
+            <a href="{% url 'products' %}?category=honey" class="dropdown-item">All Honey</a>
+        </div>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link font-weight-bold dropdown-toggle" href="#" id="bookings-link"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Bookings</a>
+        <div class="dropdown-menu" aria-labelledby="bookings-link">
+            <a href="" class="dropdown-item">Reserve a Table</a>
+            <a href="" class="dropdown-item">Book Our Function Room</a>
+            <a href="" class="dropdown-item">Bee Hive Tour</a>
+        </div>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link font-weight-bold dropdown-toggle" href="#" id="account-link"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
+        <div class="dropdown-menu" aria-labelledby="account-link">
+            {% if request.user.is_authenticated %}
                 {% if request.user.is_superuser %}
                 <a href="{% url 'account_logout' %}" class="dropdown-item">Product Management</a>
                 {% endif %}
                 <a href="{% url 'profile' %}" class="dropdown-item">My Profile</a>
                 <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
-                {% else %}
+            {% else %}
                 <a href="{% url 'account_signup' %}" class="dropdown-item">Register</a>
                 <a href="{% url 'account_login' %}" class="dropdown-item">Login</a>
-                {% endif %}
-            </div>
-        </li>
-        <li class="nav-item nav-item mx-3">
-            <a class="logo-font font-weight-bold nav-link" href="">
-                About Us
-            </a>
-        </li>
-    </ul>
-</div>
+            {% endif %}
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link font-weight-bold" href="#">About Us</a>
+    </li>
+</ul>
