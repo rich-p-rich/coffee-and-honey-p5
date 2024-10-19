@@ -19,12 +19,9 @@ body {
     display: flex;
     flex-direction: column;
     background-color: white;
-}
-
-body {
-    color: #555;
-    font-family: 'Solitreo';
-    background-color: goldenrod
+    font-family: 'Red Hat Display', sans-serif;
+    color: #080000;
+    background-color: whitesmoke;
 }
 
 /* Header */
