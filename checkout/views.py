@@ -73,7 +73,7 @@ def checkout(request):
             print("DEBUG: Order form is valid")
             order = order_form.save(commit=False)
 
-            if 'pickup' in request.POST:
+            if request.POST.get('order_type') == 'pick_up':
                 order.pick_up = True
                 order.delivery_cost = settings.PICKUP_DELIVERY_PRICE
                 # Confirmation message

@@ -121,7 +121,7 @@ body {
 
 /* Home page */
 #home-container {
-    margin-top: 50px;
+    margin-top: 75px;
 }
 
 .section {
@@ -144,9 +144,9 @@ body {
 /* Product detail page 
 .pdp-page {
     margin-top: 250px;
-}
+}  
 
-Bag template */ 
+/* Bag template */ 
 .bag-container {
     padding-top: 200px;
     padding-left: 20px;
@@ -162,21 +162,17 @@ Bag template */
     margin-right: 20px;
 }
 
-/* .overlay {
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    position: fixed;
-    background: goldenrod;
-    z-index: 0;
-} */
+/* Profile */
 
-
-
-
+.profile-container {
+    background-color: white;
+    padding-top: 50px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
 
 /* from Bulma */
+
 .icon {
     align-items: center;
     display: inline-flex;
@@ -222,7 +218,6 @@ Bag template */
     border: 1px solid black !important;
 }
 
-/* The footer */
 /* The footer */
 footer {
     background-color: whitesmoke;
