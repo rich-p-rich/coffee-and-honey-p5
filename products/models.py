@@ -41,6 +41,7 @@ class ProductVariant(models.Model):
         return f"{self.product.name} - {self.weight}g" # g = grams
 
 class Service(models.Model):
+    # Linked in product model at extra_services = models.ManyToManyField('Service)...
     name = models.CharField(max_length=254)
     description = models.TextField(null=True, blank=True)
     surcharge = models.DecimalField(max_digits=6, decimal_places=2)  # Additional costs for the added service

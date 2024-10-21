@@ -9,6 +9,7 @@ from .forms import OrderForm
 from .models import Order, OrderLineItem
 
 from products.models import Product
+from profiles.models import RecipientAddresses
 from profiles.forms import UserProfileForm
 from profiles.models import UserProfile
 from bag.contexts import bag_contents
@@ -73,37 +74,55 @@ def checkout(request):
             print("DEBUG: Order form is valid")
             order = order_form.save(commit=False)
 
-            if request.POST.get('order_type') == 'pick_up':
+
+            # Identify chosen delivery_type
+            delivery_type = request.POST.get('delivery_type')
+
+            if delivery_type == 'pickup':
                 order.pick_up = True
-                order.delivery_cost = settings.PICKUP_DELIVERY_PRICE
-                # Confirmation message
+                order.delivery_cost = PICKUP_DELIVERY_PRICE  # Set to 0 for pick-up
                 messages.success(request, 'You have chosen to pick up your order from Coffee and Honey.')
-            else:
+            elif delivery_type == 'delivery-different':
+                # Use the form data to fill delivery fields
                 order.pick_up = False
+                order.different_delivery_address = True
                 order.delivery_name = order_form.cleaned_data['delivery_name']
                 order.delivery_street_address1 = order_form.cleaned_data['delivery_street_address1']
                 order.delivery_street_address2 = order_form.cleaned_data['delivery_street_address2']
                 order.delivery_town_or_city = order_form.cleaned_data['delivery_town_or_city']
-                order.delivery_county= order_form.cleaned_data['delivery_county']
-                order.delivery_postcode= order_form.cleaned_data['delivery_postcode']
-                order.delivery_country= order_form.cleaned_data['delivery_country']
+                order.delivery_county = order_form.cleaned_data['delivery_county']
+                order.delivery_postcode = order_form.cleaned_data['delivery_postcode']
+                order.delivery_country = order_form.cleaned_data['delivery_country']
+                order.delivery_cost = calculate_delivery_cost(order.order_total)
+            else:  # Assumes 'delivery-billing' case
+                order.pick_up = False
+                order.different_delivery_address = False
+                # Copy billing address to delivery fields
+                order.delivery_name = order.billing_full_name
+                order.delivery_street_address1 = order.billing_street_address1
+                order.delivery_street_address2 = order.billing_street_address2
+                order.delivery_town_or_city = order.billing_town_or_city
+                order.delivery_county = order.billing_county
+                order.delivery_postcode = order.billing_postcode
+                order.delivery_country = order.billing_country
                 order.delivery_cost = calculate_delivery_cost(order.order_total)
 
-                # Save the address to the user's profile if requested
-                if 'save-address' in request.POST and request.user.is_authenticated:
-                    recipient_address = RecipientAddresses(
-                        user_profile=request.user.userprofile,
-                        recipient_name=order.delivery_name,
-                        recipient_street_address1=order.delivery_street_address1,
-                        recipient_street_address2=order.delivery_street_address2,
-                        recipient_town_or_city=order.delivery_town_or_city,
-                        recipient_county=order.delivery_county,
-                        recipient_postcode=order.delivery_postcode,
-                        recipient_country=order.delivery_country,
-                    )
-                    recipient_address.save()
-                    messages.success(request, 'Delivery address saved to your profile.')
-            
+            # Save the address if requested
+            if 'save-address' in request.POST and request.user.is_authenticated and delivery_type != 'pickup':
+                recipient_address = RecipientAddresses(
+                    user_profile=request.user.userprofile,
+                    recipient_name=order.delivery_name,
+                    recipient_street_address1=order.delivery_street_address1,
+                    recipient_street_address2=order.delivery_street_address2,
+                    recipient_town_or_city=order.delivery_town_or_city,
+                    recipient_county=order.delivery_county,
+                    recipient_postcode=order.delivery_postcode,
+                    recipient_country=order.delivery_country,
+                )
+                recipient_address.save()
+                messages.success(request, 'Delivery address saved to your profile.')
+
+                    
             # Inspect the client secret
             print(f"DEBUG: Client secret from POST: {request.POST.get('client_secret')}")
 
