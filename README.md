@@ -1,141 +1,74 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Welcome to my project 5: Coffee and Honey
 
-Welcome to my project 5: Coffee and Honey
-
-Background. 
-I have long been a fan of coffee shops where you can enjoy decent coffee and cake, maybe a freshly made sandwich, and while away some time either reading a book
+## Background and Business Case
+I have long been a fan of coffee shops where you can enjoy decent coffee and cake, maybe a freshly made sandwich, and spend time either meeting friends, reading a book
 or simply staring out of the window. I am as happy in a good chain or franchise as I am in an independent, but a good independent coffee shop
 will always hold a special place in my heart. Sadly, I have seen several such independents go out of business because the margins are so fine 
 and the competition is so tough. However I have also seen many independents try to expand their businesses by selling or offering extras, from function rooms in which yoga classes
 or toddler groups are held, selling cups and teapots or even installing a bookstore. Some ideas have worked and some have not, but I thought this would be 
 an interesting project to take on for P5: how could an independent coffee shop establish an online presence that would help it:
 
-- expand its business by becoming better known locally 
 - make money by selling products online  
+- offering extra services such as function room booking
+- allow a limited amount of table reservations 
+- offer a hive-tour for anyone interested in bees and beekeeing (see below for background)
+- and by doing all this, expand its business by becoming better known locally 
 
 These are therefore the aims of my P5 project website Coffee and Honey.
 
+# Project Overview: Coffee and Honey
 
-## Gitpod Reminders
+As will be clear, the website relies heavily on the Boutique Ado Walk-Through project, particularly for the shopping bag and checkout process. However, as my imagined Coffee and Honey shop is a bit more limited in terms of the number of products it offers, and sells a different type of project with different pricing structure, I have hopefully provided sufficient independent development away from the Boutique Ado example.  
 
-To run a frontend (HTML, CSS, Javascript only) application in Gitpod, in the terminal, type:
+As with Project 4, it is built on mobile-first principles around a Django framework and supported by a PostgreSQL database from the Code Institute; I generated the secret key using this tool: https://randomkeygen.com/
 
-`python3 -m http.server`
+## Why 'Coffee and Honey'?
 
-A blue button should appear to click: _Make Public_,
+One of my hobbies is beekeeping, and I briefly considered setting up a website that sells beekeeping equipment; however, I thought there are more possibilities in cafe-style business, such as bookings (tables, function room and hive-tours) than in a straight-forward e-commerce shop, so decided to merge my two ideas and interests. This has some parallels in real-life: many bakeries were I live in southern Germany sell jars of honey from local beekeepers (although these bakeries do not usually have an online presence) and I thought that would be an interesting add-on to the type of coffee shop that are familiar to me from England and Ireland.  
 
-Another blue button should appear to click: _Open Browser_.
+Merging the two ideas also gives (I think) a catchy and memorable name, that describes the website's buisness in concise and clear terms. People are generally well-disposed to either coffe or honey, often both, and 
 
-To run a backend Python file, type `python3 app.py` if your Python file is named `app.py`, of course.
 
-A blue button should appear to click: _Make Public_,
+# MVP
 
-Another blue button should appear to click: _Open Browser_.
+## Website functionality 
+The MVP allows customers to:
+- browse and purchase products 
+- add items to the shopping bag, and edit the shopping bag 
+- create an account in which their basic details and order history are saved
+- choose between home delivery, delivery to friends / family, or pick-up in the cafe
+- complete an order using their credit card hosted by Stripe (currently test data only!)
+- the account also allows them to add / edit / delete addresses which are saved to their profile.
 
-By Default, Gitpod gives you superuser security privileges. Therefore, you do not need to use the `sudo` (superuser do) command in the bash terminal in any of the lessons.
+In this sense, CRUD functionality is available both in the shopping bag and in the profile.  
 
-To log into the Heroku toolbelt CLI:
+The MVP version of my project takes orders for the following: 
+- bags of coffee beans in different sizes (250g, 500g, 750g, 1000g)
+- customers can choose to pay a small surcharge to have them freshly ground before shipping 
+- bags of pre-ground coffee 
+- jars of honey in two different sizes: 340g and 500g  
+The price of both products is calculated according to the weight.  
 
-1. Log in to your Heroku account and go to *Account Settings* in the menu under your avatar.
-2. Scroll down to the *API Key* and click *Reveal*
-3. Copy the key
-4. In Gitpod, from the terminal, run `heroku_config`
-5. Paste in your API key when asked
+## Admin
+The admin interface can be accessed by a superuser who can do the following: 
+- TO DO
 
-You can now use the `heroku` CLI program - try running `heroku apps` to confirm it works. This API key is unique and private to you, so do not share it. If you accidentally make it public, you can create a new one with _Regenerate API Key_.
 
-### Connecting your Mongo database
 
-- **Connect to Mongo CLI on a IDE**
-- navigate to your MongoDB Clusters Sandbox
-- click **"Connect"** button
-- select **"Connect with the MongoDB shell"**
-- select **"I have the mongo shell installed"**
-- choose **mongosh (2.0 or later)** for : **"Select your mongo shell version"**
-- choose option: **"Run your connection string in your command line"**
-- in the terminal, paste the copied code `mongo "mongodb+srv://<CLUSTER-NAME>.mongodb.net/<DBname>" --apiVersion 1 --username <USERNAME>`
-  - replace all `<angle-bracket>` keys with your own data
-- enter password _(will not echo **\*\*\*\*** on screen)_
+## Security
+All sensitive information such as the secret key is set in env.py which is added to .gitignore in Gitpod, and to the Heroku config vars for deployment. Debug is set to False.  
 
-------
+The front-end and back-end security is provided by the @login_required decorator along with CSRF protection implemented via the {% csrf_token %} template tag.
 
-## Release History
+# UX
 
-We continually tweak and adjust this template to help give you the best experience. Here is the version history:
+# Agile
 
-**June 18, 2024,** Add Mongo back into template
+# Version Control
 
-**June 14, 2024,** Temporarily remove Mongo until the key issue is resolved
+## A note on commit messages.
+Following feedback on my 4th project on 1st October, I started writing them according to the conventions listed here: https://www.conventionalcommits.org/en/v1.0.0/#summary
+Therefore there is a change in the style of the commit messages from that date. However, I think it is worth making the change in order to improve as a developer.
 
-**May 28 2024:** Fix Mongo and Links installs
 
-**April 26 2024:** Update node version to 16
 
-**September 20 2023:** Update Python version to 3.9.17.
-
-**September 1 2021:** Remove `PGHOSTADDR` environment variable.
-
-**July 19 2021:** Remove `font_fix` script now that the terminal font issue is fixed.
-
-**July 2 2021:** Remove extensions that are not available in Open VSX.
-
-**June 30 2021:** Combined the P4 and P5 templates into one file, added the uptime script. See the FAQ at the end of this file.
-
-**June 10 2021:** Added: `font_fix` script and alias to fix the Terminal font issue
-
-**May 10 2021:** Added `heroku_config` script to allow Heroku API key to be stored as an environment variable.
-
-**April 7 2021:** Upgraded the template for VS Code instead of Theia.
-
-**October 21 2020:** Versions of the HTMLHint, Prettier, Bootstrap4 CDN and Auto Close extensions updated. The Python extension needs to stay the same version for now.
-
-**October 08 2020:** Additional large Gitpod files (`core.mongo*` and `core.python*`) are now hidden in the Explorer, and have been added to the `.gitignore` by default.
-
-**September 22 2020:** Gitpod occasionally creates large `core.Microsoft` files. These are now hidden in the Explorer. A `.gitignore` file has been created to make sure these files will not be committed, along with other common files.
-
-**April 16 2020:** The template now automatically installs MySQL instead of relying on the Gitpod MySQL image. The message about a Python linter not being installed has been dealt with, and the set-up files are now hidden in the Gitpod file explorer.
-
-**April 13 2020:** Added the _Prettier_ code beautifier extension instead of the code formatter built-in to Gitpod.
-
-**February 2020:** The initialisation files now _do not_ auto-delete. They will remain in your project. You can safely ignore them. They just make sure that your workspace is configured correctly each time you open it. It will also prevent the Gitpod configuration popup from appearing.
-
-**December 2019:** Added Eventyret's Bootstrap 4 extension. Type `!bscdn` in a HTML file to add the Bootstrap boilerplate. Check out the <a href="https://github.com/Eventyret/vscode-bcdn" target="_blank">README.md file at the official repo</a> for more options.
-
-------
-
-## FAQ about the uptime script
-
-**Why have you added this script?**
-
-It will help us to calculate how many running workspaces there are at any one time, which greatly helps us with cost and capacity planning. It will help us decide on the future direction of our cloud-based IDE strategy.
-
-**How will this affect me?**
-
-For everyday usage of Gitpod, it doesn’t have any effect at all. The script only captures the following data:
-
-- An ID that is randomly generated each time the workspace is started.
-- The current date and time
-- The workspace status of “started” or “running”, which is sent every 5 minutes.
-
-It is not possible for us or anyone else to trace the random ID back to an individual, and no personal data is being captured. It will not slow down the workspace or affect your work.
-
-**So….?**
-
-We want to tell you this so that we are being completely transparent about the data we collect and what we do with it.
-
-**Can I opt out?**
-
-Yes, you can. Since no personally identifiable information is being captured, we'd appreciate it if you let the script run; however if you are unhappy with the idea, simply run the following commands from the terminal window after creating the workspace, and this will remove the uptime script:
-
-```
-pkill uptime.sh
-rm .vscode/uptime.sh
-```
-
-**Anything more?**
-
-Yes! We'd strongly encourage you to look at the source code of the `uptime.sh` file so that you know what it's doing. As future software developers, it will be great practice to see how these shell scripts work.
-
----
-
-Happy coding!

@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from .models import UserProfile, RecipientAddresses
 from .forms import UserProfileForm, RecipientAddressesForm
 
@@ -52,6 +53,16 @@ def order_history(request, order_number):
     }
 
     return render(request, template, context)
+
+@login_required
+def set_billing_as_default(request):
+    if request.method == 'POST':
+        user_profile = request.user.userprofile
+        # Ensure no other addresses are set as default
+        RecipientAddresses.objects.filter(user_profile=user_profile, is_default=True).update(is_default=False)
+        # The billing address is now the default
+        return JsonResponse({"success": True}, status=200)
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 @login_required
 def saved_addresses(request):

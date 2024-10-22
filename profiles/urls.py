@@ -9,4 +9,5 @@ urlpatterns = [
     path('edit_address/<int:address_id>/', views.edit_address, name='edit_address'),
     path('delete_address/<int:address_id>/', views.delete_address, name='delete_address'),
     path('set_default_address/<int:address_id>/', views.set_default_address, name='set_default_address'),
+    path('set_billing_as_default/', views.set_billing_as_default, name='set_billing_as_default'),
 ]
