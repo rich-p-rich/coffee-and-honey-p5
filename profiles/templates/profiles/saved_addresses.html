@@ -7,6 +7,22 @@
     <!-- List of Saved Addresses -->
     {% if addresses %}
     <div class="list-group mb-4">
+        <!-- Billing Address if Present -->
+        <div class="list-group-item bg-light border-primary">
+            <h5 class="mb-1">
+                Billing Address 
+                <i class="fas fa-star text-warning" title="Default Billing Address"></i>
+            </h5>
+            <p class="mb-1">
+                {{ user_profile.default_street_address1 }}<br>
+                {% if user_profile.default_street_address2 %}{{ user_profile.default_street_address2 }}<br>{% endif %}
+                {{ user_profile.default_town_or_city }}, {{ user_profile.default_county }}<br>
+                {{ user_profile.default_postcode }}<br>
+                {{ user_profile.default_country }}
+            </p>
+        </div>
+
+        <!-- List of Saved Recipient Addresses -->
         {% for address in addresses %}
             <div class="list-group-item {% if address.is_default %}bg-light border-primary{% endif %}">
                 <h5 class="mb-1">
@@ -42,4 +58,5 @@
     <!-- Button to Add New Address -->
     <a href="{% url 'add_address' %}" class="btn btn-primary">Add New Address</a>
 </div>
+
 {% endblock %}
