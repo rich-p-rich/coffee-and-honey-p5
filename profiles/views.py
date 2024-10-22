@@ -105,6 +105,20 @@ def add_address(request, address_id):
     
     return render(request, 'profiles/add_address.html', context)
 
+@login_required
+def set_default_address(request, address_id):
+    user_profile = request.user.userprofile
+    address = get_object_or_404(RecipientAddresses, id=address_id, user_profile=user_profile)
+    
+    # Set all addresses to not be the default
+    RecipientAddresses.objects.filter(user_profile=user_profile, is_default=True).update(is_default=False)
+    
+    # Set the selected address as the default
+    address.is_default = True
+    address.save()
+    
+    messages.success(request, "Default address has been updated.")
+    return redirect('saved_addresses')
 
 @login_required
 def edit_address(request, address_id):

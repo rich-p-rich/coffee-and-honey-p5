@@ -41,6 +41,7 @@ def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
 
+    # Handle POST request (form submission)
     if request.method == 'POST':
         print("DEBUG: Handling POST request")
         bag = request.session.get('bag', {})
@@ -62,7 +63,7 @@ def checkout(request):
         if order_form.is_valid():
             print("DEBUG: Order form is valid")
             order = order_form.save(commit=False)
-            delivery_type = request.POST.get('order_type')  # Make sure this matches your form field
+            delivery_type = request.POST.get('order_type')
 
             if delivery_type == 'pickup':
                 order.pick_up = True
@@ -157,7 +158,24 @@ def checkout(request):
         )
 
         print(f"DEBUG: Stripe PaymentIntent created with amount: {stripe_total}")
-        order_form = OrderForm()  # Initialize empty order form for GET requests
+
+        # Pre-fill form with default address from UserProfile if available
+        user_profile = None
+        initial_data = {}
+        if request.user.is_authenticated:
+            user_profile = request.user.userprofile
+            initial_data = {
+                'billing_full_name': user_profile.user.get_full_name(),
+                'billing_phone_number': user_profile.default_phone_number,
+                'billing_street_address1': user_profile.default_street_address1,
+                'billing_street_address2': user_profile.default_street_address2,
+                'billing_town_or_city': user_profile.default_town_or_city,
+                'billing_county': user_profile.default_county,
+                'billing_postcode': user_profile.default_postcode,
+                'billing_country': user_profile.default_country,
+            }
+
+        order_form = OrderForm(initial=initial_data)
 
     if not stripe_public_key:
         print("DEBUG: Stripe public key missing")
