@@ -83,11 +83,11 @@ def saved_addresses(request):
     return render(request, 'profiles/saved_addresses.html', context)
 
 @login_required
-def add_address(request, address_id):
+def add_address(request):
     """
     Add an address to the profile.
     """
-    address = get_object_or_404(RecipientAddresses, id=address_id, user_profile=request.user.userprofile)
+    address = get_object_or_404(RecipientAddresses, user_profile=request.user.userprofile)
     
     if request.method == 'POST':
         form = RecipientAddressesForm(request.POST, instance=address)
