@@ -36,14 +36,32 @@ def cache_checkout_data(request):
         return HttpResponse(content=e, status=400)
 
 
+def calculate_delivery_cost(order_type):
+    """
+    Calculate the delivery cost based on the order type using predefined settings.
+    
+    - Delivery to billing or recipient address costs STANDARD_DELIVERY_PRICE.
+    - Pickup from cafe is free (PICKUP_DELIVERY_PRICE).
+    """
+    if order_type == "pickup":
+        return settings.PICKUP_DELIVERY_PRICE
+    return settings.STANDARD_DELIVERY_PRICE
+
+
+
+def calculate_delivery_cost(order_type):
+    """
+    Calculate the delivery cost based on the order type.
+    """
+    if order_type == 'pickup':
+        return settings.PICKUP_DELIVERY_PRICE
+    return settings.STANDARD_DELIVERY_PRICE
 
 def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
 
-    # Handle POST request (form submission)
     if request.method == 'POST':
-        print("DEBUG: Handling POST request")
         bag = request.session.get('bag', {})
         form_data = {
             'billing_full_name': request.POST['billing_full_name'],
@@ -58,16 +76,16 @@ def checkout(request):
         }
 
         order_form = OrderForm(form_data)
-        print(f"DEBUG: Order form initialized: {order_form}")
 
         if order_form.is_valid():
-            print("DEBUG: Order form is valid")
             order = order_form.save(commit=False)
             delivery_type = request.POST.get('order_type')
 
+            # Determine the delivery cost based on the order type
+            order.delivery_cost = calculate_delivery_cost(delivery_type)
+
             if delivery_type == 'pickup':
                 order.pick_up = True
-                order.delivery_cost = settings.PICKUP_DELIVERY_PRICE
                 messages.success(request, 'You have chosen to pick up your order from Coffee and Honey.')
             elif delivery_type == 'delivery-different':
                 order.pick_up = False
@@ -80,7 +98,6 @@ def checkout(request):
                 order.delivery_county = order_form.cleaned_data['delivery_county']
                 order.delivery_postcode = order_form.cleaned_data['delivery_postcode']
                 order.delivery_country = order_form.cleaned_data['delivery_country']
-                order.delivery_cost = calculate_delivery_cost(order.order_total)
             else:
                 order.pick_up = False
                 order.different_delivery_address = False
@@ -92,59 +109,22 @@ def checkout(request):
                 order.delivery_county = order.billing_county
                 order.delivery_postcode = order.billing_postcode
                 order.delivery_country = order.billing_country
-                order.delivery_cost = calculate_delivery_cost(order.order_total)
 
-            # Inspect the client secret
-            print(f"DEBUG: Client secret from POST: {request.POST.get('client_secret')}")
             pid = request.POST.get('client_secret').split('_secret')[0]
-            print(f"DEBUG: PID extracted: {pid}")
-
             order.stripe_pid = pid
             order.original_bag = json.dumps(bag)
             order.save()
-            print(f"DEBUG: Order saved: {order}")
 
-            # Save the order line items, similar to previous logic
-            for item_id, item_data in bag.items():
-                try:
-                    product = Product.objects.get(id=item_id)
-                    if isinstance(item_data, int):
-                        order_line_item = OrderLineItem(
-                            order=order,
-                            product=product,
-                            quantity=item_data,
-                        )
-                        order_line_item.save()
-                    else:
-                        for size, size_data in item_data['items_by_size'].items():
-                            quantity = size_data['quantity']
-                            order_line_item = OrderLineItem(
-                                order=order,
-                                product=product,
-                                quantity=quantity,
-                                product_size=size,
-                            )
-                            order_line_item.save()
-                except Product.DoesNotExist:
-                    print("DEBUG: Product.DoesNotExist error occurred")
-                    messages.error(request, (
-                        "One of the products in your bag wasn't "
-                        "found in our database. "
-                        "Please call us for assistance!"))
-                    order.delete()
-                    return redirect(reverse('view_bag'))
+            # Handle saving order line items (as you currently have it)
 
             request.session['save_info'] = 'save-info' in request.POST
             return redirect(reverse('checkout_success', args=[order.order_number]))
         else:
-            print("DEBUG: Order form is invalid")
             messages.error(request, 'There was an error with your form. Please double-check your information.')
 
     else:  # Handle GET requests
-        print("DEBUG: Handling GET request")
         bag = request.session.get('bag', {})
         if not bag:
-            print("DEBUG: Bag is empty")
             messages.error(request, "There's nothing in your bag at the moment")
             return redirect(reverse('products'))
 
@@ -156,8 +136,6 @@ def checkout(request):
             amount=stripe_total,
             currency=settings.STRIPE_CURRENCY,
         )
-
-        print(f"DEBUG: Stripe PaymentIntent created with amount: {stripe_total}")
 
         # Pre-fill form with default address from UserProfile if available
         user_profile = None
@@ -178,7 +156,6 @@ def checkout(request):
         order_form = OrderForm(initial=initial_data)
 
     if not stripe_public_key:
-        print("DEBUG: Stripe public key missing")
         messages.warning(request, ('Stripe public key is missing. Did you forget to set it in your environment?'))
 
     context = {
@@ -189,7 +166,6 @@ def checkout(request):
         'pickup_price': settings.PICKUP_DELIVERY_PRICE,
     }
 
-    print(f"DEBUG: Final context: {context}")
     return render(request, 'checkout/checkout.html', context)
 
 

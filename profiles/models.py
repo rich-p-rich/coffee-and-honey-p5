@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 # Create your models here.
 
 from django.db import models
@@ -52,6 +53,7 @@ class RecipientAddresses(models.Model):
     recipient_county = models.CharField(max_length=80, null=True, blank=True)
     recipient_postcode = models.CharField(max_length=20, null=True, blank=True)
     recipient_country = models.CharField(max_length=40, null=True, blank=True)
+    is_default = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.name} - {self.street_address1}, {self.town_or_city}"
