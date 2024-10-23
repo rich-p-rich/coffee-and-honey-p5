@@ -1,6 +1,6 @@
 # Welcome to my project 5: Coffee and Honey
 
-## Background and Business Case
+# Background and Business Case
 I have long been a fan of coffee shops where you can enjoy decent coffee and cake, maybe a freshly made sandwich, and spend time either meeting friends, reading a book
 or simply staring out of the window. I am as happy in a good chain or franchise as I am in an independent, but a good independent coffee shop
 will always hold a special place in my heart. Sadly, I have seen several such independents go out of business because the margins are so fine 
@@ -18,13 +18,13 @@ These are therefore the aims of my P5 project website Coffee and Honey.
 
 # Project Overview: Coffee and Honey
 
-As will be clear, the website relies heavily on the Boutique Ado Walk-Through project, particularly for the shopping bag and checkout process. However, as my imagined Coffee and Honey shop is a bit more limited in terms of the number of products it offers, and sells a different type of project with different pricing structure, I have hopefully provided sufficient independent development away from the Boutique Ado example.  
+As will be clear, the website relies heavily on the Boutique Ado Walk-Through project, particularly for the shopping bag and checkout process. However, as my imagined Coffee and Honey shop is a bit more limited in terms of the number of products it offers, and sells a different type of project with different pricing structure. Additionally, I have expanded the MyAccount page with more delivery and pick-up options, and an expanded account section with CRUD functionality for saved delivery addresses. I have hopefully provided sufficient independent development away from the Boutique Ado example.  
 
 As with Project 4, it is built on mobile-first principles around a Django framework and supported by a PostgreSQL database from the Code Institute; I generated the secret key using this tool: https://randomkeygen.com/
 
 ## Why 'Coffee and Honey'?
 
-One of my hobbies is beekeeping, and I briefly considered setting up a website that sells beekeeping equipment; however, I thought there are more possibilities in cafe-style business, such as bookings (tables, function room and hive-tours) than in a straight-forward e-commerce shop, so decided to merge my two ideas and interests. This has some parallels in real-life: many bakeries were I live in southern Germany sell jars of honey from local beekeepers (although these bakeries do not usually have an online presence) and I thought that would be an interesting add-on to the type of coffee shop that are familiar to me from England and Ireland.  
+One of my hobbies is beekeeping, and I briefly considered setting up a website that sells beekeeping equipment; however, I thought there are more possibilities in cafe-style business, such as bookings (tables, function room and hive-tours) than in a straight-forward e-commerce shop, so decided to merge my two ideas and interests. This has some parallels in real-life: many bakeries where I live in southern Germany sell jars of honey from local beekeepers (although these bakeries do not usually have an online presence) and I thought that would be an interesting add-on to the type of coffee shop that are familiar to me from England and Ireland.  
 
 Merging the two ideas also gives (I think) a catchy and memorable name, that describes the website's buisness in concise and clear terms. People are generally well-disposed to either coffe or honey, often both, and 
 
@@ -66,7 +66,7 @@ The front-end and back-end security is provided by the @login_required decorator
 
 # Version Control
 
-## A note on commit messages.
+## A note on commit messages
 Following feedback on my 4th project on 1st October, I started writing them according to the conventions listed here: https://www.conventionalcommits.org/en/v1.0.0/#summary
 Therefore there is a change in the style of the commit messages from that date. However, I think it is worth making the change in order to improve as a developer.
 

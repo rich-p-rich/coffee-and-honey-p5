@@ -98,23 +98,23 @@ def add_address(request):
     """
     Add an address to the profile.
     """
-    address = get_object_or_404(RecipientAddresses, user_profile=request.user.userprofile)
-    
     if request.method == 'POST':
-        form = RecipientAddressesForm(request.POST, instance=address)
+        form = RecipientAddressesForm(request.POST)
         if form.is_valid():
-            form.save()
+            address = form.save(commit=False)
+            address.user_profile = request.user.userprofile
+            address.save()
             messages.success(request, 'Address successfully added.')
             return redirect('saved_addresses')
     else:
-        form = RecipientAddressesForm(instance=address)
+        form = RecipientAddressesForm()
     
     context = {
         'form': form,
-        'address': address,
     }
     
     return render(request, 'profiles/add_address.html', context)
+
 
 @login_required
 def set_default_address(request, address_id):
