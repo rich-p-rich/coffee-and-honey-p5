@@ -35,6 +35,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Function to ensure delivery fields are visible before submitting the form
+    function ensureDeliveryFieldsVisible() {
+        if (btn_deliveryDifferentOption && btn_deliveryDifferentOption.checked) {
+            // Ensure fields are shown before form submission
+            differentDeliveryAddress.classList.remove('d-none');
+        }
+    }
+
     // Function to handle updating the delivery and grand total prices
     function updatePrices() {
         let deliveryCost = deliveryPrice; // Default to standard delivery cost
@@ -60,14 +68,13 @@ document.addEventListener('DOMContentLoaded', function () {
             grandTotalElement.textContent = `€${grandTotal.toFixed(2)}`;
         }
     }
-    
+
     // Combined function to handle all changes when a delivery option is selected
     function handleDeliveryOptionChange() {
         console.log("DEBUG: Handling change in delivery option.");
-        updateAddressFields(); // Assuming this function already exists
+        updateAddressFields(); // Ensure fields are toggled correctly
         updatePrices();
     }
-    
 
     // Event Listeners for order type change, with checks to ensure elements exist
     if (pickupOption) {
@@ -82,18 +89,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Set initial state on page load
     handleDeliveryOptionChange();
-});
 
-const saveAddressCheckbox = document.getElementById('id-save-address');
-
-function toggleSaveAddressOption() {
-    if (saveAddressCheckbox && saveAddressCheckbox.checked) {
-        console.log("The user wants to save this address.");
-    } else {
-        console.log("The user does not want to save this address.");
+    // Add ensure function to form submission
+    const checkoutForm = document.querySelector('form');
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', ensureDeliveryFieldsVisible);
     }
-}
 
-if (saveAddressCheckbox) {
-    saveAddressCheckbox.addEventListener('change', toggleSaveAddressOption);
-}
+    const saveAddressCheckbox = document.getElementById('id-save-address');
+
+    function toggleSaveAddressOption() {
+        if (saveAddressCheckbox && saveAddressCheckbox.checked) {
+            console.log("The user wants to save this address.");
+        } else {
+            console.log("The user does not want to save this address.");
+        }
+    }
+
+    if (saveAddressCheckbox) {
+        saveAddressCheckbox.addEventListener('change', toggleSaveAddressOption);
+    }
+});

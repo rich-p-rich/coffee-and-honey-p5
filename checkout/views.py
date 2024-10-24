@@ -57,6 +57,15 @@ def calculate_delivery_cost(order_type):
         return settings.PICKUP_DELIVERY_PRICE
     return settings.STANDARD_DELIVERY_PRICE
 
+
+def calculate_delivery_cost(order_type):
+    """
+    Calculate the delivery cost based on the order type.
+    """
+    if order_type == 'pickup':
+        return settings.PICKUP_DELIVERY_PRICE
+    return settings.STANDARD_DELIVERY_PRICE
+
 def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
@@ -84,20 +93,53 @@ def checkout(request):
             # Determine the delivery cost based on the order type
             order.delivery_cost = calculate_delivery_cost(delivery_type)
 
-            if delivery_type == 'pickup':
-                order.pick_up = True
-                messages.success(request, 'You have chosen to pick up your order from Coffee and Honey.')
-            elif delivery_type == 'delivery-different':
-                order.pick_up = False
-                order.different_delivery_address = True
-                # Use the form data to fill delivery fields
-                order.delivery_name = order_form.cleaned_data['delivery_name']
-                order.delivery_street_address1 = order_form.cleaned_data['delivery_street_address1']
-                order.delivery_street_address2 = order_form.cleaned_data['delivery_street_address2']
-                order.delivery_town_or_city = order_form.cleaned_data['delivery_town_or_city']
-                order.delivery_county = order_form.cleaned_data['delivery_county']
-                order.delivery_postcode = order_form.cleaned_data['delivery_postcode']
-                order.delivery_country = order_form.cleaned_data['delivery_country']
+        # Print request.POST to inspect raw form data
+        print("Raw Form Data:", request.POST)
+
+        # Handle delivery address based on order type
+        if delivery_type == 'pickup':
+            order.pick_up = True
+            messages.success(request, 'You have chosen to pick up your order from Coffee and Honey.')
+        elif delivery_type == 'delivery-different':
+            order.pick_up = False
+            order.different_delivery_address = True
+            # Use the form data to fill delivery fields
+            order.delivery_name = order_form.cleaned_data.get('delivery_name', order.billing_full_name)
+            order.delivery_street_address1 = order_form.cleaned_data.get('delivery_street_address1')
+            order.delivery_street_address2 = order_form.cleaned_data.get('delivery_street_address2', '')
+            order.delivery_town_or_city = order_form.cleaned_data.get('delivery_town_or_city')
+            order.delivery_county = order_form.cleaned_data.get('delivery_county', '')
+            order.delivery_postcode = order_form.cleaned_data.get('delivery_postcode')
+            order.delivery_country = order_form.cleaned_data.get('delivery_country')
+
+            # Print cleaned data for verification
+            print("Cleaned Data:", order_form.cleaned_data)
+
+            # Define the recipient name and address, using values directly from order object
+            recipient_name = order.delivery_name
+            recipient_street_address1 = order.delivery_street_address1
+            recipient_town_or_city = order.delivery_town_or_city
+
+            # Debugging: Print to confirm values
+            print(f"Recipient Name: {recipient_name}")
+            print(f"Recipient Street Address 1: {recipient_street_address1}")
+            print(f"Recipient Town or City: {recipient_town_or_city}")
+
+            # Save delivery address to user's profile if "Save this delivery information" is checked
+            save_address = request.POST.get('save-address')
+            if save_address and request.user.is_authenticated:
+                RecipientAddresses.objects.create(
+                    user_profile=request.user.userprofile,
+                    recipient_name=recipient_name,
+                    recipient_phone_number=order.billing_phone_number,
+                    recipient_street_address1=recipient_street_address1,
+                    recipient_street_address2=order.delivery_street_address2,
+                    recipient_town_or_city=recipient_town_or_city,
+                    recipient_county=order.delivery_county,
+                    recipient_postcode=order.delivery_postcode,
+                    recipient_country=order.delivery_country
+                )
+
             else:
                 order.pick_up = False
                 order.different_delivery_address = False
@@ -144,6 +186,7 @@ def checkout(request):
             user_profile = request.user.userprofile
             initial_data = {
                 'billing_full_name': user_profile.user.get_full_name(),
+                'billing_email': user_profile.user.email,
                 'billing_phone_number': user_profile.default_phone_number,
                 'billing_street_address1': user_profile.default_street_address1,
                 'billing_street_address2': user_profile.default_street_address2,
@@ -167,7 +210,6 @@ def checkout(request):
     }
 
     return render(request, 'checkout/checkout.html', context)
-
 
 def checkout_success(request, order_number):
     """

@@ -9,7 +9,7 @@ class OrderForm(forms.ModelForm):
                   'billing_street_address1', 'billing_street_address2',
                   'billing_town_or_city', 'billing_postcode', 'billing_country',
                   'billing_county', 
-                  # delivery address fields
+                  # these are delivery address fields
                   'delivery_name', 'delivery_street_address1', 'delivery_street_address2',
                   'delivery_town_or_city', 'delivery_postcode', 'delivery_country',
                   'delivery_county']
