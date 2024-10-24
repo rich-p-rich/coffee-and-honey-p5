@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 
 # Create your views here.
 
@@ -159,7 +160,10 @@ def delete_address(request, address_id):
     """
     Delete a saved recipient address.
     """
-    address = get_object_or_404(RecipientAddresses, id=address_id, user_profile=request.user.userprofile)
-    address.delete()
-    messages.success(request, 'Recipient address deleted successfully.')
+    if request.method == 'POST':
+        address = get_object_or_404(RecipientAddresses, id=address_id, user_profile=request.user.userprofile)
+        address.delete()
+        messages.success(request, 'Recipient address deleted successfully.')
+        return redirect('saved_addresses')
+    
     return redirect('saved_addresses')
