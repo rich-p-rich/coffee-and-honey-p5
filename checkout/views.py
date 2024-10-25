@@ -102,9 +102,47 @@ def checkout(request):
                 order.delivery_country = request.POST.get('delivery_country')
 
                 # Save the address to the profile if checkbox is checked
-                save_address = request.POST.get('save-address')
+                save_address = request.POST.get('save-address')  # Make sure this is defined first
+                print(f"Save address checkbox value: {save_address}")  # Now it should print 'on' if checked
+
                 if save_address == 'on' and request.user.is_authenticated:
-                    save_delivery_address_to_profile(order, request)
+                    print("Saving address to profile...")
+                    # Extract delivery address fields to ensure they are not empty
+                    recipient_name = order.delivery_name or order.billing_full_name  # Fallback to billing name if delivery name is missing
+                    recipient_street_address1 = order.delivery_street_address1
+                    recipient_street_address2 = order.delivery_street_address2
+                    recipient_town_or_city = order.delivery_town_or_city
+                    recipient_county = order.delivery_county
+                    recipient_postcode = order.delivery_postcode
+                    recipient_country = order.delivery_country
+
+                    # Only attempt to save if `recipient_street_address1` is set
+                    print(f"Recipient Name: {recipient_name}")
+                    print(f"Street Address 1: {recipient_street_address1}")
+                    print(f"Town or City: {recipient_town_or_city}")
+                    print(f"Country: {recipient_country}")
+
+                    # Address validation
+                    if recipient_name and recipient_street_address1 and recipient_town_or_city and recipient_country:
+                        try:
+                            RecipientAddresses.objects.create(
+                                user_profile=request.user.userprofile,
+                                recipient_name=recipient_name,
+                                recipient_phone_number=order.billing_phone_number,
+                                recipient_street_address1=recipient_street_address1,
+                                recipient_street_address2=recipient_street_address2,
+                                recipient_town_or_city=recipient_town_or_city,
+                                recipient_county=recipient_county,
+                                recipient_postcode=recipient_postcode,
+                                recipient_country=recipient_country
+                            )
+                            print("Address saved successfully.")
+                        except Exception as e:
+                            print(f"Failed to save address: {e}")
+                            messages.error(request, 'There was an error saving your address. Please try again.')
+                    else:
+                        print("Address validation failed, not saving.")
+                        messages.error(request, 'Please ensure that all required delivery address fields are filled in correctly.')
 
             elif delivery_type == 'delivery-billing-same':
                 # Delivery to the billing address scenario
