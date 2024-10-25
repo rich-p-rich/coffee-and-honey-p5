@@ -70,6 +70,10 @@ def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
 
+    # Always initialize stripe.api_key and intent
+    stripe.api_key = stripe_secret_key
+    intent = None
+
     if request.method == 'POST':
         bag = request.session.get('bag', {})
         form_data = {
@@ -93,53 +97,71 @@ def checkout(request):
             # Determine the delivery cost based on the order type
             order.delivery_cost = calculate_delivery_cost(delivery_type)
 
-        # Print request.POST to inspect raw form data
-        print("Raw Form Data:", request.POST)
+            # Handle delivery address based on order type
+            if delivery_type == 'pickup':
+                order.pick_up = True
+                messages.success(request, 'You have chosen to pick up your order from Coffee and Honey.')
+            elif delivery_type == 'delivery-different':
+                order.pick_up = False
+                order.different_delivery_address = True
+                
+                # Extract delivery fields directly from POST data
+                order.delivery_name = request.POST.get('delivery_name', order.billing_full_name)
+                order.delivery_street_address1 = request.POST.get('delivery_street_address1')
+                order.delivery_street_address2 = request.POST.get('delivery_street_address2', '')
+                order.delivery_town_or_city = request.POST.get('delivery_town_or_city')
+                order.delivery_county = request.POST.get('delivery_county', '')
+                order.delivery_postcode = request.POST.get('delivery_postcode')
+                order.delivery_country = request.POST.get('delivery_country')
 
-        # Handle delivery address based on order type
-        if delivery_type == 'pickup':
-            order.pick_up = True
-            messages.success(request, 'You have chosen to pick up your order from Coffee and Honey.')
-        elif delivery_type == 'delivery-different':
-            order.pick_up = False
-            order.different_delivery_address = True
-            # Use the form data to fill delivery fields
-            order.delivery_name = order_form.cleaned_data.get('delivery_name', order.billing_full_name)
-            order.delivery_street_address1 = order_form.cleaned_data.get('delivery_street_address1')
-            order.delivery_street_address2 = order_form.cleaned_data.get('delivery_street_address2', '')
-            order.delivery_town_or_city = order_form.cleaned_data.get('delivery_town_or_city')
-            order.delivery_county = order_form.cleaned_data.get('delivery_county', '')
-            order.delivery_postcode = order_form.cleaned_data.get('delivery_postcode')
-            order.delivery_country = order_form.cleaned_data.get('delivery_country')
+                # Print to debug if needed
+                print(f"Delivery Name: {order.delivery_name}")
+                print(f"Street Address 1: {order.delivery_street_address1}")
+                print(f"Town or City: {order.delivery_town_or_city}")
+                print(f"Country: {order.delivery_country}")
 
-            # Print cleaned data for verification
-            print("Cleaned Data:", order_form.cleaned_data)
+                # Save delivery address to user's profile if "Save this delivery information" is checked
+                save_address = request.POST.get('save-address')  # Make sure this is defined first
+                print(f"Save address checkbox value: {save_address}")  # Now it should print 'on' if checked
 
-            # Define the recipient name and address, using values directly from order object
-            recipient_name = order.delivery_name
-            recipient_street_address1 = order.delivery_street_address1
-            recipient_town_or_city = order.delivery_town_or_city
+                if save_address == 'on' and request.user.is_authenticated:
+                    print("Saving address to profile...")
+                    # Extract delivery address fields to ensure they are not empty
+                    recipient_name = order.delivery_name or order.billing_full_name  # Fallback to billing name if delivery name is missing
+                    recipient_street_address1 = order.delivery_street_address1
+                    recipient_street_address2 = order.delivery_street_address2
+                    recipient_town_or_city = order.delivery_town_or_city
+                    recipient_county = order.delivery_county
+                    recipient_postcode = order.delivery_postcode
+                    recipient_country = order.delivery_country
 
-            # Debugging: Print to confirm values
-            print(f"Recipient Name: {recipient_name}")
-            print(f"Recipient Street Address 1: {recipient_street_address1}")
-            print(f"Recipient Town or City: {recipient_town_or_city}")
+                    # Only attempt to save if `recipient_street_address1` is set
+                    print(f"Recipient Name: {recipient_name}")
+                    print(f"Street Address 1: {recipient_street_address1}")
+                    print(f"Town or City: {recipient_town_or_city}")
+                    print(f"Country: {recipient_country}")
 
-            # Save delivery address to user's profile if "Save this delivery information" is checked
-            save_address = request.POST.get('save-address')
-            if save_address and request.user.is_authenticated:
-                RecipientAddresses.objects.create(
-                    user_profile=request.user.userprofile,
-                    recipient_name=recipient_name,
-                    recipient_phone_number=order.billing_phone_number,
-                    recipient_street_address1=recipient_street_address1,
-                    recipient_street_address2=order.delivery_street_address2,
-                    recipient_town_or_city=recipient_town_or_city,
-                    recipient_county=order.delivery_county,
-                    recipient_postcode=order.delivery_postcode,
-                    recipient_country=order.delivery_country
-                )
-
+                    # Address validation
+                    if recipient_name and recipient_street_address1 and recipient_town_or_city and recipient_country:
+                        try:
+                            RecipientAddresses.objects.create(
+                                user_profile=request.user.userprofile,
+                                recipient_name=recipient_name,
+                                recipient_phone_number=order.billing_phone_number,
+                                recipient_street_address1=recipient_street_address1,
+                                recipient_street_address2=recipient_street_address2,
+                                recipient_town_or_city=recipient_town_or_city,
+                                recipient_county=recipient_county,
+                                recipient_postcode=recipient_postcode,
+                                recipient_country=recipient_country
+                            )
+                            print("Address saved successfully.")
+                        except Exception as e:
+                            print(f"Failed to save address: {e}")
+                            messages.error(request, 'There was an error saving your address. Please try again.')
+                    else:
+                        print("Address validation failed, not saving.")
+                        messages.error(request, 'Please ensure that all required delivery address fields are filled in correctly.')
             else:
                 order.pick_up = False
                 order.different_delivery_address = False
@@ -152,12 +174,11 @@ def checkout(request):
                 order.delivery_postcode = order.billing_postcode
                 order.delivery_country = order.billing_country
 
+
             pid = request.POST.get('client_secret').split('_secret')[0]
             order.stripe_pid = pid
             order.original_bag = json.dumps(bag)
             order.save()
-
-            # Handle saving order line items (as you currently have it)
 
             request.session['save_info'] = 'save-info' in request.POST
             return redirect(reverse('checkout_success', args=[order.order_number]))
@@ -173,7 +194,6 @@ def checkout(request):
         current_bag = bag_contents(request)
         total = current_bag['grand_total']
         stripe_total = round(total * 100)
-        stripe.api_key = stripe_secret_key
         intent = stripe.PaymentIntent.create(
             amount=stripe_total,
             currency=settings.STRIPE_CURRENCY,
@@ -204,12 +224,13 @@ def checkout(request):
     context = {
         'order_form': order_form,
         'stripe_public_key': stripe_public_key,
-        'client_secret': intent.client_secret,
+        'client_secret': intent.client_secret if intent else '',
         'delivery_price': settings.STANDARD_DELIVERY_PRICE,
         'pickup_price': settings.PICKUP_DELIVERY_PRICE,
     }
 
     return render(request, 'checkout/checkout.html', context)
+
 
 def checkout_success(request, order_number):
     """
