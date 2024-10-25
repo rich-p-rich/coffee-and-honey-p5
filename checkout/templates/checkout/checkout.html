@@ -71,7 +71,7 @@
                     <p class="my-0 grand-total"><strong>€{{ grand_total | floatformat:2 }}</strong></p>
                 </div>
             </div>
-            
+
         </div>
         <div class="col-12 col-lg-6">
             <p class="text-muted">Please fill out the form below to complete your order</p>
@@ -89,23 +89,23 @@
 
                 <!-- Delivery and Pick-Up Options -->
                 <fieldset class="rounded px-3 mb-5">
-                    <legend class="fieldset-label small text-black px-2 w-auto">Order Type</legend>
+                    <legend class="fieldset-label small text-black px-2 w-auto">Delivery Option</legend>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="order_type" id="delivery-billing-address"
-                            value="delivery-billing" checked>
-                        <label class="form-check-label" for="delivery-billing-address">
+                        <input class="form-check-input" type="radio" name="delivery_type" id="delivery-billing-same"
+                            value="delivery-billing-same" checked>
+                        <label class="form-check-label" for="delivery-billing-same">
                             Home Delivery: €{{ delivery_price }}
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="order_type" id="delivery-different-address"
+                        <input class="form-check-input" type="radio" name="delivery_type" id="delivery-different"
                             value="delivery-different">
-                        <label class="form-check-label" for="delivery-different-address">
+                        <label class="form-check-label" for="delivery-different">
                             Delivery to Friends or Family: €{{ delivery_price }}
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="order_type" id="pickup" value="pickup">
+                        <input class="form-check-input" type="radio" name="delivery_type" id="pickup" value="pickup">
                         <label class="form-check-label" for="pickup">
                             Pick up at Coffee and Honey: free
                         </label>
@@ -133,31 +133,33 @@
                 </fieldset>
 
                 <!-- Delivery Address Section (only displayed if "Deliver to Address" is selected) -->
-                <fieldset class="rounded px-3 mb-5 d-none" id="different-delivery-address">
-                    <legend class="fieldset-label small text-black px-2 w-auto">Delivery Address</legend>
-                    {{ order_form.delivery_name | as_crispy_field }}
-                    {{ order_form.delivery_street_address1 | as_crispy_field }}
-                    {{ order_form.delivery_street_address2 | as_crispy_field }}
-                    {{ order_form.delivery_town_or_city | as_crispy_field }}
-                    {{ order_form.delivery_county | as_crispy_field }}
-                    {{ order_form.delivery_postcode | as_crispy_field }}
-                    {{ order_form.delivery_country | as_crispy_field }}
+                <div id="delivery-address-section" class="d-none">
+                    <fieldset class="rounded px-3 mb-5">
+                        <legend class="fieldset-label small text-black px-2 w-auto">Delivery Address</legend>
+                        {{ order_form.delivery_name | as_crispy_field }}
+                        {{ order_form.delivery_street_address1 | as_crispy_field }}
+                        {{ order_form.delivery_street_address2 | as_crispy_field }}
+                        {{ order_form.delivery_town_or_city | as_crispy_field }}
+                        {{ order_form.delivery_county | as_crispy_field }}
+                        {{ order_form.delivery_postcode | as_crispy_field }}
+                        {{ order_form.delivery_country | as_crispy_field }}
 
-                    <!-- Save Delivery Information Option -->
-                    <div class="form-check form-check-inline float-right mr-0" id="save-delivery-question">
-                        {% if user.is_authenticated %}
-                        <label class="form-check-label" for="id-save-address">Save this delivery information to my
-                            profile</label>
-                        <input class="form-check-input ml-2 mr-0" type="checkbox" id="id-save-address"
-                            name="save-address" checked>
-                        {% else %}
-                        <label class="form-check-label" for="id-save-address">
-                            <a class="text-info" href="{% url 'account_signup' %}">Create an account</a> or
-                            <a class="text-info" href="{% url 'account_login' %}">login</a> to save this information
-                        </label>
-                        {% endif %}
-                    </div>
-                </fieldset>
+                        <!-- Save Delivery Information Option -->
+                        <div class="form-check form-check-inline float-right mr-0" id="save-delivery-question">
+                            {% if user.is_authenticated %}
+                            <label class="form-check-label" for="id-save-address">Save this delivery information to my
+                                profile</label>
+                            <input class="form-check-input ml-2 mr-0" type="checkbox" id="id-save-address"
+                                name="save-address" checked>
+                            {% else %}
+                            <label class="form-check-label" for="id-save-address">
+                                <a class="text-info" href="{% url 'account_signup' %}">Create an account</a> or
+                                <a class="text-info" href="{% url 'account_login' %}">login</a> to save this information
+                            </label>
+                            {% endif %}
+                        </div>
+                    </fieldset>
+                </div>
                 <fieldset class="px-3">
                     <legend class="fieldset-label small text-black px-2 w-auto">Payment</legend>
                     <!-- Stripe card element -->

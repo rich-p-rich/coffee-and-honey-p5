@@ -1,33 +1,33 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const pickupOption = document.getElementById('pickup');
-    const deliveryBillingOption = document.getElementById('delivery-billing-address');
-    const btn_deliveryDifferentOption = document.getElementById('delivery-different-address');
-    const billingAddressSection = document.getElementById('billing-address');
-    const differentDeliveryAddress = document.getElementById('different-delivery-address');
 
     // Elements for updating prices
-    const orderTotalElement = document.getElementById('order-total');
-    const deliveryCostElement = document.getElementById('delivery-cost');
-    const grandTotalElement = document.getElementById('grand-total');
+    const orderTotalElement = document.querySelector('.order-total');
+    const deliveryCostElement = document.querySelector('.delivery-cost');
+    const grandTotalElement = document.querySelector('.grand-total');
+
+    // Delivery and Pickup options    
+    const pickupRadio = document.getElementById('pickup');
+    const deliveryBillingRadio = document.getElementById('delivery-billing-same');
+    const deliveryDifferentRadio = document.getElementById('delivery-different');
+    const differentDeliveryAddress = document.getElementById('delivery-address-section');
 
     // Get delivery prices from data attributes
     const priceConfig = document.getElementById('price-config');
     const deliveryPrice = parseFloat(priceConfig.getAttribute('data-delivery-price'));
     const pickupPrice = parseFloat(priceConfig.getAttribute('data-pickup-price'));
 
-    // Function to handle visibility of address fields
     function updateAddressFields() {
-        if (pickupOption && pickupOption.checked) {
+        if (pickupRadio && pickupRadio.checked) {
             // Hide delivery address when pick-up is chosen
             if (differentDeliveryAddress) {
                 differentDeliveryAddress.classList.add('d-none');
             }
-        } else if (deliveryBillingOption && deliveryBillingOption.checked) {
+        } else if (deliveryBillingRadio && deliveryBillingRadio.checked) {
             // Hide delivery address when billing address = delivery address
             if (differentDeliveryAddress) {
                 differentDeliveryAddress.classList.add('d-none');
             }
-        } else if (btn_deliveryDifferentOption && btn_deliveryDifferentOption.checked) {
+        } else if (deliveryDifferentRadio && deliveryDifferentRadio.checked) {
             // Show delivery address when different address delivery is chosen
             if (differentDeliveryAddress) {
                 differentDeliveryAddress.classList.remove('d-none');
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to ensure delivery fields are visible before submitting the form
     function ensureDeliveryFieldsVisible() {
-        if (btn_deliveryDifferentOption && btn_deliveryDifferentOption.checked) {
+        if (deliveryDifferentRadio && deliveryDifferentRadio.checked) {
             // Ensure fields are shown before form submission
             differentDeliveryAddress.classList.remove('d-none');
         }
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function updatePrices() {
         let deliveryCost = deliveryPrice; // Default to standard delivery cost
     
-        if (pickupOption && pickupOption.checked) {
+        if (pickupRadio && pickupRadio.checked) {
             console.log("DEBUG: Pickup option selected. Setting delivery cost to pick-up price.");
             deliveryCost = pickupPrice; // Set to pick-up price
         } else {
@@ -77,14 +77,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Event Listeners for order type change, with checks to ensure elements exist
-    if (pickupOption) {
-        pickupOption.addEventListener('change', handleDeliveryOptionChange);
+    if (pickupRadio) {
+        pickupRadio.addEventListener('change', handleDeliveryOptionChange);
     }
-    if (deliveryBillingOption) {
-        deliveryBillingOption.addEventListener('change', handleDeliveryOptionChange);
+    if (deliveryBillingRadio) {
+        deliveryBillingRadio.addEventListener('change', handleDeliveryOptionChange);
     }
-    if (btn_deliveryDifferentOption) {
-        btn_deliveryDifferentOption.addEventListener('change', handleDeliveryOptionChange);
+    if (deliveryDifferentRadio) {
+        deliveryDifferentRadio.addEventListener('change', handleDeliveryOptionChange);
     }
 
     // Set initial state on page load
