@@ -60,10 +60,11 @@
                     </div>
                     <div class="col-12 col-md-8 text-md-right">
                         <!-- Displaying quantity and price per piece -->
-                        <p class="small mb-0">{{ item.quantity }} @ €{{ item.product.price|floatformat:2 }} each</p>
+                        <p class="small mb-0">{{ item.quantity }} @ €{{ item.lineitem_total|div:item.quantity|floatformat:2 }} each</p>
                     </div>
                 </div>
                 {% endfor %}
+                
 
                 {% if order.pick_up %}
                 <div class="row">

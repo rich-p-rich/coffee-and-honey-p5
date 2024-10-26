@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render, get_object_or_404
 from .models import Category, Product, ProductVariant, Service
 from djmoney.models.fields import MoneyField
@@ -27,7 +28,6 @@ def all_products(request):
 
 
 # Product Detail Page
-
 def product_detail(request, product_id):
     """ A view to display a single product, including any variants """
     product = get_object_or_404(Product, pk=product_id)
@@ -38,6 +38,7 @@ def product_detail(request, product_id):
     context = {
         'product': product,
         'variants': variants,
+        'freshly_ground_beans_price': settings.FRESHLY_GROUND_BEANS,
     }
 
     return render(request, 'products/product_detail.html', context)
