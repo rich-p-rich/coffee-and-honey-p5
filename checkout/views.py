@@ -82,18 +82,14 @@ def checkout(request):
 
             # Handle each delivery type explicitly
             if delivery_type == 'pickup':
-                # Pick-Up Scenario
                 order.pick_up = True
                 order.different_delivery_address = False
                 messages.success(request, 'You have chosen to pick up your order from Coffee and Honey.')
                 order.save()
 
             elif delivery_type == 'delivery-different':
-                # Delivery to a different address scenario
                 order.pick_up = False
                 order.different_delivery_address = True
-
-                # Extract delivery fields directly from POST data
                 order.delivery_name = request.POST.get('delivery_name', order.billing_full_name)
                 order.delivery_street_address1 = request.POST.get('delivery_street_address1')
                 order.delivery_street_address2 = request.POST.get('delivery_street_address2', '')
@@ -101,58 +97,11 @@ def checkout(request):
                 order.delivery_county = request.POST.get('delivery_county', '')
                 order.delivery_postcode = request.POST.get('delivery_postcode')
                 order.delivery_country = request.POST.get('delivery_country')
-
                 order.save()
 
-                # Save the address to the profile if checkbox is checked
-                save_address = request.POST.get('save-address')  # Make sure this is defined first
-                print(f"Save address checkbox value: {save_address}")  # Now it should print 'on' if checked
-
-                if save_address == 'on' and request.user.is_authenticated:
-                    print("Saving address to profile...")
-                    # Extract delivery address fields to ensure they are not empty
-                    recipient_name = order.delivery_name or order.billing_full_name  # Fallback to billing name if delivery name is missing
-                    recipient_street_address1 = order.delivery_street_address1
-                    recipient_street_address2 = order.delivery_street_address2
-                    recipient_town_or_city = order.delivery_town_or_city
-                    recipient_county = order.delivery_county
-                    recipient_postcode = order.delivery_postcode
-                    recipient_country = order.delivery_country
-
-                    # Only attempt to save if `recipient_street_address1` is set
-                    print(f"Recipient Name: {recipient_name}")
-                    print(f"Street Address 1: {recipient_street_address1}")
-                    print(f"Town or City: {recipient_town_or_city}")
-                    print(f"Country: {recipient_country}")
-
-                    # Address validation
-                    if recipient_name and recipient_street_address1 and recipient_town_or_city and recipient_country:
-                        try:
-                            RecipientAddresses.objects.create(
-                                user_profile=request.user.userprofile,
-                                recipient_name=recipient_name,
-                                recipient_phone_number=order.billing_phone_number,
-                                recipient_street_address1=recipient_street_address1,
-                                recipient_street_address2=recipient_street_address2,
-                                recipient_town_or_city=recipient_town_or_city,
-                                recipient_county=recipient_county,
-                                recipient_postcode=recipient_postcode,
-                                recipient_country=recipient_country
-                            )
-                            print("Address saved successfully.")
-                        except Exception as e:
-                            print(f"Failed to save address: {e}")
-                            messages.error(request, 'There was an error saving your address. Please try again.')
-                    else:
-                        print("Address validation failed, not saving.")
-                        messages.error(request, 'Please ensure that all required delivery address fields are filled in correctly.')
-
             elif delivery_type == 'delivery-billing-same':
-                # Delivery to the billing address scenario
                 order.pick_up = False
                 order.different_delivery_address = False
-
-                # Copy billing address to delivery fields
                 order.delivery_name = order.billing_full_name
                 order.delivery_street_address1 = order.billing_street_address1
                 order.delivery_street_address2 = order.billing_street_address2
@@ -160,7 +109,6 @@ def checkout(request):
                 order.delivery_county = order.billing_county
                 order.delivery_postcode = order.billing_postcode
                 order.delivery_country = order.billing_country
-
                 order.save()
 
             pid = request.POST.get('client_secret').split('_secret')[0]
@@ -168,34 +116,27 @@ def checkout(request):
             order.original_bag = json.dumps(bag)
             order.save()
 
+            # Save each item in the bag as an OrderLineItem
             for item_id, item_data in bag.items():
                 try:
                     product = Product.objects.get(id=item_id)
-                    
                     if isinstance(item_data, int):
-                        # Product without variants
                         order_line_item = OrderLineItem(
                             order=order,
                             product=product,
                             quantity=item_data,
                         )
-                        print(f"DEBUG: Creating OrderLineItem for {product.name} - Quantity: {item_data}")
                         order_line_item.save()
-                    
                     else:
-                        # Product with variants
                         for size, data in item_data['items_by_size'].items():
-                            # Get the quantity directly from `data` here
-                            quantity = int(data.get('quantity', 1))  # Default to 1 if 'quantity' key is missing
+                            quantity = int(data.get('quantity', 1))
                             order_line_item = OrderLineItem(
                                 order=order,
                                 product=product,
                                 quantity=quantity,
                                 product_size=size,
                             )
-                            print(f"DEBUG: Creating OrderLineItem for {product.name} - Size: {size}, Quantity: {quantity}")
                             order_line_item.save()
-                            
                 except Product.DoesNotExist:
                     messages.error(request, (
                         "One of the products in your bag wasn't "
@@ -205,6 +146,12 @@ def checkout(request):
                     order.delete()
                     return redirect(reverse('view_bag'))
 
+            # Now assign order totals using the bag contents context
+            current_bag = bag_contents(request)
+            order.order_total = current_bag['total']
+            order.delivery_cost = current_bag['delivery']
+            order.grand_total = current_bag['grand_total']
+            order.save()
 
             request.session['save_info'] = 'save-info' in request.POST
             return redirect(reverse('checkout_success', args=[order.order_number]))
@@ -212,7 +159,8 @@ def checkout(request):
         else:
             messages.error(request, 'There was an error with your form. Please double-check your information.')
 
-    else:  # Handle GET requests
+    # Handle GET requests
+    else:
         bag = request.session.get('bag', {})
         if not bag:
             messages.error(request, "There's nothing in your bag at the moment")
@@ -246,7 +194,7 @@ def checkout(request):
         order_form = OrderForm(initial=initial_data)
 
     if not stripe_public_key:
-        messages.warning(request, ('Stripe public key is missing. Did you forget to set it in your environment?'))
+        messages.warning(request, 'Stripe public key is missing. Did you forget to set it in your environment?')
 
     context = {
         'order_form': order_form,
@@ -257,6 +205,7 @@ def checkout(request):
     }
 
     return render(request, 'checkout/checkout.html', context)
+
 
 
 def checkout_success(request, order_number):
