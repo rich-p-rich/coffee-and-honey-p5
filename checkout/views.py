@@ -8,7 +8,7 @@ from django.conf import settings
 from .forms import OrderForm
 from .models import Order, OrderLineItem
 
-from products.models import Product
+from products.models import Product, ProductVariant
 from profiles.models import RecipientAddresses
 from profiles.forms import UserProfileForm
 from profiles.models import UserProfile
@@ -221,58 +221,58 @@ def checkout(request):
 
 
 def checkout_success(request, order_number):
-    """
-    Handle successful checkouts
-    """
-    save_info = request.session.get('save_info')
+    """Handle successful checkouts"""
     order = get_object_or_404(Order, order_number=order_number)
+    
+    # Retrieve bag from session
+    bag = request.session.get('bag', {})
+    line_items = []  # Initialize an empty list for line items
 
-    # Fetch all line items for this order
-    line_items = OrderLineItem.objects.filter(order=order)
-    print(f"Line items count: {line_items.count()}")
+    # Process each item in the bag
+    for item_id, item_data in bag.items():
+        product = get_object_or_404(Product, pk=item_id)
+        
+        # Check if the item has 'items_by_size' (for products with sizes)
+        if isinstance(item_data, dict) and 'items_by_size' in item_data:
+            for size, details in item_data['items_by_size'].items():
+                # Fetch the specific variant based on product and weight (size)
+                variant = get_object_or_404(ProductVariant, product=product, weight=size)
+                price = float(details['price'])
+                quantity = details['quantity']
+                extra_service_cost = details.get('extra_service_cost', 0)
+                subtotal = (price * quantity) + extra_service_cost  # calculate subtotal
+                
+                # Append item details to line_items
+                line_items.append({
+                    'product': product,
+                    'product_size': variant.weight,
+                    'quantity': quantity,
+                    'unit_price': price,
+                    'extra_service_cost': extra_service_cost,
+                    'subtotal': subtotal,
+                })
+        else:
+            # For items without sizes
+            price = float(item_data['price'])
+            quantity = item_data['quantity']
+            extra_service_cost = item_data.get('extra_service_cost', 0)
+            subtotal = (price * quantity) + extra_service_cost
+            
+            line_items.append({
+                'product': product,
+                'quantity': quantity,
+                'unit_price': price,
+                'extra_service_cost': extra_service_cost,
+                'subtotal': subtotal,
+            })
 
-    # Print the order details to verify them
-    print(f"Order Pickup: {order.pick_up}")
-    print(f"Order Different Delivery: {order.different_delivery_address}")
-    print(f"Order Delivery Name: {order.delivery_name}")
-    print(f"Order Delivery Address1: {order.delivery_street_address1}")
-
-    if request.user.is_authenticated:
-        profile = UserProfile.objects.get(user=request.user)
-        # Attach the user's profile to the order
-        order.user_profile = profile
-        order.save()
-
-        # Save the user's info
-        if save_info:
-            profile_data = {
-                'default_phone_number': order.billing_phone_number,
-                'default_country': order.billing_country,
-                'default_postcode': order.billing_postcode,
-                'default_town_or_city': order.billing_town_or_city,
-                'default_street_address1': order.billing_street_address1,
-                'default_street_address2': order.billing_street_address2,
-                'default_county': order.billing_county,
-            }
-            user_profile_form = UserProfileForm(profile_data, instance=profile)
-            if user_profile_form.is_valid():
-                user_profile_form.save()
-
-    messages.success(request, f'Order successfully processed! \
-        Your order number is {order_number}. A confirmation \
-        email will be sent to {order.billing_email}.')
-
-    # Clear the bag session
-    if 'bag' in request.session:
-        del request.session['bag']
-
-    template = 'checkout/checkout_success.html'
     context = {
         'order': order,
         'line_items': line_items,
-        'order_total': order.order_total,
         'delivery': order.delivery_cost,
         'grand_total': order.grand_total,
     }
 
-    return render(request, template, context)
+    # Clear the session bag as the order is complete
+    request.session['bag'] = {}
+    return render(request, 'checkout/checkout_success.html', context)
