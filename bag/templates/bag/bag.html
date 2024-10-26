@@ -2,20 +2,13 @@
 {% load static %}
 {% load bag_tools %}
 
-{% block page_header %}
-{% endblock %}
-
 {% block content %}
-
 <div id="shopping-bag-container" class="container mb-2">
     <div class="row">
         <div class="col">
-            <hr>
             <h2 class="logo-font mb-4">Shopping Bag</h2>
-            <hr>
         </div>
     </div>
-
 
     <div class="row">
         <div id="shopping-bag" class="col">
@@ -33,76 +26,74 @@
 
                     {% for item in bag_items %}
                     <tr>
+                        <!-- Display Product Image -->
                         <td class="p-3 w-25">
-                            {% if item.product.image %}
-                            <img class="img-fluid rounded" src="{{ item.product.image.url }}"
-                                alt="{{ item.product.name }}">
-                            {% else %}
-                            <img class="img-fluid rounded" src="{{ MEDIA_URL }}noimage.png"
-                                alt="{{ item.product.name }}">
-                            {% endif %}
+                            <img class="img-fluid rounded" src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
                         </td>
+                        
+                        <!-- Display Product Info -->
                         <td class="py-3">
                             <p class="my-0"><strong>{{ item.product.name }}</strong></p>
-                            <p class="my-0">Size:
-                                {% if item.product.has_sizes %}{{ item.size|upper }}{% else %}N/A{% endif %}</p>
+                            
+                            <!-- Show variant weight if it exists -->
+                            <p class="my-0">
+                                Size: 
+                                {% if item.size %}
+                                    {{ item.size }}g
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </p>
+                            
+                            <!-- SKU Display -->
                             <p class="my-0 small text-muted">SKU: {{ item.product.sku|upper }}</p>
                         </td>
+                        
+                        <!-- Display Price -->
                         <td class="py-3">
-                            <p class="my-0">€{{ item.product.price }}</p>
+                            <p class="my-0">
+                                €{{ item.price }}
+                            </p>
                         </td>
+                        
+                        <!-- Quantity and Update Form -->
                         <td class="py-3 w-25">
                             <form class="form update-form" method="POST" action="{% url 'adjust_bag' item.item_id %}">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <button class="decrement-qty btn btn-sm btn-black rounded-0"
-                                                data-item_id="{{ item.item_id }}" id="decrement-qty_{{ item.item_id }}">
-                                                <span>
-                                                    <i class="fas fa-minus fa-sm"></i>
-                                                </span>
-                                            </button>
-                                        </div>
                                         <input class="form-control form-control-sm qty_input" type="number"
                                             name="quantity" value="{{ item.quantity }}" min="1" max="99"
                                             data-item_id="{{ item.item_id }}" id="id_qty_{{ item.item_id }}">
-                                        <div class="input-group-append">
-                                            <button class="increment-qty btn btn-sm btn-black rounded-0"
-                                                data-item_id="{{ item.item_id }}" id="increment-qty_{{ item.item_id }}">
-                                                <span>
-                                                    <i class="fas fa-plus fa-sm"></i>
-                                                </span>
-                                            </button>
-                                        </div>
-                                        {% if item.product.has_sizes %}
-                                        <input type="hidden" name="product_size" value="{{ item.size }}">
+                                        
+                                        {% if item.size %}
+                                            <input type="hidden" name="product_size" value="{{ item.size }}">
                                         {% endif %}
                                     </div>
                                 </div>
-
-                                <a class="update-link text-info"><small>Update</small></a>
+                                <div class="d-flex mt-2">
+                                    <a class="update-link text-info mr-3"><small>Update</small></a>
+                                    <a class="remove-item text-danger" id="remove_{{ item.item_id }}" 
+                                       href="{% url 'remove_from_bag' item.item_id %}?size={{ item.size }}">
+                                       <small>Remove</small>
+                                    </a>
+                                </div>
                             </form>
-
-                            >
-                            <div class="float-left">
-                                <a class="remove-item text-danger" id="remove_{{ item.item_id }}"
-                                    data-product_size="{{ item.size }}">
-                                    <small>Remove</small>
-                                </a>
-                            </div>
                         </td>
-
+                        
+                        <!-- Subtotal Calculation -->
                         <td class="py-3">
-                            <p class="my-0">€{{ item.product.price | calc_subtotal:item.quantity }}</p>
+                            <p class="my-0">€{{ item.subtotal|floatformat:2 }}</p>
                         </td>
                     </tr>
                     {% endfor %}
+                    
+                    <!-- Totals Row -->
                     <tr>
-                        <td colspan="5" class="pt-5 text-right">
+                        <td colspan="5" class="text-right">
                             <h6><strong>Bag Total: €{{ total|floatformat:2 }}</strong></h6>
                             <h6>Delivery: €{{ delivery|floatformat:2 }}</h6>
-                            <h4 class="mt-4"><strong>Grand Total: €{{ grand_total|floatformat:2 }}</strong></h4>
+                            <h4><strong>Grand Total: €{{ grand_total|floatformat:2 }}</strong></h4>
                         </td>
                     </tr>
                     <tr>
@@ -134,7 +125,9 @@
             {% endif %}
         </div>
     </div>
-    {% endblock %}
+</div>
+{% endblock %}
+
 
     {% block postloadjs %}
     {{ block.super }}
