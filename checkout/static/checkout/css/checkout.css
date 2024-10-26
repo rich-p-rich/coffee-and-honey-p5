@@ -89,3 +89,81 @@ select option[value=""] {
   margin: 0;
   height: 100%
 }
+
+/* Checkout success */
+.container-success {
+  background-color: #f9f9f9;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+.order-confirmation-wrapper {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.section-divider {
+  border-bottom: 1px solid #ddd;
+  margin: 15px 0;
+}
+
+h2.logo-font {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.text-muted {
+  font-weight: 600;
+  color: #777;
+}
+
+p {
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.text-black {
+  color: #333;
+}
+
+.font-weight-bold {
+  font-weight: bold;
+}
+
+.text-md-right {
+  text-align: right;
+}
+
+.small {
+  font-size: 0.85rem;
+}
+
+.row.mt-4 {
+  margin-top: 30px;
+}
+
+.btn-black {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.btn-black:hover {
+  background-color: #555;
+  color: #fff;
+}
+
+hr {
+  margin: 15px 0;
+  border: 0.5px solid #ddd;
+}
