@@ -29,11 +29,15 @@ def all_products(request):
 # Product Detail Page
 
 def product_detail(request, product_id):
-    """ A view to display a single product """
+    """ A view to display a single product, including any variants """
     product = get_object_or_404(Product, pk=product_id)
+
+    # Check if the product has variants
+    variants = product.variants.all() if product.variants.exists() else None
 
     context = {
         'product': product,
+        'variants': variants,
     }
 
     return render(request, 'products/product_detail.html', context)

@@ -15,33 +15,30 @@ def bag_contents(request):
         if product.variants.exists():
             # Handle variant-specific logic
             if isinstance(item_data, int):
+                # Fallback case if item_data is an integer
                 variant = product.variants.first()
                 if variant and variant.price:
                     total += item_data * variant.price
+                    product_count += item_data
                     bag_items.append({
                         'item_id': item_id,
                         'quantity': item_data,
                         'product': product,
                         'variant': variant,
-                        'subtotal': Decimal(variant.price) * Decimal(quantity),
+                        'subtotal': Decimal(variant.price) * Decimal(item_data),
                     })
                 else:
-                    print(f"Error: No price found for variant {variant}")
+                    print(f"Warning: No price found for variant {variant}")
             else:
-                for size, data in item_data['items_by_size'].items():
-                    print(f"DEBUG: size={size}, quantity={data['quantity']}, item_data['items_by_size']={item_data['items_by_size']}")
-
-                    quantity = data['quantity']
+                # Handle structured data with 'items_by_size'
+                for size, data in item_data.get('items_by_size', {}).items():
+                    quantity = data.get('quantity', 1)
 
                     try:
                         variant = product.variants.get(weight=size)
-                        print(f"DEBUG: Variant found: {variant}, Price: {variant.price}")
-
                         if variant and variant.price:
-                            # Ensure price is handled as a Decimal
                             total += Decimal(quantity) * Decimal(variant.price)
-                            print(f"DEBUG: Added {quantity} * {variant.price} to total: {total}")
-
+                            product_count += quantity
                             bag_items.append({
                                 'item_id': item_id,
                                 'quantity': quantity,
@@ -51,40 +48,30 @@ def bag_contents(request):
                                 'subtotal': Decimal(variant.price) * Decimal(quantity),
                             })
                         else:
-                            print(f"Error: No price found for variant {variant}")
+                            print(f"Warning: No price found for variant {variant}")
                     except ProductVariant.DoesNotExist:
-                        print(f"Error: No variant found for size {size}")
+                        print(f"Warning: No variant found for size {size}")
         else:
             # Handle products without variants
-            print(f"DEBUG: {product.name} has no variants")
+            quantity = item_data.get('quantity', 1) if isinstance(item_data, dict) else item_data
+
             if product.price:
-                if isinstance(item_data, dict):
-                    quantity = item_data.get('quantity', 1)
-
-                else:
-                    quantity = item_data
-
                 total += Decimal(quantity) * Decimal(product.price)
-                print(f"DEBUG: Added {quantity} * {product.price} to total: {total}")
-
+                product_count += quantity
                 bag_items.append({
                     'item_id': item_id,
-                    'quantity': item_data,
+                    'quantity': quantity,
                     'product': product,
-                    'subtotal': Decimal(variant.price) * Decimal(quantity),
+                    'subtotal': Decimal(product.price) * Decimal(quantity),
                 })
             else:
-                print(f"Error: No price found for product {product.name}")
+                print(f"Warning: No price found for product {product.name}")
 
-    # Check to see if bag is empty before calculating delivery
-    if total > 0:
-        delivery = Decimal(settings.STANDARD_DELIVERY_PRICE)
-    else:
-        delivery = Decimal(0)
-        
+    # Calculate delivery cost based on the total
+    delivery = Decimal(settings.STANDARD_DELIVERY_PRICE) if total > 0 else Decimal(0)
     grand_total = delivery + total
-    print(f"DEBUG: Grand total: {grand_total}")
 
+    # Context including the delivery and grand total
     context = {
         'bag_items': bag_items,
         'total': total,

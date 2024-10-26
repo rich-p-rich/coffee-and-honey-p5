@@ -75,7 +75,7 @@ def add_to_bag(request, item_id):
     quantity = int(request.POST.get('quantity'))
     redirect_url = request.POST.get('redirect_url')
 
-    # Print request.POST to see if 'product_size' is being posted
+    # Debugging: print the POST data
     print("POST data:", request.POST)
 
     size = None
@@ -84,10 +84,19 @@ def add_to_bag(request, item_id):
     # Fetch the variant if a size is selected
     if 'product_size' in request.POST:
         size = request.POST['product_size']
-        variant = get_object_or_404(ProductVariant, product=product, weight=size)
-        price = variant.price
+        try:
+            variant = ProductVariant.objects.get(product=product, weight=size)
+            price = variant.price
+            print(f"DEBUG: Variant found - weight: {size}, price: {price}")
+        except ProductVariant.DoesNotExist:
+            print(f"WARNING: No variant found for product {product.name} with size {size}")
     else:
-        print("No size posted for this product.")
+        print("DEBUG: No size selected, using product's base price.")
+        price = product.price
+
+    # Check if price is still None
+    if price is None:
+        print(f"ERROR: Price is None for product {product.name} (id: {item_id}, size: {size}).")
 
     # Get the current shopping bag from the session
     bag = request.session.get('bag', {})
@@ -112,17 +121,17 @@ def add_to_bag(request, item_id):
         elif item_id in bag:
             bag[item_id] += quantity
         else:
-            bag[item_id] = {'quantity': quantity, 'price': str(product.price)}
+            bag[item_id] = {'quantity': quantity, 'price': str(price)}
+
+    # Debugging: Print bag contents before saving to session
+    print("Bag contents before updating session:", bag)
 
     # Update the session with the modified bag
     request.session['bag'] = bag
-    print("Bag after adding:", bag)  # Print the updated bag structure
-
-    # Toast message container
-    print(f"DEBUG TOAST: Adding success message for product: {product.name}")
     messages.success(request, f'Added {product.name} to your bag')
 
     return redirect(redirect_url)
+
 
 
 
