@@ -1,5 +1,5 @@
 from django.shortcuts import (
-    render, redirect, reverse, get_object_or_404, HttpResponse
+    render, redirect, reverse, get_object_or_404, get_list_or_404, HttpResponse
 )
 from django.views.decorators.http import require_POST
 from django.contrib import messages
@@ -168,8 +168,47 @@ def checkout(request):
             order.original_bag = json.dumps(bag)
             order.save()
 
+            for item_id, item_data in bag.items():
+                try:
+                    product = Product.objects.get(id=item_id)
+                    
+                    if isinstance(item_data, int):
+                        # Product without variants
+                        order_line_item = OrderLineItem(
+                            order=order,
+                            product=product,
+                            quantity=item_data,
+                        )
+                        print(f"DEBUG: Creating OrderLineItem for {product.name} - Quantity: {item_data}")
+                        order_line_item.save()
+                    
+                    else:
+                        # Product with variants
+                        for size, data in item_data['items_by_size'].items():
+                            # Get the quantity directly from `data` here
+                            quantity = int(data.get('quantity', 1))  # Default to 1 if 'quantity' key is missing
+                            order_line_item = OrderLineItem(
+                                order=order,
+                                product=product,
+                                quantity=quantity,
+                                product_size=size,
+                            )
+                            print(f"DEBUG: Creating OrderLineItem for {product.name} - Size: {size}, Quantity: {quantity}")
+                            order_line_item.save()
+                            
+                except Product.DoesNotExist:
+                    messages.error(request, (
+                        "One of the products in your bag wasn't "
+                        "found in our database. "
+                        "Please call us for assistance!")
+                    )
+                    order.delete()
+                    return redirect(reverse('view_bag'))
+
+
             request.session['save_info'] = 'save-info' in request.POST
             return redirect(reverse('checkout_success', args=[order.order_number]))
+
         else:
             messages.error(request, 'There was an error with your form. Please double-check your information.')
 
@@ -227,6 +266,10 @@ def checkout_success(request, order_number):
     save_info = request.session.get('save_info')
     order = get_object_or_404(Order, order_number=order_number)
 
+    # Fetch all line items for this order
+    line_items = OrderLineItem.objects.filter(order=order)
+    print(f"Line items count: {line_items.count()}")
+
     # Print the order details to verify them
     print(f"Order Pickup: {order.pick_up}")
     print(f"Order Different Delivery: {order.different_delivery_address}")
@@ -258,12 +301,17 @@ def checkout_success(request, order_number):
         Your order number is {order_number}. A confirmation \
         email will be sent to {order.billing_email}.')
 
+    # Clear the bag session
     if 'bag' in request.session:
         del request.session['bag']
 
     template = 'checkout/checkout_success.html'
     context = {
         'order': order,
+        'line_items': line_items,
+        'order_total': order.order_total,
+        'delivery': order.delivery_cost,
+        'grand_total': order.grand_total,
     }
 
     return render(request, template, context)
