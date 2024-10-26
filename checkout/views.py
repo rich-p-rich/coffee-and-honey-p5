@@ -86,6 +86,7 @@ def checkout(request):
                 order.pick_up = True
                 order.different_delivery_address = False
                 messages.success(request, 'You have chosen to pick up your order from Coffee and Honey.')
+                order.save()
 
             elif delivery_type == 'delivery-different':
                 # Delivery to a different address scenario
@@ -100,6 +101,8 @@ def checkout(request):
                 order.delivery_county = request.POST.get('delivery_county', '')
                 order.delivery_postcode = request.POST.get('delivery_postcode')
                 order.delivery_country = request.POST.get('delivery_country')
+
+                order.save()
 
                 # Save the address to the profile if checkbox is checked
                 save_address = request.POST.get('save-address')  # Make sure this is defined first
@@ -158,6 +161,7 @@ def checkout(request):
                 order.delivery_postcode = order.billing_postcode
                 order.delivery_country = order.billing_country
 
+                order.save()
 
             pid = request.POST.get('client_secret').split('_secret')[0]
             order.stripe_pid = pid
