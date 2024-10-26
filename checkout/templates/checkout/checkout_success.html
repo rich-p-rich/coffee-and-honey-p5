@@ -47,7 +47,7 @@
 
                 <div class="row">
                     <div class="col">
-                        <small class="text-muted">Order Details:</small>
+                        Order Details:
                     </div>
                 </div>
 
@@ -55,20 +55,30 @@
                 <div class="row">
                     <div class="col-12 col-md-4">
                         <p class="small mb-0 text-black font-weight-bold">
-                            {{ item.product.name }}{% if item.product_size %} - Size: {{ item.product_size|upper }}g{% endif %}
+                            You purchased
+                            {{ item.product.name }}{% if item.product_size %} - Size:
+                            {{ item.product_size|upper }}g{% endif %}
                         </p>
                     </div>
-                    <div class="col-12 col-md-8 text-md-right">
-                        <!-- Displaying quantity and price per piece -->
-                        <p class="small mb-0">{{ item.quantity }} @ €{{ item.lineitem_total|div:item.quantity|floatformat:2 }} each</p>
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <!-- Display only the product name and size once -->
+                            <p class="small mb-0 text-black font-weight-bold">
+                                {{ item.product.name }}{% if item.product_size %} - Size: {{ item.product_size|upper }}g{% endif %}
+                            </p>
+                        </div>
+                        <div class="col-12 col-md-8 text-md-right">
+                            <!-- Display quantity and unit price -->
+                            <p class="small mb-0">{{ item.quantity }} @ €{{ item.unit_price|floatformat:2 }} each</p>
+                        </div>
                     </div>
-                </div>
                 {% endfor %}
-                
+
 
                 {% if order.pick_up %}
                 <div class="row">
                     <div class="col-12">
+                        <p>Delivery or Pick-up?</p>
                         <p class="text-black font-weight-bold">Pick-Up from Coffee and Honey Café</p>
                     </div>
                 </div>

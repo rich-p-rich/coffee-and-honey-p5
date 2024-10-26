@@ -120,23 +120,34 @@ def checkout(request):
             for item_id, item_data in bag.items():
                 try:
                     product = Product.objects.get(id=item_id)
+                    
                     if isinstance(item_data, int):
+                        # Single-price product
                         order_line_item = OrderLineItem(
                             order=order,
                             product=product,
                             quantity=item_data,
+                            unit_price=product.price  # Set the unit price for single-price products
                         )
+                        print(f"DEBUG: Product: {order_line_item.product.name}, Quantity: {order_line_item.quantity}, Unit Price: {order_line_item.unit_price}")
                         order_line_item.save()
+
                     else:
+                        # Variant product
                         for size, data in item_data['items_by_size'].items():
                             quantity = int(data.get('quantity', 1))
+                            variant = product.variants.get(weight=size)  # Fetch the variant
+                            
                             order_line_item = OrderLineItem(
                                 order=order,
                                 product=product,
                                 quantity=quantity,
                                 product_size=size,
+                                unit_price=variant.price  # Set the unit price for variant products
                             )
+                            print(f"DEBUG: Product: {order_line_item.product.name}, Size: {order_line_item.product_size}, Quantity: {order_line_item.quantity}, Unit Price: {order_line_item.unit_price}")
                             order_line_item.save()
+
                 except Product.DoesNotExist:
                     messages.error(request, (
                         "One of the products in your bag wasn't "
@@ -145,6 +156,7 @@ def checkout(request):
                     )
                     order.delete()
                     return redirect(reverse('view_bag'))
+
 
             # Now assign order totals using the bag contents context
             current_bag = bag_contents(request)
