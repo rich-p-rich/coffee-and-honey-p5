@@ -23,7 +23,8 @@ def view_bag(request):
                 variant = get_object_or_404(ProductVariant, product=product, weight=size)
                 price = float(details['price'])
                 quantity = details['quantity']
-                subtotal = price * quantity
+                extra_service_cost = details.get('extra_service_cost', 0)
+                subtotal = (price * quantity) + extra_service_cost
                 total += subtotal
                 bag_items.append({
                     'product': product,
@@ -31,9 +32,10 @@ def view_bag(request):
                     'size': variant.weight,
                     'quantity': quantity,
                     'price': price,
+                    'extra_service_cost': extra_service_cost,
                     'subtotal': subtotal
                 })
-        # Handle items without size (like products that don't have variants)
+        # Handle items without size (products that don't have size/weight variants)
         elif isinstance(item_data, dict):
             price = float(item_data['price'])
             quantity = item_data['quantity']

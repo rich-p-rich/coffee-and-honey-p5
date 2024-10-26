@@ -42,13 +42,17 @@
                 <div class="col-7">
                     <p class="my-0"><strong>{{ item.product.name }}</strong></p>
                     <p class="my-0 small">Size:
-                        {% if item.variant %}
-                        {{ item.variant.weight }}g
+                        {% if item.size %}
+                        {{ item.size }}g
                         {% else %}
                         N/A
                         {% endif %}
                     </p>
+                    </p>
                     <p class="my-0 small text-muted">Qty: {{ item.quantity }}</p>
+                    {% if item.extra_service_cost > 0 %}
+                    <p class="my-0 small text-muted">Freshly Ground Service: €{{ item.extra_service_cost|floatformat:2 }}</p>
+                    {% endif %}
                 </div>
                 <div class="col-3 text-right">
                     <p class="my-0 small text-muted">€{{ item.product.price | calc_subtotal:item.quantity }}</p>
