@@ -33,11 +33,14 @@ def bag_contents(request):
                 # Handle structured data with 'items_by_size'
                 for size, data in item_data.get('items_by_size', {}).items():
                     quantity = data.get('quantity', 1)
+                    extra_service_cost = Decimal(data.get('extra_service_cost', 0))
+                    freshly_ground = data.get('freshly_ground', False)
 
                     try:
                         variant = product.variants.get(weight=size)
                         if variant and variant.price:
-                            total += Decimal(quantity) * Decimal(variant.price)
+                            subtotal = (Decimal(variant.price) * Decimal(quantity)) + extra_service_cost
+                            total += subtotal
                             product_count += quantity
                             bag_items.append({
                                 'item_id': item_id,
@@ -45,12 +48,15 @@ def bag_contents(request):
                                 'product': product,
                                 'variant': variant,
                                 'size': size,
-                                'subtotal': Decimal(variant.price) * Decimal(quantity),
+                                'extra_service_cost': extra_service_cost,
+                                'freshly_ground': freshly_ground,
+                                'subtotal': subtotal,
                             })
                         else:
                             print(f"Warning: No price found for variant {variant}")
                     except ProductVariant.DoesNotExist:
                         print(f"Warning: No variant found for size {size}")
+
         else:
             # Handle products without variants
             quantity = item_data.get('quantity', 1) if isinstance(item_data, dict) else item_data

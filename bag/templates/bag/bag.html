@@ -21,6 +21,14 @@
                             <th scope="col" class="col-1">Price</th>
                             <th scope="col" class="col-1">Qty</th>
                             <th scope="col" class="col-2">Subtotal</th>
+
+                            {% if item.extra_service_cost %}
+                        <tr>
+                            <td colspan="4" class="text-right">
+                                Freshly Ground Service: €{{ item.extra_service_cost|floatformat:2 }}
+                            </td>
+                        </tr>
+                        {% endif %}
                         </tr>
                     </thead>
 
@@ -28,74 +36,70 @@
                     <tr>
                         <!-- Display Product Image -->
                         <td class="p-3 w-25">
-                            <img class="img-fluid rounded" src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                            <img class="img-fluid rounded" src="{{ item.product.image.url }}"
+                                alt="{{ item.product.name }}">
                         </td>
-                        
+
                         <!-- Display Product Info -->
                         <td class="py-3">
                             <p class="my-0"><strong>{{ item.product.name }}</strong></p>
-                            
+
                             <!-- Show variant weight if it exists -->
                             <p class="my-0">
-                                Size: 
+                                Size:
                                 {% if item.size %}
-                                    {{ item.size }}g
+                                {{ item.size }}g
                                 {% else %}
-                                    N/A
+                                N/A
                                 {% endif %}
                             </p>
-                            
+
                             <!-- SKU Display -->
                             <p class="my-0 small text-muted">SKU: {{ item.product.sku|upper }}</p>
                         </td>
-                        
+
                         <!-- Display Price -->
                         <td class="py-3">
-                            <p class="my-0">
-                                €{{ item.price }}
-                            </p>
+                            <p class="my-0">€{{ item.price|floatformat:2 }}</p>
+                            
+                            <!-- If extra service chosen -->
+                            {% if item.freshly_ground %}
+                                <p class="small text-muted my-0">+ Freshly Ground: €{{ item.extra_service_cost|floatformat:2 }}</p>
+                            {% endif %}
                         </td>
-                        
+
                         <!-- Quantity and Update Form -->
                         <td class="py-3 w-25">
-                            <form class="form update-form" method="POST" action="{% url 'adjust_bag' item.item_id %}">
+                            <form class="form update-form" method="POST"
+                                action="{% url 'adjust_bag' item.product.id %}">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <div class="input-group">
                                         <input class="form-control form-control-sm qty_input" type="number"
                                             name="quantity" value="{{ item.quantity }}" min="1" max="99"
-                                            data-item_id="{{ item.item_id }}" id="id_qty_{{ item.item_id }}">
-                                        
+                                            data-item_id="{{ item.product.id }}" id="id_qty_{{ item.product.id }}">
+
                                         {% if item.size %}
-                                            <input type="hidden" name="product_size" value="{{ item.size }}">
+                                        <input type="hidden" name="product_size" value="{{ item.size }}">
                                         {% endif %}
                                     </div>
                                 </div>
                                 <div class="d-flex mt-2">
                                     <a class="update-link text-info mr-3"><small>Update</small></a>
-                                    <a class="remove-item text-danger" id="remove_{{ item.item_id }}" 
-                                       href="{% url 'remove_from_bag' item.item_id %}?size={{ item.size }}">
-                                       <small>Remove</small>
+                                    <a class="remove-item text-danger" id="remove_{{ item.product.id }}"
+                                        href="{% url 'remove_from_bag' item.product.id %}?size={{ item.size }}">
+                                        <small>Remove</small>
                                     </a>
                                 </div>
                             </form>
                         </td>
-                        
+
                         <!-- Subtotal Calculation -->
                         <td class="py-3">
                             <p class="my-0">€{{ item.subtotal|floatformat:2 }}</p>
                         </td>
                     </tr>
                     {% endfor %}
-                    
-                    <!-- Totals Row -->
-                    <tr>
-                        <td colspan="5" class="text-right">
-                            <h6><strong>Bag Total: €{{ total|floatformat:2 }}</strong></h6>
-                            <h6>Delivery: €{{ delivery|floatformat:2 }}</h6>
-                            <h4><strong>Grand Total: €{{ grand_total|floatformat:2 }}</strong></h4>
-                        </td>
-                    </tr>
                     <tr>
                         <td colspan="5" class="text-right">
                             <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
@@ -129,32 +133,32 @@
 {% endblock %}
 
 
-    {% block postloadjs %}
-    {{ block.super }}
-    {% include 'products/includes/quantity_input_script.html' %}
+{% block postloadjs %}
+{{ block.super }}
+{% include 'products/includes/quantity_input_script.html' %}
 
-    <script type="text/javascript">
-        // Update quantity on click
-        $('.update-link').click(function (e) {
-            var form = $(this).closest('.update-form');
-            form.submit();
-        })
+<script type="text/javascript">
+    // Update quantity on click
+    $('.update-link').click(function (e) {
+        var form = $(this).closest('.update-form');
+        form.submit();
+    })
 
-        // Remove item and reload on click
-        $('.remove-item').click(function (e) {
-            var csrfToken = "{{ csrf_token }}";
-            var itemId = $(this).attr('id').split('remove_')[1];
-            var size = $(this).data('product_size');
-            var url = `/bag/remove/${itemId}/`;
-            var data = {
-                'csrfmiddlewaretoken': csrfToken,
-                'product_size': size
-            };
+    // Remove item and reload on click
+    $('.remove-item').click(function (e) {
+        var csrfToken = "{{ csrf_token }}";
+        var itemId = $(this).attr('id').split('remove_')[1];
+        var size = $(this).data('product_size');
+        var url = `/bag/remove/${itemId}/`;
+        var data = {
+            'csrfmiddlewaretoken': csrfToken,
+            'product_size': size
+        };
 
-            $.post(url, data)
-                .done(function () {
-                    location.reload();
-                });
-        })
-    </script>
-    {% endblock %}
+        $.post(url, data)
+            .done(function () {
+                location.reload();
+            });
+    })
+</script>
+{% endblock %}
