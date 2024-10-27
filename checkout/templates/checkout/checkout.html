@@ -136,6 +136,7 @@
                 </fieldset>
 
                 <!-- Dropdown for Saved Addresses (only displayed if "Deliver to Address" is selected) -->
+                {% if user.is_authenticated %}
                 <div id="saved-address-dropdown" style="display: none; margin-top: 10px;">
                     <label for="saved_address">Select a saved address:</label>
                     <select id="saved_address" name="saved_address" class="form-control">
@@ -152,9 +153,10 @@
                                 {{ address.nickname|default:address.recipient_name }}
                             </option>
                         {% endfor %}
-                    </select>
-                    
+                    </select>                    
                 </div>
+                {% endif %}
+
 
                 <!-- Delivery Address Section (only displayed if "Deliver to Address" is selected) -->
                 <div id="delivery-address-section" class="d-none">
