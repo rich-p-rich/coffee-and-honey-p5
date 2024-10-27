@@ -47,7 +47,9 @@ class RecipientAddresses(models.Model):
     recipient_county = models.CharField(max_length=80, null=True, blank=True)
     recipient_postcode = models.CharField(max_length=20, null=True, blank=True)
     recipient_country = models.CharField(max_length=40, null=True, blank=True)
+    nickname = models.CharField(max_length=50, blank=True, help_text="Nickname for this address (e.g., 'Mum and Dad', 'The Office', etc)")
     is_default = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.name} - {self.street_address1}, {self.town_or_city}"
+        return self.nickname or self.recipient_name  # Fallback if no nickname is provided
