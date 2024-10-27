@@ -51,5 +51,4 @@ class RecipientAddresses(models.Model):
     is_default = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.name} - {self.street_address1}, {self.town_or_city}"
-        return self.nickname or self.recipient_name  # Fallback if no nickname is provided
+        return self.nickname or self.recipient_name  # For the 'choose saved address' in checkout

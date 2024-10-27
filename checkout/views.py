@@ -205,6 +205,8 @@ def checkout(request):
 
             # Call up saved addresses for logged-in customer
             saved_addresses = RecipientAddresses.objects.filter(user_profile=user_profile)
+            print("DEBUG: Saved Addresses:", saved_addresses)  # Check the contents of saved_addresses
+
 
         order_form = OrderForm(initial=initial_data)
 
