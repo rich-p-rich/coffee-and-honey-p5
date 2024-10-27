@@ -75,28 +75,30 @@
                                     <!-- Decrement Button with Styling -->
                                     <div class="input-group-prepend">
                                         <button class="decrement-qty btn btn-sm btn-black rounded-0"
-                                                data-item_id="{{ item.item_id }}" id="decrement-qty_{{ item.item_id }}" title="Decrease quantity">
+                                            data-item_id="{{ item.item_id }}" id="decrement-qty_{{ item.item_id }}"
+                                            title="Decrease quantity">
                                             <span>
                                                 <i class="fas fa-minus fa-sm"></i>
                                             </span>
                                         </button>
                                     </div>
-                                    
+
                                     <!-- Quantity Input -->
-                                    <input class="form-control form-control-sm qty_input" type="number"
-                                           name="quantity" value="{{ item.quantity }}" min="1" max="99"
-                                           data-item_id="{{ item.item_id }}" id="id_qty_{{ item.item_id }}">
-                                    
+                                    <input class="form-control form-control-sm qty_input" type="number" name="quantity"
+                                        value="{{ item.quantity }}" min="1" max="99" data-item_id="{{ item.item_id }}"
+                                        id="id_qty_{{ item.item_id }}">
+
                                     <!-- Increment Button with Styling -->
                                     <div class="input-group-append">
                                         <button class="increment-qty btn btn-sm btn-black rounded-0"
-                                                data-item_id="{{ item.item_id }}" id="increment-qty_{{ item.item_id }}" title="Increase quantity">
+                                            data-item_id="{{ item.item_id }}" id="increment-qty_{{ item.item_id }}"
+                                            title="Increase quantity">
                                             <span>
                                                 <i class="fas fa-plus fa-sm"></i>
                                             </span>
                                         </button>
                                     </div>
-                    
+
                                     {% if item.product.has_sizes %}
                                     <input type="hidden" name="product_size" value="{{ item.size }}">
                                     {% endif %}
@@ -106,65 +108,104 @@
                             <!-- Align Update and Remove Buttons to the Right -->
                             <div class="d-flex justify-content-end mt-2">
                                 <!-- Update Button -->
-                                <button type="submit" class="btn bag-update-link btn-info btn-sm mr-2" title="Update bag">
+                                <button type="submit" class="btn bag-update-link btn-info btn-sm mr-2"
+                                    title="Update bag">
                                     Update
                                 </button>
-                                
+
                                 <!-- Remove Button -->
-                                <a class="remove-item btn btn-danger bag-rempve btn-sm" id="remove_{{ item.item_id }}" 
-                                   href="{% url 'remove_from_bag' item.item_id %}?size={{ item.size }}" title="Remove product from bag">
+                                <a class="remove-item btn btn-danger bag-rempve btn-sm" id="remove_{{ item.item_id }}"
+                                    href="{% url 'remove_from_bag' item.item_id %}?size={{ item.size }}"
+                                    title="Remove product from bag">
                                     Remove
                                 </a>
                             </div>
                         </form>
                     </td>
-                    
-                    
 
-            <!-- Subtotal Calculation -->
-            <td class="py-3">
-                <p class="my-0">€{{ item.subtotal|floatformat:2 }}</p>
-            </td>
-            </tr>
-            {% endfor %}
+                 
+                    <!-- Subtotal Calculation -->
+                    <td class="py-3">
+                        <p class="my-0">€{{ item.subtotal|floatformat:2 }}</p>
+                    </td>
+                    </tr>
+                    {% endfor %}
 
-            <!-- Totals Row -->
-            <tr>
-                <td colspan="5" class="text-right">
-                    <h6><strong>Bag Total: €{{ total|floatformat:2 }}</strong></h6>
-                    <h6>Delivery: €{{ delivery|floatformat:2 }}</h6>
-                    <h4><strong>Grand Total: €{{ grand_total|floatformat:2 }}</strong></h4>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="5" class="text-right">
-                    <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
-                        <span class="icon">
-                            <i class="fas fa-chevron-left"></i>
-                        </span>
-                        <span class="text-uppercase">Keep Shopping</span>
-                    </a>
-                    <a href="{% url 'checkout' %}" class="btn btn-black rounded-0 btn-lg">
-                        <span class="text-uppercase">Secure Checkout</span>
-                        <span class="icon">
-                            <i class="fas fa-lock"></i>
-                        </span>
-                    </a>
-                </td>
-            </tr>
-            </table>
+                    <!-- Totals Row -->
+                    <tr>
+                        <td colspan="5" class="text-right">
+                            <h6><strong>Bag Total: €{{ total|floatformat:2 }}</strong></h6>
+                            <h6>Delivery: €{{ delivery|floatformat:2 }}</h6>
+                            <h4><strong>Grand Total: €{{ grand_total|floatformat:2 }}</strong></h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="text-right">
+                            <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
+                                <span class="icon">
+                                    <i class="fas fa-chevron-left"></i>
+                                </span>
+                                <span class="text-uppercase">Keep Shopping</span>
+                            </a>
+
+                            <!-- Check if the user is authenticated -->
+                            {% if user.is_authenticated %}
+                            <!-- Direct link to checkout for logged-in users -->
+                            <a href="{% url 'checkout' %}" class="btn btn-black rounded-0 btn-lg">
+                                <span class="text-uppercase">Secure Checkout</span>
+                                <span class="icon">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </a>
+                            {% else %}
+                            <!-- Modal trigger for non-logged-in  users -->
+                            <button type="button" class="btn btn-black rounded-0 btn-lg" onclick="openModal()">
+                                <span class="text-uppercase">Secure Checkout</span>
+                                <span class="icon">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+
+                 <!-- Modal signin / register prompt -->
+                <div class="modal fade" id="signInModal" tabindex="-1" aria-labelledby="signInModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="signInModalLabel">Sign In or Register</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Please sign in if you have an account, or register if not.
+                                    You can also proceed as a guest.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <a href="{% url 'account_login' %}" class="btn btn-success">Log in</a>
+                                <a href="{% url 'account_signup' %}" class="btn btn-primary">Register</a>
+                                <a href="{% url 'checkout' %}" class="btn btn-outline-black">Proceed as Guest</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% else %}
+            <p class="lead mb-5">Your bag is empty.</p>
+            <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
+                <span class="icon">
+                    <i class="fas fa-chevron-left"></i>
+                </span>
+                <span class="text-uppercase">Keep Shopping</span>
+            </a>
+            {% endif %}
         </div>
-        {% else %}
-        <p class="lead mb-5">Your bag is empty.</p>
-        <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
-            <span class="icon">
-                <i class="fas fa-chevron-left"></i>
-            </span>
-            <span class="text-uppercase">Keep Shopping</span>
-        </a>
-        {% endif %}
     </div>
-</div>
 </div>
 {% endblock %}
 
@@ -196,5 +237,11 @@
                 location.reload();
             });
     })
+
+    // Modal trigger
+    function openModal() {
+    var myModal = new bootstrap.Modal(document.getElementById('signInModal'));
+    myModal.show();
+}
 </script>
 {% endblock %}
