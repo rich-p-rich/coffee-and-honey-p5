@@ -11,6 +11,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const deliveryDifferentRadio = document.getElementById('delivery-different');
     const differentDeliveryAddress = document.getElementById('delivery-address-section');
 
+    // Check if there is a saved default delivery address (different to billing address) 
+    const defaultDeliveryData = JSON.parse(document.getElementById('default-delivery-data').getAttribute('data-default'));
+
+
     // For using saved addresses in profile to populate a different delivery address
     const savedAddressDropdown = document.getElementById('saved-address-dropdown');
     const savedAddressSelect = document.getElementById('saved_address');

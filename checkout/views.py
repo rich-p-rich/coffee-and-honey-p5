@@ -191,6 +191,7 @@ def checkout(request):
 
         if request.user.is_authenticated:
             user_profile = request.user.userprofile
+            # Populate the billing address with shipping details if billing = delivery address
             initial_data = {
                 'billing_full_name': user_profile.user.get_full_name(),
                 'billing_email': user_profile.user.email,
@@ -203,12 +204,32 @@ def checkout(request):
                 'billing_country': user_profile.default_country,
             }
 
+            # Get the default delivery address if it exists
+            default_delivery_address = RecipientAddresses.objects.filter(user_profile=user_profile, is_default=True).first()
+            if default_delivery_address:
+                # If a default delivery address exists, add it to the context
+                delivery_initial_data = {
+                    'delivery_name': default_delivery_address.recipient_name,
+                    'delivery_phone_number': default_delivery_address.recipient_phone_number,
+                    'delivery_street_address1': default_delivery_address.recipient_street_address1,
+                    'delivery_street_address2': default_delivery_address.recipient_street_address2,
+                    'delivery_town_or_city': default_delivery_address.recipient_town_or_city,
+                    'delivery_county': default_delivery_address.recipient_county,
+                    'delivery_postcode': default_delivery_address.recipient_postcode,
+                    'delivery_country': default_delivery_address.recipient_country,
+                }
+            else:
+                delivery_initial_data = {}
+
             # Call up saved addresses for logged-in customer
             saved_addresses = RecipientAddresses.objects.filter(user_profile=user_profile)
             print("DEBUG: Saved Addresses:", saved_addresses)  # Check the contents of saved_addresses
 
+            # Prepare the form with both billing and delivery initial data
+            order_form = OrderForm(initial={**initial_data, **delivery_initial_data})
 
-        order_form = OrderForm(initial=initial_data)
+        else:
+            order_form = OrderForm()
 
     if not stripe_public_key:
         messages.warning(request, 'Stripe public key is missing. Did you forget to set it in your environment?')
@@ -220,6 +241,7 @@ def checkout(request):
         'delivery_price': settings.STANDARD_DELIVERY_PRICE,
         'pickup_price': settings.PICKUP_DELIVERY_PRICE,
         'saved_addresses': saved_addresses,
+        'default_delivery_data': delivery_data, 
     }
 
     return render(request, 'checkout/checkout.html', context)
