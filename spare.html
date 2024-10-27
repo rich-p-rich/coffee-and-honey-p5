@@ -1,24 +1,216 @@
-<!-- Quantity and Update Form -->
-<td class="py-3 w-25">
-    <form class="form update-form" method="POST" action="{% url 'adjust_bag' item.item_id %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <div class="input-group">
-                <input class="form-control form-control-sm qty_input" type="number"
-                    name="quantity" value="{{ item.quantity }}" min="1" max="99"
-                    data-item_id="{{ item.item_id }}" id="id_qty_{{ item.item_id }}">
-                
-                {% if item.size %}
-                    <input type="hidden" name="product_size" value="{{ item.size }}">
-                {% endif %}
+{% extends "base.html" %}
+{% load static %}
+{% load bag_tools %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'checkout/css/checkout.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="checkout-overlay"></div>
+<div class="container order-sum">
+    <div class="row">
+        <div class="col">
+            <hr>
+            <h2 class="logo-font mb-4">Checkout</h2>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="order-sum col-12 col-lg-6 order-lg-last mb-5">
+            <p>Order Summary</p>
+            <div class="row">
+                <div class="col-7 offset-2">
+                    <p class="mb-1 mt-0 small text-muted">Item</p>
+                </div>
+                <div class="col-3 text-right">
+                    <p class="my-0 small text-muted">€{{ item.subtotal|floatformat:2 }}</p>
+                </div>
+            </div>
+            <!-- Products in checkout -->
+            {% for item in bag_items %}
+            <div class="row">
+                <div class="col-2 mb-1">
+                    <a href="{% url 'product_detail' item.product.id %}">
+                        {% if item.product.image %}
+                        <img class="w-100" src="{{ item.product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                        <img class="w-100" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                        {% endif %}
+                    </a>
+                </div>
+                <div class="col-7">
+                    <p class="my-0"><strong>{{ item.product.name }}</strong></p>
+                    <p class="my-0 small">Size:
+                        {% if item.size %}
+                        {{ item.size }}g
+                        {% else %}
+                        N/A
+                        {% endif %}
+                    </p>
+                    </p>
+                    <!-- If extra service was chosen -->
+                    <p class="my-0 small text-muted">Qty: {{ item.quantity }}</p>
+                    {% if item.extra_service_cost > 0 %}
+                    <p class="my-0 small text-muted">Freshly Ground Service:
+                        €{{ item.extra_service_cost|floatformat:2 }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-3 text-right">
+                    <p class="my-0 small text-muted">€{{ item.product.price | calc_subtotal:item.quantity }}</p>
+                </div>
+            </div>
+            {% endfor %}
+            <!-- Summary order details -->
+            <hr class="my-0">
+            <div class="row text-black text-right">
+                <div class="col-7 offset-2">
+                    <p class="my-0">Order Total:</p>
+                    <p class="my-0">Delivery:</p>
+                    <p class="my-0">Grand Total:</p>
+                </div>
+                <div class="col-3">
+                    <p class="my-0 order-total">€{{ total | floatformat:2 }}</p>
+                    <p class="my-0 delivery-cost">€{{ delivery | floatformat:2 }}</p>
+                    <p class="my-0 grand-total"><strong>€{{ grand_total | floatformat:2 }}</strong></p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <p class="text-muted">Please fill out the form below to complete your order</p>
+                <form action="{% url 'checkout' %}" method="POST" id="payment-form">
+                    {% csrf_token %}
+
+                    <!-- Set pick-up price -->
+                    <div id="price-config" data-delivery-price="{{ delivery_price }}"
+                        data-pickup-price="{{ pickup_price }}">
+                    </div>
+
+                    <!-- Delivery and Pick-Up Options -->
+                    <fieldset class="rounded px-3 mb-5">
+                        <legend class="fieldset-label small text-black px-2 w-auto">Delivery Option</legend>
+
+                        <!-- Ship to billing address -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="delivery_type" id="delivery-billing-same"
+                                value="delivery-billing-same" checked>
+                            <label class="form-check-label" for="delivery-billing-same">Home Delivery:
+                                €{{ delivery_price }}</label>
+                        </div>
+
+                        <!-- Ship to non-billing or default address if different from billing -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="delivery_type" id="delivery-different"
+                                value="delivery-different">
+                            <label class="form-check-label" for="delivery-different">Delivery to Friends or Family:
+                                €{{ delivery_price }}</label>
+                        </div>
+
+                        <!-- Pick-up in cafe -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="delivery_type" id="pickup"
+                                value="pickup">
+                            <label class="form-check-label" for="pickup">Pick up at Coffee and Honey: free</label>
+                        </div>
+                    </fieldset>
+
+                    <!-- Dropdown for Saved Addresses (only displayed if "Deliver to Address" is selected) -->
+                    <div id="saved-address-dropdown" style="display: none; margin-top: 10px;">
+                        <label for="saved_address">Select a saved address:</label>
+                        <select id="saved_address" name="saved_address" class="form-control">
+                            <option value="">-- Select an Address --</option>
+                            {% for address in saved_addresses %}
+                            <option value="{{ address.id }}" data-recipient_name="{{ address.recipient_name }}"
+                                data-street_address1="{{ address.recipient_street_address1 }}"
+                                data-street_address2="{{ address.recipient_street_address2 }}"
+                                data-town_or_city="{{ address.recipient_town_or_city }}"
+                                data-county="{{ address.recipient_county }}"
+                                data-postcode="{{ address.recipient_postcode }}"
+                                data-country="{{ address.recipient_country }}">
+                                {{ address.nickname|default:address.recipient_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Delivery Address Section (only displayed if "Deliver to Address" is selected) -->
+                    <div id="delivery-address-section" class="d-none">
+                        <fieldset class="rounded px-3 mb-5">
+                            <legend class="fieldset-label small text-black px-2 w-auto">Delivery Address</legend>
+
+                            <!-- Delivery Address Fields -->
+                            {{ order_form.delivery_name | as_crispy_field }}
+                            {{ order_form.delivery_street_address1 | as_crispy_field }}
+                            {{ order_form.delivery_street_address2 | as_crispy_field }}
+                            {{ order_form.delivery_town_or_city | as_crispy_field }}
+                            {{ order_form.delivery_county | as_crispy_field }}
+                            {{ order_form.delivery_postcode | as_crispy_field }}
+                            {{ order_form.delivery_country | as_crispy_field }}
+
+                            <!-- Save Delivery Information Option -->
+                            <div class="form-check form-check-inline float-right mr-0" id="save-delivery-question">
+                                {% if user.is_authenticated %}
+                                <label class="form-check-label" for="id-save-address">Save this delivery information to
+                                    my profile</label>
+                                <input class="form-check-input ml-2 mr-0" type="checkbox" id="id-save-address"
+                                    name="save-address" checked>
+                                {% else %}
+                                <label class="form-check-label" for="id-save-address">
+                                    <a class="text-info" href="{% url 'account_signup' %}">Create an account</a> or
+                                    <a class="text-info" href="{% url 'account_login' %}">login</a> to save this
+                                    information
+                                </label>
+                                {% endif %}
+                            </div>
+                        </fieldset>
+                    </div>
+                    <fieldset class="px-3">
+                        <legend class="fieldset-label small text-black px-2 w-auto">Payment</legend>
+                        <!-- Stripe card element -->
+                        <div class="mb-3" id="card-element"></div>
+
+                        <!-- Display form errors -->
+                        <div class="mb-3 text-danger" id="card-errors" role="alert"></div>
+                        <input type="hidden" value="{{ client_secret }}" name="client_secret">
+                    </fieldset>
+
+                    <div class="submit-button text-right mt-5 mb-2">
+                        <a href="{% url 'view_bag' %}" class="btn btn-outline-black rounded-0">
+                            <span class="icon">
+                                <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="font-weight-bold">Adjust Bag</span>
+                        </a>
+                        <button id="submit-button" class="btn btn-black rounded-0">
+                            <span class="font-weight-bold">Complete Order</span>
+                            <span class="icon">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </button>
+                        <p class="small text-danger my-0">
+                            <span class="icon">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </span>
+                            <span>Your card will be charged <strong>€{{ grand_total|floatformat:2 }}</strong></span>
+                        </p>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="d-flex mt-2">
-            <a class="update-link text-info mr-3"><small>Update</small></a>
-            <a class="remove-item text-danger" id="remove_{{ item.item_id }}" 
-               href="{% url 'remove_from_bag' item.item_id %}?size={{ item.size }}">
-               <small>Remove</small>
-            </a>
-        </div>
-    </form>
-</td>
+    </div>
+    <div id="loading-overlay">
+        <h1 class="text-light logo-font loading-spinner">
+            <span class="icon">
+                <i class="fas fa-3x fa-sync-alt fa-spin"></i>
+            </span>
+        </h1>
+    </div>
+    {% endblock %}
+
+    {% block postloadjs %}
+    {{ block.super }}
+    {{ stripe_public_key|json_script:"id_stripe_public_key" }}
+    {{ client_secret|json_script:"id_client_secret" }}
+    <script src="{% static 'checkout/js/stripe_elements.js' %}"></script>
+    <script src="{% static 'checkout/js/checkout.js' %}"></script>
+    {% endblock %}

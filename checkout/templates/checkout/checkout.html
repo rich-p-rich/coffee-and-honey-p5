@@ -53,7 +53,8 @@
                     <!-- If extra service was chosen -->
                     <p class="my-0 small text-muted">Qty: {{ item.quantity }}</p>
                     {% if item.extra_service_cost > 0 %}
-                    <p class="my-0 small text-muted">Freshly Ground Service: €{{ item.extra_service_cost|floatformat:2 }}</p>
+                    <p class="my-0 small text-muted">Freshly Ground Service:
+                        €{{ item.extra_service_cost|floatformat:2 }}</p>
                     {% endif %}
                 </div>
                 <div class="col-3 text-right">
@@ -106,16 +107,6 @@
                             Delivery to Friends or Family: €{{ delivery_price }}
                         </label>
                     </div>
-                    <!-- Dropdown for Saved Addresses -->
-                    <div id="saved-address-dropdown" style="display: none; margin-top: 10px;">
-                        <label for="saved_address">Select a saved address:</label>
-                        <select id="saved_address" name="saved_address" class="form-control">
-                            <option value="">-- Select an Address --</option>
-                            {% for address in saved_addresses %}
-                                <option value="{{ address.id }}">{{ address.nickname|default:address.recipient_name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
                     <!-- Pick-up in cafe -->
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="delivery_type" id="pickup" value="pickup">
@@ -127,7 +118,7 @@
 
                 <!-- Billing Personal Details (always displayed) -->
                 <fieldset class="rounded px-3 mb-5">
-                    <legend class="fieldset-label small text-black px-2 w-auto">Details</legend>
+                    <legend class="fieldset-label small text-black px-2 w-auto">Billing Details</legend>
                     {{ order_form.billing_full_name | as_crispy_field }}
                     {{ order_form.billing_email | as_crispy_field }}
                 </fieldset>
@@ -144,16 +135,20 @@
                     {{ order_form.billing_country | as_crispy_field }}
                 </fieldset>
 
+                <!-- Dropdown for Saved Addresses (only displayed if "Deliver to Address" is selected) -->
+                <div id="saved-address-dropdown" style="display: none; margin-top: 10px;">
+                    <label for="saved_address">Select a saved address:</label>
+                    <select id="saved_address" name="saved_address" class="form-control">
+                        <option value="">-- Select an Address --</option>
+                        {% for address in saved_addresses %}
+                        <option value="{{ address.id }}">{{ address.nickname }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
                 <!-- Delivery Address Section (only displayed if "Deliver to Address" is selected) -->
                 <div id="delivery-address-section" class="d-none">
                     <fieldset class="rounded px-3 mb-5">
                         <legend class="fieldset-label small text-black px-2 w-auto">Delivery Address</legend>
-                        
-                        <!-- Add Nickname Field Here -->
-                        <div class="form-group">
-                            {{ form.recipient_nickname }}
-                        </div>
-
                         {{ order_form.delivery_name | as_crispy_field }}
                         {{ order_form.delivery_street_address1 | as_crispy_field }}
                         {{ order_form.delivery_street_address2 | as_crispy_field }}
