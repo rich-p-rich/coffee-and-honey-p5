@@ -51,7 +51,7 @@ def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
 
-    # Always initialize stripe.api_key and intent
+    # Initialize stripe.api_key and intent
     stripe.api_key = stripe_secret_key
     intent = None
 
@@ -74,13 +74,11 @@ def checkout(request):
         if order_form.is_valid():
             order = order_form.save(commit=False)
 
-            # Extract delivery type early on
+            # Identify delivery type and set price accordingly
             delivery_type = request.POST.get('delivery_type')
-
-            # Set delivery cost based on the type
             order.delivery_cost = calculate_delivery_cost(delivery_type)
 
-            # Handle each delivery type explicitly
+            # Loop through delivery type conditions
             if delivery_type == 'pickup':
                 order.pick_up = True
                 order.different_delivery_address = False
@@ -136,7 +134,7 @@ def checkout(request):
                         # Variant product
                         for size, data in item_data['items_by_size'].items():
                             quantity = int(data.get('quantity', 1))
-                            variant = product.variants.get(weight=size)  # Fetch the variant
+                            variant = product.variants.get(weight=size)
                             
                             order_line_item = OrderLineItem(
                                 order=order,
@@ -158,7 +156,7 @@ def checkout(request):
                     return redirect(reverse('view_bag'))
 
 
-            # Now assign order totals using the bag contents context
+            # Set order totals based on the bag's contents
             current_bag = bag_contents(request)
             order.order_total = current_bag['total']
             order.delivery_cost = current_bag['delivery']
@@ -189,6 +187,8 @@ def checkout(request):
         # Pre-fill form with default address from UserProfile if available
         user_profile = None
         initial_data = {}
+        saved_addresses = None
+
         if request.user.is_authenticated:
             user_profile = request.user.userprofile
             initial_data = {
@@ -203,6 +203,9 @@ def checkout(request):
                 'billing_country': user_profile.default_country,
             }
 
+            # Call up saved addresses for logged-in customer
+            saved_addresses = RecipientAddresses.objects.filter(user_profile=user_profile)
+
         order_form = OrderForm(initial=initial_data)
 
     if not stripe_public_key:
@@ -214,6 +217,7 @@ def checkout(request):
         'client_secret': intent.client_secret if intent else '',
         'delivery_price': settings.STANDARD_DELIVERY_PRICE,
         'pickup_price': settings.PICKUP_DELIVERY_PRICE,
+        'saved_addresses': saved_addresses,
     }
 
     return render(request, 'checkout/checkout.html', context)
@@ -232,7 +236,7 @@ def checkout_success(request, order_number):
     for item_id, item_data in bag.items():
         product = get_object_or_404(Product, pk=item_id)
         
-        # Check if the item has 'items_by_size' (for products with sizes)
+        # Check if the item has 'items_by_size' (for products with weight/price variations)
         if isinstance(item_data, dict) and 'items_by_size' in item_data:
             for size, details in item_data['items_by_size'].items():
                 # Fetch the specific variant based on product and weight (size)
@@ -252,7 +256,7 @@ def checkout_success(request, order_number):
                     'subtotal': subtotal,
                 })
         else:
-            # For items without sizes
+            # For items without sizes (for products with *no* weight/price variations)
             price = float(item_data['price'])
             quantity = item_data['quantity']
             extra_service_cost = item_data.get('extra_service_cost', 0)

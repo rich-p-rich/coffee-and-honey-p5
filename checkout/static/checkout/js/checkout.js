@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const deliveryDifferentRadio = document.getElementById('delivery-different');
     const differentDeliveryAddress = document.getElementById('delivery-address-section');
 
-    // For using saved addresses in profile to populate a different delvery address
+    // For using saved addresses in profile to populate a different delivery address
     const savedAddressDropdown = document.getElementById('saved-address-dropdown');
     const savedAddressSelect = document.getElementById('saved_address');
 
@@ -20,21 +20,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const deliveryPrice = parseFloat(priceConfig.getAttribute('data-delivery-price'));
     const pickupPrice = parseFloat(priceConfig.getAttribute('data-pickup-price'));
 
-       function updateAddressFields() {
+    function updateAddressFields() {
         if (pickupRadio && pickupRadio.checked) {
             // Hide delivery address when pick-up is chosen
             if (differentDeliveryAddress) {
                 differentDeliveryAddress.classList.add('d-none');
+            }
+            if (savedAddressDropdown) {
+                savedAddressDropdown.style.display = 'none';
             }
         } else if (deliveryBillingRadio && deliveryBillingRadio.checked) {
             // Hide delivery address when billing address = delivery address
             if (differentDeliveryAddress) {
                 differentDeliveryAddress.classList.add('d-none');
             }
-        } else if (deliveryDifferentRadio && deliveryDifferentRadio.checked) {
-            // Show delivery address when different address delivery is chosen
-            if (differentDeliveryAddress) {
-                differentDeliveryAddress.classList.remove('d-none');
+            if (savedAddressDropdown) {
+                savedAddressDropdown.style.display = 'none';
             }
         } else if (deliveryDifferentRadio && deliveryDifferentRadio.checked) {
             // Show delivery address and saved address dropdown when different address delivery is chosen
