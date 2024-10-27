@@ -188,6 +188,7 @@ def checkout(request):
         user_profile = None
         initial_data = {}
         saved_addresses = None
+        delivery_initial_data = {} 
 
         if request.user.is_authenticated:
             user_profile = request.user.userprofile
@@ -218,8 +219,6 @@ def checkout(request):
                     'delivery_postcode': default_delivery_address.recipient_postcode,
                     'delivery_country': default_delivery_address.recipient_country,
                 }
-            else:
-                delivery_initial_data = {}
 
             # Call up saved addresses for logged-in customer
             saved_addresses = RecipientAddresses.objects.filter(user_profile=user_profile)
@@ -231,21 +230,20 @@ def checkout(request):
         else:
             order_form = OrderForm()
 
-    if not stripe_public_key:
-        messages.warning(request, 'Stripe public key is missing. Did you forget to set it in your environment?')
+        if not stripe_public_key:
+            messages.warning(request, 'Stripe public key is missing. Did you forget to set it in your environment?')
 
-    context = {
-        'order_form': order_form,
-        'stripe_public_key': stripe_public_key,
-        'client_secret': intent.client_secret if intent else '',
-        'delivery_price': settings.STANDARD_DELIVERY_PRICE,
-        'pickup_price': settings.PICKUP_DELIVERY_PRICE,
-        'saved_addresses': saved_addresses,
-        'default_delivery_data': delivery_data, 
-    }
+        context = {
+            'order_form': order_form,
+            'stripe_public_key': stripe_public_key,
+            'client_secret': intent.client_secret if intent else '',
+            'delivery_price': settings.STANDARD_DELIVERY_PRICE,
+            'pickup_price': settings.PICKUP_DELIVERY_PRICE,
+            'saved_addresses': saved_addresses,
+            'default_delivery_data': delivery_initial_data,  # Use delivery_initial_data here
+        }
 
-    return render(request, 'checkout/checkout.html', context)
-
+        return render(request, 'checkout/checkout.html', context)
 
 
 def checkout_success(request, order_number):

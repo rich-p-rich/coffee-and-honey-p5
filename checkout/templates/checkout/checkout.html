@@ -136,7 +136,7 @@
                 </fieldset>
                 
                 <!-- Check if there is a saved default delivery address -->
-                <div id="default-delivery-data" data-default="{{ default_delivery_data|json_script:'default_delivery_data' }}"></div>
+                <div id="default_delivery_data">{{ default_delivery_data|json_script:"default_delivery_data" }}</div>
 
                 <!-- Dropdown for Saved Addresses (only displayed if "Deliver to Address" is selected) -->
                 {% if user.is_authenticated %}
