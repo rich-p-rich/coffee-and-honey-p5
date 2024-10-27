@@ -38,6 +38,7 @@ class RecipientAddressesForm(forms.ModelForm):
     class Meta:
         model = RecipientAddresses
         fields = [
+            'nickname',
             'recipient_name', 
             'recipient_phone_number',
             'recipient_street_address1', 
@@ -50,11 +51,12 @@ class RecipientAddressesForm(forms.ModelForm):
        
     def __init__(self, *args, **kwargs):
         """
-        Add placeholders for storing the reicipient's shipping details
+        Add placeholders for storing the recipient's shipping details
         """
         super().__init__(*args, **kwargs)
         placeholders = {
-            'recipient_name': 'Recipient Name',
+            'nickname': 'Address Nickname (e.g., Home, Office)',  # Add placeholder for 'nickname'
+            'recipient_name': 'Recipient Name (e.g., Parents, Office)',
             'recipient_phone_number': 'Recipient Phone Number',
             'recipient_street_address1': 'Street Address 1',
             'recipient_street_address2': 'Street Address 2',
@@ -67,10 +69,7 @@ class RecipientAddressesForm(forms.ModelForm):
         self.fields['recipient_phone_number'].widget.attrs['autofocus'] = True
         for field in self.fields:
             if field != 'default_country':
-                if self.fields[field].required:
-                    placeholder = f'{placeholders[field]} *'
-                else:  
-                    placeholder = placeholders[field]
+                placeholder = f"{placeholders[field]} *" if self.fields[field].required else placeholders[field]
                 self.fields[field].widget.attrs['placeholder'] = placeholder  
             self.fields[field].widget.attrs['class'] = 'border-black rounded-0 profile-form-input'
             self.fields[field].label = False

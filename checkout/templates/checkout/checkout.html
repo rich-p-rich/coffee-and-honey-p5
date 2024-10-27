@@ -112,7 +112,7 @@
                         <select id="saved_address" name="saved_address" class="form-control">
                             <option value="">-- Select an Address --</option>
                             {% for address in saved_addresses %}
-                            <option value="{{ address.id }}">{{ address.nickname }}</option>
+                            <option value="{{ address.id }}">{{ address.nickname|default:address.recipient_name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -148,6 +148,12 @@
                 <div id="delivery-address-section" class="d-none">
                     <fieldset class="rounded px-3 mb-5">
                         <legend class="fieldset-label small text-black px-2 w-auto">Delivery Address</legend>
+                        
+                        <!-- Add Nickname Field Here -->
+                        <div class="form-group">
+                            {{ form.recipient_nickname }}
+                        </div>
+
                         {{ order_form.delivery_name | as_crispy_field }}
                         {{ order_form.delivery_street_address1 | as_crispy_field }}
                         {{ order_form.delivery_street_address2 | as_crispy_field }}
