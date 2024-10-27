@@ -28,6 +28,7 @@
                     <p class="my-0 small text-muted">€{{ item.subtotal|floatformat:2 }}</p>
                 </div>
             </div>
+            <!-- Products in checkout -->
             {% for item in bag_items %}
             <div class="row">
                 <div class="col-2 mb-1">
@@ -49,6 +50,7 @@
                         {% endif %}
                     </p>
                     </p>
+                    <!-- If extra service was chosen -->
                     <p class="my-0 small text-muted">Qty: {{ item.quantity }}</p>
                     {% if item.extra_service_cost > 0 %}
                     <p class="my-0 small text-muted">Freshly Ground Service: €{{ item.extra_service_cost|floatformat:2 }}</p>
@@ -59,6 +61,7 @@
                 </div>
             </div>
             {% endfor %}
+            <!-- Summary order details -->
             <hr class="my-0">
             <div class="row text-black text-right">
                 <div class="col-7 offset-2">
@@ -67,11 +70,8 @@
                     <p class="my-0">Grand Total:</p>
                 </div>
                 <div class="col-3">
-                    <!-- Order total -->
                     <p class="my-0 order-total">€{{ total | floatformat:2 }}</p>
-                    <!-- Delivery cost (will be updated by JavaScript) -->
                     <p class="my-0 delivery-cost">€{{ delivery | floatformat:2 }}</p>
-                    <!-- Grand total (will be updated by JavaScript) -->
                     <p class="my-0 grand-total"><strong>€{{ grand_total | floatformat:2 }}</strong></p>
                 </div>
             </div>
@@ -79,20 +79,17 @@
         </div>
         <div class="col-12 col-lg-6">
             <p class="text-muted">Please fill out the form below to complete your order</p>
-            <div class="debug-info">
-                <strong>DEBUG: Order Form Errors</strong>
-                {{ order_form.errors }}
-            </div>
             <form action="{% url 'checkout' %}" method="POST" id="payment-form">
                 {% csrf_token %}
 
-                <!-- Price Configuration for JavaScript -->
+                <!-- Set pick-up price -->
                 <div id="price-config" data-delivery-price="{{ delivery_price }}"
                     data-pickup-price="{{ pickup_price }}">
                 </div>
 
                 <!-- Delivery and Pick-Up Options -->
                 <fieldset class="rounded px-3 mb-5">
+                    <!-- Ship to billing address -->
                     <legend class="fieldset-label small text-black px-2 w-auto">Delivery Option</legend>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="delivery_type" id="delivery-billing-same"
@@ -101,6 +98,7 @@
                             Home Delivery: €{{ delivery_price }}
                         </label>
                     </div>
+                    <!-- Ship to non-billing or default address if diff to billing -->
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="delivery_type" id="delivery-different"
                             value="delivery-different">
@@ -108,6 +106,17 @@
                             Delivery to Friends or Family: €{{ delivery_price }}
                         </label>
                     </div>
+                    <!-- Dropdown for Saved Addresses -->
+                    <div id="saved-address-dropdown" style="display: none; margin-top: 10px;">
+                        <label for="saved_address">Select a saved address:</label>
+                        <select id="saved_address" name="saved_address" class="form-control">
+                            <option value="">-- Select an Address --</option>
+                            {% for address in saved_addresses %}
+                            <option value="{{ address.id }}">{{ address.nickname }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- Pick-up in cafe -->
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="delivery_type" id="pickup" value="pickup">
                         <label class="form-check-label" for="pickup">
@@ -116,8 +125,7 @@
                     </div>
                 </fieldset>
 
-
-                <!-- Details Section (always displayed) -->
+                <!-- Billing Personal Details (always displayed) -->
                 <fieldset class="rounded px-3 mb-5">
                     <legend class="fieldset-label small text-black px-2 w-auto">Details</legend>
                     {{ order_form.billing_full_name | as_crispy_field }}

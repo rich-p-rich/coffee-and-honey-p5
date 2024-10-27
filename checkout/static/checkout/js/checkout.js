@@ -11,12 +11,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const deliveryDifferentRadio = document.getElementById('delivery-different');
     const differentDeliveryAddress = document.getElementById('delivery-address-section');
 
+    // For using saved addresses in profile to populate a different delvery address
+    const savedAddressDropdown = document.getElementById('saved-address-dropdown');
+    const savedAddressSelect = document.getElementById('saved_address');
+
     // Get delivery prices from data attributes
     const priceConfig = document.getElementById('price-config');
     const deliveryPrice = parseFloat(priceConfig.getAttribute('data-delivery-price'));
     const pickupPrice = parseFloat(priceConfig.getAttribute('data-pickup-price'));
 
-    function updateAddressFields() {
+       function updateAddressFields() {
         if (pickupRadio && pickupRadio.checked) {
             // Hide delivery address when pick-up is chosen
             if (differentDeliveryAddress) {
@@ -31,6 +35,14 @@ document.addEventListener('DOMContentLoaded', function () {
             // Show delivery address when different address delivery is chosen
             if (differentDeliveryAddress) {
                 differentDeliveryAddress.classList.remove('d-none');
+            }
+        } else if (deliveryDifferentRadio && deliveryDifferentRadio.checked) {
+            // Show delivery address and saved address dropdown when different address delivery is chosen
+            if (differentDeliveryAddress) {
+                differentDeliveryAddress.classList.remove('d-none');
+            }
+            if (savedAddressDropdown) {
+                savedAddressDropdown.style.display = 'block';
             }
         }
     }
