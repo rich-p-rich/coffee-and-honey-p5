@@ -140,16 +140,20 @@
                     <label for="saved_address">Select a saved address:</label>
                     <select id="saved_address" name="saved_address" class="form-control">
                         <option value="">-- Select an Address --</option>
-                        {% if saved_addresses %}
-                            {% for address in saved_addresses %}
-                                <option value="{{ address.id }}">
-                                    {{ address.nickname|default:address.recipient_name }}
-                                </option>
-                            {% endfor %}
-                        {% else %}
-                            <option value="">No saved addresses found</option>
-                        {% endif %}
+                        {% for address in saved_addresses %}
+                            <option value="{{ address.id }}" 
+                                    data-recipient-name="{{ address.recipient_name }}"
+                                    data-street-address1="{{ address.recipient_street_address1 }}"
+                                    data-street-address2="{{ address.recipient_street_address2 }}"
+                                    data-town-or-city="{{ address.recipient_town_or_city }}"
+                                    data-county="{{ address.recipient_county }}"
+                                    data-postcode="{{ address.recipient_postcode }}"
+                                    data-country="{{ address.recipient_country }}">
+                                {{ address.nickname|default:address.recipient_name }}
+                            </option>
+                        {% endfor %}
                     </select>
+                    
                 </div>
 
                 <!-- Delivery Address Section (only displayed if "Deliver to Address" is selected) -->

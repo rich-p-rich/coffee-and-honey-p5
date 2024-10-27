@@ -47,6 +47,33 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     }
+    
+    // Populate delivery address fields based on saved_address selection
+    function populateAddressFields() {
+        const selectedOption = savedAddressSelect.options[savedAddressSelect.selectedIndex];
+        if (!selectedOption.value) return;
+    
+        // Fetch data attributes from the selected option
+        const recipientName = selectedOption.getAttribute('data-recipient-name');
+        const streetAddress1 = selectedOption.getAttribute('data-street-address1');
+        const streetAddress2 = selectedOption.getAttribute('data-street-address2');
+        const townOrCity = selectedOption.getAttribute('data-town-or-city');
+        const county = selectedOption.getAttribute('data-county');
+        const postcode = selectedOption.getAttribute('data-postcode');
+        const country = selectedOption.getAttribute('data-country');
+    
+        // Set delivery address fields with the fetched data
+        document.getElementById('id_delivery_name').value = recipientName;
+        document.getElementById('id_delivery_street_address1').value = streetAddress1;
+        document.getElementById('id_delivery_street_address2').value = streetAddress2 || '';
+        document.getElementById('id_delivery_town_or_city').value = townOrCity;
+        document.getElementById('id_delivery_county').value = county || '';
+        document.getElementById('id_delivery_postcode').value = postcode;
+        document.getElementById('id_delivery_country').value = country;
+    }
+    
+    // Event Listener for the saved address dropdown
+    savedAddressSelect.addEventListener('change', populateAddressFields);
 
     // Function to ensure delivery fields are visible before submitting the form
     function ensureDeliveryFieldsVisible() {
