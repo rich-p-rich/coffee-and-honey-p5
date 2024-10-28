@@ -31,10 +31,18 @@ SECRET_KEY = os.environ.get("SECRET_KEY", '')
 # Set to False for production and submission
 DEBUG = True
 
-ALLOWED_HOSTS = ['8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net', 'localhost',
+ALLOWED_HOSTS = ['https://8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net',
+                '8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net', 'localhost',
+                'https://8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net',
                 '.herokuapp.com']
 
-
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost',
+    'https://8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net',
+    'https://*.gitpod.io',
+    'https://*.herokuapp.com',
+    'https://8000-richprich-englishtutord-94zz8190n00.ws.codeinstitute-ide.net',
+]
 
 # Application definition
 
@@ -43,9 +51,9 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -69,12 +77,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'allauth.account.middleware.AccountMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
+
 
 ROOT_URLCONF = 'coffee_and_honey.urls'
 
-CRISPY_TEMPALTE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 TEMPLATES = [
     {
@@ -183,11 +192,6 @@ CURRENCY_SYMBOL = '€'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -14,3 +14,7 @@ from django.core.wsgi import get_wsgi_application
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'coffee_and_honey.settings')
 
 application = get_wsgi_application()
+
+
+
+
