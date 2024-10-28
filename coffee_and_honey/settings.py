@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Set to False for production and submission
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net', 'localhost',
                 '.herokuapp.com']
@@ -69,7 +69,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+    #'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'coffee_and_honey.urls'
