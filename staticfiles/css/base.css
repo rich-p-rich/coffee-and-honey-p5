@@ -18,13 +18,9 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: white;
-}
-
-body {
-    color: #555;
-    font-family: 'Solitreo';
-    background-color: goldenrod
+    background-color: goldenrod;
+    font-family: 'Red Hat Display', sans-serif;
+    color: #080000;
 }
 
 /* Header */
@@ -33,7 +29,7 @@ body {
     padding-top: 10px;
     padding: 10px;
     text-align: center;
-    background-color: whitesmoke;
+    background-color: white;
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -53,29 +49,38 @@ body {
 }
 
 #shopping-bag {
-        right: 20px; /* Bag image in header only: adjusts the distance from the right margin */
+        right: 20px; /* Bag image in header only; nothing to do with actual bag -> see 'Bag template' */
 }
 
 /* Navbar */
-#navbar-container {
-    background-color: whitesmoke;
-}
 
 #navbar .navbar-nav {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     width: 100%;
-    background-color: whitesmoke;
-    
-  }
+}
 
-.nav-link {
+.navbar {
+    margin-bottom: 0;
+    background-color: white !important;
     color:#000;
 }
 
-#main-nav {
-    background-color: whitesmoke;
-    text-align: left;
+.nav-item {
+    padding: 0.5rem 1.5rem;
+    color:black; 
+}
+
+.navbar-collapse {
+    display: flex;
+    justify-content: space-between;
+    background-color: white !important; 
+    color: black; 
+    width: 100%;
+}
+
+.dropdown-menu {
+    background-color: white; 
 }
 
 /* Sign-in/out or Log-in/out pages */
@@ -83,10 +88,10 @@ body {
     margin-top: 250px;
 }
 
-/*Logged in status message: welcome NAME or you are logged out
+/*Logged in status message: welcome NAME or you are logged out*/
 #login-status {
     width: 100%; 
-    margin-top: 250px;
+    margin-top: 220px;
     margin-bottom: 10px;
     padding: 2px 0;
     line-height: normal;
@@ -95,8 +100,8 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-  }*/
-
+  }
+  
 /* Message container for Toasts etc */
 .message-container {
     position: fixed;
@@ -116,7 +121,7 @@ body {
 
 /* Home page */
 #home-container {
-    margin-top: 350px;
+    margin-top: 75px;
 }
 
 .section {
@@ -139,13 +144,17 @@ body {
 /* Product detail page 
 .pdp-page {
     margin-top: 250px;
-}
+}  
 
-Bag template */ 
+/* Bag template */ 
 .bag-container {
     padding-top: 200px;
     padding-left: 20px;
     padding-right: 20px;
+}
+
+#shopping-bag-container {
+    background-color: white;
 }
 
 #shopping-bag {
@@ -153,21 +162,22 @@ Bag template */
     margin-right: 20px;
 }
 
-.overlay {
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    position: fixed;
-    background: goldenrod;
-    z-index: 0;
+.bag-update-link,
+.bag-rempve {
+    margin-bottom: 5px; /* Adjust spacing between buttons */
 }
 
+/* Profile */
 
-
-
+.profile-container {
+    background-color: white;
+    padding-top: 50px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
 
 /* from Bulma */
+
 .icon {
     align-items: center;
     display: inline-flex;
@@ -220,9 +230,27 @@ footer {
     justify-content: center;
     padding: 10px;
     width: 100%;
+    z-index: 20;
+  }
+  
+  #social-networks {
+      display: flex;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      align-items: center;
+      justify-content: center;
+  }
+  
+  #social-networks li {
+      margin-right: 20px;  
+  }
+  
+  #social-networks li:last-child {
+      margin-right: 0;  
   }
 
-/* -------------------------------- Media Queries */
+/* Media Queries */
 
 @media (max-width: 370px){
     .product-container {
@@ -253,74 +281,3 @@ footer {
 }
 
 
-/* Slightly larger container on xl screens */
-@media (min-width: 1200px) {
-  .container {
-    max-width: 80%;
-  }
-}
-
-/* fixed top navbar only on medium and up */
-@media (min-width: 992px) {
-    .fixed-top-desktop-only {
-        position: fixed;
-        top: 0;
-        right: 0;
-        left: 0;
-        z-index: 1030;
-    }
-}
-
-/* Fix navbar position for larger screens (laptops and desktops) */
-@media (min-width: 992px) {
-    .header-text-section {
-        z-index: 100;
-    }
-
-    .navbar {
-        margin-top: 0; /* Make sure the navbar is placed immediately below the header text */
-    }
-
-    .navbar-collapse {
-        justify-content: center;
-    }
-}
-
-/* Ensure mobile view is unaffected */
-@media (max-width: 991px) {
-    .header-text-section {
-        display: none;
-    }
-
-    .navbar {
-        margin-top: 0;
-    }
-}
-
-/* For large laptops */
-@media (min-width: 1025px) and (max-width: 1200px) {
-    .product-container {
-        max-width: 85%; /* Adjust to fit the screen */
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .card-img-top {
-        width: 100%;
-        height: auto;
-    }
-}
-
-@media (min-width: 1440px) {
-    .product-container {
-        max-width: 80%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .card-img-top {
-        object-fit: cover;
-        width: 100%;
-        height: auto;
-    }
-}
