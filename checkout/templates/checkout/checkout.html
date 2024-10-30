@@ -143,7 +143,7 @@
                 <div id="saved-address-dropdown" style="display: none; margin-top: 10px;">
                     <label for="saved_address">Select a saved address:</label>
                     <select id="saved_address" name="saved_address" class="form-control">
-                        <option value="">-- Select an Address --</option>
+                        <option value="">-- Choose from your Address Book --</option>
                         {% for address in saved_addresses %}
                             <option value="{{ address.id }}" 
                                     data-recipient-name="{{ address.recipient_name }}"
