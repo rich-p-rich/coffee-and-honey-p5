@@ -241,6 +241,15 @@ Product detail page
     border: 1px solid black !important;
 }
 
+/* 404 Page */
+.container-404 {
+    background-color: white;
+    margin-top: 100px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
 /* The footer */
 footer {
     background-color: whitesmoke;
