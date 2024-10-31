@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /accounts/
+Disallow: /bag/
+Disallow: https://coffee-and-honey-p5-fc5ef8bcd788.herokuapp.com/sitemap.xml
