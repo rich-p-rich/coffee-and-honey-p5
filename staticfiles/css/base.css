@@ -141,22 +141,52 @@ body {
     width: 100%; 
 }
 
-Product detail page 
+/*Product detail page */ 
 .pdp-page {
-    margin-top: 250px;
+    margin-top: 100px;
 }  
 
 /* Bag template */  
 #shopping-bag-container {
     background-color: white;
     margin-top: 75px;
-    padding: 10px;
+    padding-left: 20px;
     max-width: 600px;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: auto;
+    margin-right: auto;
     overflow-x: hidden;
     box-sizing: border-box;
 }
+
+.bag-totals {
+    font-size: 0.5em;
+}
+
+#shopping-bag-container .table th,
+#shopping-bag-container .table td {
+    padding-left: 10px;
+    padding-right: 5px;
+    font-size: 0.85em; 
+}
+
+#shopping-bag-container .table-responsive {
+    overflow-x: auto;
+}
+
+#shopping-bag-container .table th:nth-child(1),
+#shopping-bag-container .table td:nth-child(1) {
+    width: auto; /* Product info column */
+}
+
+#shopping-bag-container .table th:nth-child(2),
+#shopping-bag-container .table td:nth-child(2),
+#shopping-bag-container .table th:nth-child(3),
+#shopping-bag-container .table td:nth-child(3),
+#shopping-bag-container .table th:nth-child(4),
+#shopping-bag-container .table td:nth-child(4) {
+    width: 20%; /* Price, Qty, Subtotal columns */
+}
+
 #shopping-bag-container h2.logo-font {
     font-size: 0.9em;
     word-wrap: break-word;
@@ -165,10 +195,10 @@ Product detail page
 
 #shopping-bag-container .empty-bag-message
 .table-responsive .table  {
-    font-size: 0.9em;
+    font-size: 0.5em;
     word-wrap: break-word;
     white-space: normal;
-    padding-left: 15px;
+    padding-left: 10px;
     padding-right: 10px;
     text-align: left;
     word-wrap: break-word;
@@ -268,14 +298,6 @@ footer {
       align-items: center;
       justify-content: center;
   }
-  /*
-  #social-networks li {
-      margin-right: 20px;  
-  }
-  
-  #social-networks li:last-child {
-      margin-right: 0;  
-  }*/
 
   .indicates-required {
     display: block;
@@ -311,19 +333,16 @@ footer {
         max-width: 100%;
     }
     .offset-1 {
-        margin-left: 0;  /* Remove the offset for tablets */
+        margin-left: 0;
     }
 
     #shopping-bag-container {
-        padding: 15px;
-        margin-top: 80px;
+        margin-top: 20px;
+        padding: 20px;
+        max-width: 90%; /* Adjust based on preference */
     }
 
-    #shopping-bag-container h2.logo-font {
-        font-size: 2rem;
-    }
-
-    #shopping-bag-container .img-fluid {
-        max-width: 100px;
+    #shopping-bag .table {
+        width: 100%;
     }
 }

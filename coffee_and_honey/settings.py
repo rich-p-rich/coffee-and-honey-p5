@@ -28,8 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# Set to False for production and submission
-DEBUG = False
+# Debug is True for Gitpod and dev
+# Debug is False for production and submission
+DEBUG = True
 
 ALLOWED_HOSTS = ['https://8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net',
                 '8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net', 'localhost',
