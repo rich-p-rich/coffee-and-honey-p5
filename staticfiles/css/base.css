@@ -268,14 +268,22 @@ footer {
       align-items: center;
       justify-content: center;
   }
-  
+  /*
   #social-networks li {
       margin-right: 20px;  
   }
   
   #social-networks li:last-child {
       margin-right: 0;  
-  }
+  }*/
+
+  .indicates-required {
+    display: block;
+    text-align: left;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
 
 /* Media Queries */
 
