@@ -153,13 +153,14 @@ body {
 }
 
 .pdp-page {
-    margin-top: 125px;
+    margin-top: 25px;
+    margin-bottom: 50px;
 }  
 
 /* Bag template */  
 #shopping-bag-container {
     background-color: white;
-    margin-top: 75px;
+    margin-top: 15px;
     padding-left: 20px;
     max-width: 600px;
     margin-left: auto;

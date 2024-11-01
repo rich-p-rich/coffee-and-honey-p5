@@ -18,14 +18,15 @@ def bag_contents(request):
                 # Fallback case if item_data is an integer
                 variant = product.variants.first()
                 if variant and variant.price:
-                    total += item_data * variant.price
+                    item_subtotal = variant.price * item_data
+                    total += item_subtotal
                     product_count += item_data
                     bag_items.append({
                         'item_id': item_id,
                         'quantity': item_data,
                         'product': product,
                         'variant': variant,
-                        'subtotal': Decimal(variant.price) * Decimal(item_data),
+                        'item_subtotal': item_subtotal,
                     })
                 else:
                     print(f"Warning: No price found for variant {variant}")
@@ -33,14 +34,17 @@ def bag_contents(request):
                 # Handle structured data with 'items_by_size'
                 for size, data in item_data.get('items_by_size', {}).items():
                     quantity = data.get('quantity', 1)
-                    extra_service_cost = Decimal(data.get('extra_service_cost', 0))
+                    price = data.get('price', variant.price)
+                    extra_service_cost = data.get('extra_service_cost', 0)
                     freshly_ground = data.get('freshly_ground', False)
 
                     try:
                         variant = product.variants.get(weight=size)
                         if variant and variant.price:
-                            subtotal = (Decimal(variant.price) * Decimal(quantity)) + extra_service_cost
-                            total += subtotal
+                            # Calculate item and service subtotals
+                            item_subtotal = variant.price * quantity
+                            service_subtotal = extra_service_cost * quantity
+                            total += item_subtotal + service_subtotal
                             product_count += quantity
                             bag_items.append({
                                 'item_id': item_id,
@@ -50,7 +54,8 @@ def bag_contents(request):
                                 'size': size,
                                 'extra_service_cost': extra_service_cost,
                                 'freshly_ground': freshly_ground,
-                                'subtotal': subtotal,
+                                'item_subtotal': item_subtotal,
+                                'service_subtotal': service_subtotal,
                             })
                         else:
                             print(f"Warning: No price found for variant {variant}")
@@ -62,19 +67,20 @@ def bag_contents(request):
             quantity = item_data.get('quantity', 1) if isinstance(item_data, dict) else item_data
 
             if product.price:
-                total += Decimal(quantity) * Decimal(product.price)
+                item_subtotal = product.price * quantity
+                total += item_subtotal
                 product_count += quantity
                 bag_items.append({
                     'item_id': item_id,
                     'quantity': quantity,
                     'product': product,
-                    'subtotal': Decimal(product.price) * Decimal(quantity),
+                    'item_subtotal': item_subtotal,
                 })
             else:
                 print(f"Warning: No price found for product {product.name}")
 
     # Calculate delivery cost based on the total
-    delivery = Decimal(settings.STANDARD_DELIVERY_PRICE) if total > 0 else Decimal(0)
+    delivery = settings.STANDARD_DELIVERY_PRICE if total > 0 else 0
     grand_total = delivery + total
 
     # Context including the delivery and grand total
@@ -85,8 +91,5 @@ def bag_contents(request):
         'delivery': delivery,
         'grand_total': grand_total,
     }
-
-    # Print the final context for confirmation
-    print("DEBUG: Final bag context:", context)
 
     return context

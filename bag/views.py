@@ -12,66 +12,90 @@ def view_bag(request):
 
     bag = request.session.get('bag', {})
     bag_items = []
-    total = 0
+    total_product_subtotal = 0
+    total_service_subtotal = 0
     print("Session data:", bag)
 
-    for item_id, item_data in bag.items():
-        product = get_object_or_404(Product, pk=item_id)
-
-        # Check if the item has 'items_by_size' (for products with sizes)
-        if isinstance(item_data, dict) and 'items_by_size' in item_data:
+    if isinstance(item_data, dict) and 'items_by_size' in item_data:
             for size, details in item_data['items_by_size'].items():
                 variant = get_object_or_404(ProductVariant, product=product, weight=size)
                 price = float(details['price'])
                 quantity = details['quantity']
                 extra_service_cost = details.get('extra_service_cost', 0)
-                subtotal = (price * quantity) + extra_service_cost
-                total += subtotal
+
+                # Calculate subtotals for the product and for the extra service
+                item_subtotal = price * quantity
+                service_subtotal = extra_service_cost * quantity
+
+                # Add to the overall totals
+                bag_total += item_subtotal + service_subtotal
+                total_product_subtotal += item_subtotal
+                total_service_subtotal += service_subtotal
+
+                # Append item to bag_items with separate subtotals
                 bag_items.append({
                     'product': product,
-                    'item_id': item_id, 
+                    'item_id': item_id,
                     'size': variant.weight,
                     'quantity': quantity,
                     'price': price,
                     'extra_service_cost': extra_service_cost,
-                    'subtotal': subtotal
+                    'item_subtotal': item_subtotal,
+                    'service_subtotal': service_subtotal
                 })
-        # Handle items without size (products that don't have size/weight variants)
+
+        # Handle items without size variants
         elif isinstance(item_data, dict):
             price = float(item_data['price'])
             quantity = item_data['quantity']
             extra_service_cost = item_data.get('extra_service_cost', 0)
-            freshly_ground = item_data.get('freshly_ground', False)
-            subtotal = price * quantity
-            total += subtotal
+
+            # Calculate subtotals
+            item_subtotal = price * quantity
+            service_subtotal = extra_service_cost * quantity
+
+            # Add to the overall totals
+            bag_total += item_subtotal + service_subtotal
+            total_product_subtotal += item_subtotal
+            total_service_subtotal += service_subtotal
+
+            # Append item to bag_items with separate subtotals
             bag_items.append({
                 'product': product,
-                'item_id': item_id, 
+                'item_id': item_id,
                 'quantity': quantity,
                 'price': price,
                 'extra_service_cost': extra_service_cost,
-                'freshly_ground': freshly_ground,
-                'subtotal': subtotal
+                'item_subtotal': item_subtotal,
+                'service_subtotal': service_subtotal
             })
+
+        # Handle items where item_data is just the quantity (no size or extra details)
         else:
-            # Handle items where item_data is an integer (i.e., just the quantity)
-            quantity = item_data  # item_data is just the quantity here
-            price = product.price if product.price else 0.0  # Use the base product price or set to 0.0 if None
-            price = float(price)  # Convert price to float if not None
-            subtotal = price * quantity
-            total += subtotal
+            quantity = item_data
+            price = product.price if product.price else 0.0  # Use base product price or 0.0 if None
+            item_subtotal = price * quantity
+            bag_total += item_subtotal
+            total_product_subtotal += item_subtotal
+
+            # Append item with no service cost
             bag_items.append({
                 'product': product,
-                'item_id': item_id, 
+                'item_id': item_id,
                 'quantity': quantity,
                 'price': price,
-                'subtotal': subtotal
+                'item_subtotal': item_subtotal,
+                'service_subtotal': 0  # No service for this item
             })
 
     context = {
         'bag_items': bag_items,
-        'total': total,
+        'bag_total': bag_total,  # Total for everything in the basket excluding shipping
+        'total_product_subtotal': total_product_subtotal,  # Total for product items only
+        'total_service_subtotal': total_service_subtotal,  # Total for service items only
     }
+
+    return context
 
     return render(request, 'bag/bag.html', context)
 
