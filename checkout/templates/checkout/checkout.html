@@ -34,9 +34,9 @@
                 <div class="col-2 mb-1">
                     <a href="{% url 'product_detail' item.product.id %}">
                         {% if item.product.image %}
-                        <img class="w-100" src="{{ item.product.image.url }}" alt="{{ product.name }}">
+                        <img class="w-100" src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
                         {% else %}
-                        <img class="w-100" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                        <img class="w-100" src="{{ MEDIA_URL }}noimage.png" alt="{{ item.product.name }}">
                         {% endif %}
                     </a>
                 </div>
@@ -50,10 +50,10 @@
                     {% endif %}
                 </div>
                 <div class="col-3 text-right">
-                    <p class="my-0 text-muted">€{{ item.product.price * item.quantity|floatformat:2 }}</p>
+                    <p class="my-0 text-muted">€{{ item.item_subtotal|floatformat:2 }}</p>
                     
                     {% if item.extra_service_cost > 0 %}
-                        <p class="my-0 text-muted">€{{ item.extra_service_cost * item.quantity|floatformat:2 }}</p>
+                        <p class="my-0 text-muted">€{{ item.service_subtotal|floatformat:2 }}</p>
                     {% endif %}
                 </div>
                 <div class="col-3 text-right">
@@ -70,9 +70,9 @@
                     <p class="my-0">Grand Total:</p>
                 </div>
                 <div class="col-3">
-                    <p class="my-0 order-total">€{{ total | floatformat:2 }}</p>
-                    <p class="my-0 delivery-cost">€{{ delivery | floatformat:2 }}</p>
-                    <p class="my-0 grand-total"><strong>€{{ grand_total | floatformat:2 }}</strong></p>
+                    <p class="my-0 order-total">€{{ total|floatformat:2 }}</p>
+                    <p class="my-0 delivery-cost">€{{ delivery|floatformat:2 }}</p>
+                    <p class="my-0 grand-total"><strong>€{{ grand_total|floatformat:2 }}</strong></p>
                 </div>
             </div>
 
