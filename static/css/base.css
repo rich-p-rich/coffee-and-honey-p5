@@ -91,7 +91,7 @@ body {
 /*Logged in status message: welcome NAME or you are logged out*/
 #login-status {
     width: 100%; 
-    margin-top: 220px;
+    margin-top: 320px;
     margin-bottom: 10px;
     padding: 2px 0;
     line-height: normal;
@@ -141,9 +141,19 @@ body {
     width: 100%; 
 }
 
+/* Products page  
+.products-overview {
+    margin-top: 75px;
+} */
+
 /*Product detail page */ 
+
+.product-page-logo {
+    background-color: #f8f9fa;
+}
+
 .pdp-page {
-    margin-top: 100px;
+    margin-top: 125px;
 }  
 
 /* Bag template */  
@@ -309,22 +319,10 @@ footer {
 
 /* Media Queries */
 
-@media (max-width: 370px){
-    .product-container {
-        margin-top: 275px; /* To push the product page below the head */
-    }
-}  
-
-@media (min-width: 370px) and (max-width: 479px) {
-    .product-container {
-        margin-top: 250px; /* To push the product page below the head */
-    }
-}  
-
-@media (min-width: 480px) {
-    .product-container {
-        margin-top: 170px; /* To push the product page below the head */
-    }
+@media (min-width: 768px) {
+#login-status {
+    margin-top: 225px;
+}
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
@@ -339,7 +337,7 @@ footer {
     #shopping-bag-container {
         margin-top: 20px;
         padding: 20px;
-        max-width: 90%; /* Adjust based on preference */
+        max-width: 90%;
     }
 
     #shopping-bag .table {
