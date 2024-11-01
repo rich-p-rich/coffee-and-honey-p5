@@ -23,7 +23,7 @@
                     </thead>
 
                     {% for item in bag_items %}
-                    <!-- Row 1: Product Image and Info -->
+                    <!-- Row 1: Product Image and Info, Price, and Product Subtotal -->
                     <tr>
                         <td class="p-3 w-50">
                             <div class="d-flex align-items-center">
@@ -32,15 +32,29 @@
                                     <p class="my-0"><strong>{{ item.product.name }}</strong></p>
                                     <p class="my-0">Size: {% if item.size %} {{ item.size }}g {% else %} N/A {% endif %}</p>
                                     <p class="my-0 small text-muted">SKU: {{ item.product.sku|upper }}</p>
+                                    <p class="my-0">Price: €{{ item.price|floatformat:2 }}</p>
                                 </div>
                             </div>
                         </td>
+                        <td>{{ item.quantity }}</td>
+                        <td>Product Subtotal: €{{ item.item_subtotal|floatformat:2 }}</td>
                     </tr>
 
-                    <!-- Row 2: Quantity Controls and Subtotal -->
+                    <!-- Row 2: Extra Service Display (if applicable) -->
+                    {% if item.extra_service_cost > 0 %}
                     <tr>
-                        <!-- Quantity Controls -->
-                        <td>
+                        <td colspan="2">
+                            <p class="my-0">Freshly Ground Service: €{{ item.extra_service_cost|floatformat:2 }}</p>
+                        </td>
+                        <td>Service Subtotal: €{{ item.service_subtotal|floatformat:2 }}</td>
+                    </tr>
+                    {% endif %}
+
+                    <!-- Row 3: Quantity Controls, Update, and Remove Buttons -->
+                    <tr>
+                        <td colspan="3">
+                            <p class="my-0"><strong>Adjust Bag</strong></p>
+                            <br>
                             <form class="form update-form d-flex justify-content-between align-items-center"
                                 method="POST" action="{% url 'adjust_bag' item.item_id %}">
                                 {% csrf_token %}
@@ -68,25 +82,13 @@
 
                                 <div class="d-flex">
                                     <button type="submit" class="btn bag-update-link btn-info btn-sm mr-2"
-                                        title="Update bag">Update</button>
+                                        title="Update bag">Update Bag</button>
                                     <a class="remove-item btn btn-danger bag-remove btn-sm"
                                         id="remove_{{ item.item_id }}"
                                         href="{% url 'remove_from_bag' item.item_id %}?size={{ item.size }}"
-                                        title="Remove product from bag">Remove</a>
+                                        title="Remove product from bag">Remove Product</a>
                                 </div>
                             </form>
-                        </td>
-
-                        <!-- Subtotal Display -->
-                        <td>
-                            <div>
-                                <p class="my-0">Beans: €{{ item.price|floatformat:2 }}</p>
-                                <p class="my-0">Subtotal: €{{ item.price * item.quantity|floatformat:2 }}</p>
-                                {% if item.extra_service_cost > 0 %}
-                                <p class="my-0">Freshly Ground Service: €{{ item.extra_service_cost|floatformat:2 }}</p>
-                                <p class="my-0">Subtotal: €{{ item.extra_service_cost * item.quantity|floatformat:2 }}</p>
-                                {% endif %}
-                            </div>
                         </td>
                     </tr>
                     {% endfor %}
@@ -129,7 +131,7 @@
                     </div>
                 </table>
 
-                <!-- Modal signin / register prompt -->
+                <!-- Modal for Sign In/Register Prompt -->
                 <div class="modal fade" id="signInModal" tabindex="-1" aria-labelledby="signInModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">

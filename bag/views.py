@@ -8,96 +8,8 @@ from django.http import Http404
 # Create your views here.
 
 def view_bag(request):
-    """ A view that renders the bag contents page """
-
-    bag = request.session.get('bag', {})
-    bag_items = []
-    total_product_subtotal = 0
-    total_service_subtotal = 0
-    print("Session data:", bag)
-
-    if isinstance(item_data, dict) and 'items_by_size' in item_data:
-            for size, details in item_data['items_by_size'].items():
-                variant = get_object_or_404(ProductVariant, product=product, weight=size)
-                price = float(details['price'])
-                quantity = details['quantity']
-                extra_service_cost = details.get('extra_service_cost', 0)
-
-                # Calculate subtotals for the product and for the extra service
-                item_subtotal = price * quantity
-                service_subtotal = extra_service_cost * quantity
-
-                # Add to the overall totals
-                bag_total += item_subtotal + service_subtotal
-                total_product_subtotal += item_subtotal
-                total_service_subtotal += service_subtotal
-
-                # Append item to bag_items with separate subtotals
-                bag_items.append({
-                    'product': product,
-                    'item_id': item_id,
-                    'size': variant.weight,
-                    'quantity': quantity,
-                    'price': price,
-                    'extra_service_cost': extra_service_cost,
-                    'item_subtotal': item_subtotal,
-                    'service_subtotal': service_subtotal
-                })
-
-        # Handle items without size variants
-        elif isinstance(item_data, dict):
-            price = float(item_data['price'])
-            quantity = item_data['quantity']
-            extra_service_cost = item_data.get('extra_service_cost', 0)
-
-            # Calculate subtotals
-            item_subtotal = price * quantity
-            service_subtotal = extra_service_cost * quantity
-
-            # Add to the overall totals
-            bag_total += item_subtotal + service_subtotal
-            total_product_subtotal += item_subtotal
-            total_service_subtotal += service_subtotal
-
-            # Append item to bag_items with separate subtotals
-            bag_items.append({
-                'product': product,
-                'item_id': item_id,
-                'quantity': quantity,
-                'price': price,
-                'extra_service_cost': extra_service_cost,
-                'item_subtotal': item_subtotal,
-                'service_subtotal': service_subtotal
-            })
-
-        # Handle items where item_data is just the quantity (no size or extra details)
-        else:
-            quantity = item_data
-            price = product.price if product.price else 0.0  # Use base product price or 0.0 if None
-            item_subtotal = price * quantity
-            bag_total += item_subtotal
-            total_product_subtotal += item_subtotal
-
-            # Append item with no service cost
-            bag_items.append({
-                'product': product,
-                'item_id': item_id,
-                'quantity': quantity,
-                'price': price,
-                'item_subtotal': item_subtotal,
-                'service_subtotal': 0  # No service for this item
-            })
-
-    context = {
-        'bag_items': bag_items,
-        'bag_total': bag_total,  # Total for everything in the basket excluding shipping
-        'total_product_subtotal': total_product_subtotal,  # Total for product items only
-        'total_service_subtotal': total_service_subtotal,  # Total for service items only
-    }
-
-    return context
-
-    return render(request, 'bag/bag.html', context)
+    """ Render the bag contents page """
+    return render(request, 'bag/bag.html')
 
 
 def add_to_bag(request, item_id):
@@ -201,7 +113,6 @@ def add_to_bag(request, item_id):
     return redirect(redirect_url)
 
 
-
 def adjust_bag(request, item_id):
     """ Adjust the quantity of the specified product to the shopping bag """
 
@@ -232,6 +143,7 @@ def adjust_bag(request, item_id):
             messages.success(request, f'Removed {product.name} from your bag') 
 
     request.session['bag'] = bag
+    request.session.modified = True
     return redirect(reverse('view_bag'))
 
 def remove_from_bag(request, item_id):
@@ -254,6 +166,7 @@ def remove_from_bag(request, item_id):
             messages.success(request, f'Removed {product.name} from your bag')
 
         request.session['bag'] = bag
+        request.session.modified = True
         return HttpResponse(status=200)
 
     except Exception as e:
