@@ -4,6 +4,8 @@ from django.contrib import messages
 from products.models import Product, ProductVariant, Service
 from djmoney.models.fields import MoneyField
 from django.http import Http404
+from decimal import Decimal
+
 
 # Create your views here.
 
@@ -22,7 +24,7 @@ def add_to_bag(request, item_id):
 
     size = None
     price = None
-    extra_service_cost = 0  # Initialize with a default value to avoid UnboundLocalError
+    extra_service_cost = Decimal(0)  # Initialize as Decimal to avoid UnboundLocalError
 
     print("DEBUG: Starting add_to_bag")
     print("DEBUG: Freshly Ground:", freshly_ground)  # Debug
@@ -43,7 +45,7 @@ def add_to_bag(request, item_id):
 
     # Calculate the total extra service cost based on quantity if 'freshly_ground' is selected
     if freshly_ground and size:  # Only calculate extra service if a size is selected
-        extra_service_cost = settings.FRESHLY_GROUND_BEANS * quantity
+        extra_service_cost = Decimal(settings.FRESHLY_GROUND_BEANS) * Decimal(quantity)
     print("DEBUG: Extra Service Cost after calculation:", extra_service_cost)  # Debug
 
     # Get the current shopping bag from the session
@@ -56,14 +58,14 @@ def add_to_bag(request, item_id):
             if 'items_by_size' in bag[item_id]:
                 if size in bag[item_id]['items_by_size']:
                     bag[item_id]['items_by_size'][size]['quantity'] += quantity
-                    bag[item_id]['items_by_size'][size]['extra_service_cost'] += extra_service_cost
+                    bag[item_id]['items_by_size'][size]['extra_service_cost'] = str(extra_service_cost)  # Store as string
                     bag[item_id]['items_by_size'][size]['freshly_ground'] = freshly_ground
                     print(f"DEBUG: Updated bag item with size: {bag[item_id]['items_by_size'][size]}")  # Debug
                 else:
                     bag[item_id]['items_by_size'][size] = {
                         'quantity': quantity,
                         'price': str(price),
-                        'extra_service_cost': extra_service_cost,
+                        'extra_service_cost': str(extra_service_cost),  # Store as string
                         'freshly_ground': freshly_ground,
                     }
                     print(f"DEBUG: New bag item with size: {bag[item_id]['items_by_size'][size]}")  # Debug
@@ -72,7 +74,7 @@ def add_to_bag(request, item_id):
                     size: {
                         'quantity': quantity,
                         'price': str(price),
-                        'extra_service_cost': extra_service_cost,
+                        'extra_service_cost': str(extra_service_cost),  # Store as string
                         'freshly_ground': freshly_ground,
                     }
                 }
@@ -83,7 +85,7 @@ def add_to_bag(request, item_id):
                     size: {
                         'quantity': quantity,
                         'price': str(price),
-                        'extra_service_cost': extra_service_cost,
+                        'extra_service_cost': str(extra_service_cost),  # Store as string
                         'freshly_ground': freshly_ground,
                     }
                 }
@@ -124,10 +126,20 @@ def adjust_bag(request, item_id):
     bag = request.session.get('bag', {})
 
     if size:
+        # Retrieve the variant price if available, fallback to product price
+        try:
+            variant = product.variants.get(weight=size)
+            price = variant.price if variant and variant.price else product.price
+        except ProductVariant.DoesNotExist:
+            price = product.price  # Use product base price if no variant is found
+
         if quantity > 0:
-            bag[item_id]['items_by_size'][size] = quantity
-            messages.success(request, f'Updated size {size.upper()} {product.name} quantity to {bag[item_id]["items_by_size"][size]}')
- 
+            bag[item_id]['items_by_size'][size] = {
+                'quantity': quantity,
+                'price': str(price),  # Convert to string for session storage
+                'extra_service_cost': str(extra_service_cost) if 'extra_service_cost' in bag[item_id]['items_by_size'][size] else '0',
+                'freshly_ground': freshly_ground if 'freshly_ground' in bag[item_id]['items_by_size'][size] else False
+            }
         else:
             del bag[item_id]['items_by_size'][size]
             if not bag[item_id]['items_by_size']:
