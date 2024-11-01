@@ -226,6 +226,12 @@ body {
     font-size: 0.85em;
 }
 
+
+.qty_input {
+    max-width: 30%;
+    width: 100px;
+}
+
 /* Profile */
 
 .profile-container {
