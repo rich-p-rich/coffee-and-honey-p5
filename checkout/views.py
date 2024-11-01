@@ -263,10 +263,10 @@ def checkout_success(request, order_number):
             for size, details in item_data['items_by_size'].items():
                 # Fetch the specific variant based on product and weight (size)
                 variant = get_object_or_404(ProductVariant, product=product, weight=size)
-                price = float(details['price'])
-                quantity = details['quantity']
-                extra_service_cost = details.get('extra_service_cost', 0)
-                subtotal = (price * quantity) + extra_service_cost  # calculate subtotal
+                price = float(details.get('price', 0))
+                quantity = int(details.get('quantity', 1))
+                extra_service_cost = float(details.get('extra_service_cost', 0))
+                subtotal = (price * quantity) + extra_service_cost
                 
                 # Append item details to line_items
                 line_items.append({
@@ -279,9 +279,9 @@ def checkout_success(request, order_number):
                 })
         else:
             # For items without sizes (for products with *no* weight/price variations)
-            price = float(item_data['price'])
-            quantity = item_data['quantity']
-            extra_service_cost = item_data.get('extra_service_cost', 0)
+            price = float(item_data.get('price', 0))
+            quantity = int(item_data.get('quantity', 1))
+            extra_service_cost = float(item_data.get('extra_service_cost', 0))
             subtotal = (price * quantity) + extra_service_cost
             
             line_items.append({
