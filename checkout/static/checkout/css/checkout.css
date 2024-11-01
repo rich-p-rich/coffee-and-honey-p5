@@ -4,6 +4,26 @@
   background-color: #f5f5f5;
 }
 
+.service-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.service-row p {
+  margin: 0;
+}
+
+.order-summary-item {
+  border-bottom: 1px solid #e0e0e0; /* Light grey line */
+  padding-bottom: 1rem; /* Space below item */
+  margin-bottom: 1rem; /* Space between items */
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
 .order-sum {
   font-family: 'Roboto', sans-serif;
   margin-top: 50px;

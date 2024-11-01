@@ -32,7 +32,6 @@
                                     <p class="my-0"><strong>{{ item.product.name }}</strong></p>
                                     <p class="my-0">Size: {% if item.size %} {{ item.size }}g {% else %} N/A {% endif %}</p>
                                     <p class="my-0 small text-muted">SKU: {{ item.product.sku|upper }}</p>
-                                    <p class="my-0">Price: €{{ item.price|floatformat:2 }}</p>
                                 </div>
                             </div>
                         </td>

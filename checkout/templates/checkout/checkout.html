@@ -24,14 +24,12 @@
                 <div class="col-7 offset-2">
                     <p class="mb-1 mt-0 small text-muted">Item</p>
                 </div>
-                <div class="col-3 text-right">
-                    <p class="my-0 small text-muted">€{{ item.subtotal|floatformat:2 }}</p>
-                </div>
             </div>
+            
             <!-- Products in checkout -->
             {% for item in bag_items %}
-            <div class="row">
-                <div class="col-2 mb-1">
+            <div class="row align-items-center border-bottom pb-2 mb-2">
+                <div class="col-2">
                     <a href="{% url 'product_detail' item.product.id %}">
                         {% if item.product.image %}
                         <img class="w-100" src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
@@ -43,24 +41,27 @@
                 <div class="col-7">
                     <p class="my-0"><strong>{{ item.product.name }}</strong></p>
                     <p class="my-0 small">Size: {{ item.size }}g</p>
-                    <p class="my-0 small text-muted">Qty: {{ item.quantity }}</p>
-                    
+
+                    <!-- Quantity and Subtotal in the same row -->
+                    <p class="my-0 small d-flex justify-content-between">
+                        Qty: {{ item.quantity }} <span class="text-right">€{{ item.item_subtotal|floatformat:2 }}</span>
+                    </p>
+
+                    <!-- Freshly Ground Service -->
                     {% if item.extra_service_cost > 0 %}
-                        <p class="my-0 small text-muted">Freshly Ground Service:</p>
+                    <div class="row service-row">
+                        <div class="col-8">
+                            <p class="my-0 small">Freshly Ground Service:</p>
+                        </div>
+                        <div class="col-4 text-right">
+                            <p class="my-0">€{{ item.service_subtotal|floatformat:2 }}</p>
+                        </div>
+                    </div>
                     {% endif %}
-                </div>
-                <div class="col-3 text-right">
-                    <p class="my-0 text-muted">€{{ item.item_subtotal|floatformat:2 }}</p>
-                    
-                    {% if item.extra_service_cost > 0 %}
-                        <p class="my-0 text-muted">€{{ item.service_subtotal|floatformat:2 }}</p>
-                    {% endif %}
-                </div>
-                <div class="col-3 text-right">
-                    <p class="my-0 small text-muted">€{{ item.product.price | calc_subtotal:item.quantity }}</p>
                 </div>
             </div>
             {% endfor %}
+
             <!-- Summary order details -->
             <hr class="my-0">
             <div class="row text-black text-right">
@@ -133,7 +134,7 @@
                     {{ order_form.billing_postcode | as_crispy_field }}
                     {{ order_form.billing_country | as_crispy_field }}
                 </fieldset>
-                
+
                 <!-- Check if there is a saved default delivery address -->
                 <div id="default_delivery_data">{{ default_delivery_data|json_script:"default_delivery_data" }}</div>
 
@@ -144,18 +145,17 @@
                     <select id="saved_address" name="saved_address" class="form-control">
                         <option value="">-- Choose from your Address Book --</option>
                         {% for address in saved_addresses %}
-                            <option value="{{ address.id }}" 
-                                    data-recipient-name="{{ address.recipient_name }}"
-                                    data-street-address1="{{ address.recipient_street_address1 }}"
-                                    data-street-address2="{{ address.recipient_street_address2 }}"
-                                    data-town-or-city="{{ address.recipient_town_or_city }}"
-                                    data-county="{{ address.recipient_county }}"
-                                    data-postcode="{{ address.recipient_postcode }}"
-                                    data-country="{{ address.recipient_country }}">
-                                {{ address.nickname|default:address.recipient_name }}
-                            </option>
+                        <option value="{{ address.id }}" data-recipient-name="{{ address.recipient_name }}"
+                            data-street-address1="{{ address.recipient_street_address1 }}"
+                            data-street-address2="{{ address.recipient_street_address2 }}"
+                            data-town-or-city="{{ address.recipient_town_or_city }}"
+                            data-county="{{ address.recipient_county }}"
+                            data-postcode="{{ address.recipient_postcode }}"
+                            data-country="{{ address.recipient_country }}">
+                            {{ address.nickname|default:address.recipient_name }}
+                        </option>
                         {% endfor %}
-                    </select>                    
+                    </select>
                 </div>
                 {% endif %}
 
