@@ -319,6 +319,18 @@ footer {
 
 /* Media Queries */
 
+@media (min-width: 427px) {
+#login-status {
+        margin-top: 225px;
+    }
+}
+
+@media (min-width: 430px) {
+    #login-status {
+            margin-top: 265px;
+        }
+    }
+
 @media (min-width: 768px) {
 #login-status {
     margin-top: 225px;
