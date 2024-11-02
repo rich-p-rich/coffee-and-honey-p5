@@ -14,71 +14,41 @@ document.addEventListener('DOMContentLoaded', function () {
     const defaultDeliveryElement = document.getElementById('default_delivery_data');
     let defaultDeliveryData = null;
 
-    // Check if default delivery element exists
+    // Check if default delivery element exists before parsing
     if (defaultDeliveryElement) {
         defaultDeliveryData = JSON.parse(defaultDeliveryElement.textContent);
     }
 
-    console.log("defaultDeliveryData:", defaultDeliveryData);
+    // 1. Function to check if the delivery address differs from the billing address
+    function deliveryAddressDiffersFromBilling() {
+        if (!defaultDeliveryData) return false;
 
-    // Enable customer to select saved addresses
-    const savedAddressDropdown = document.getElementById('saved-address-dropdown');
-    const savedAddressSelect = document.getElementById('saved_address');
+        const billingName = document.getElementById('id_billing_full_name').value;
+        const billingStreet = document.getElementById('id_billing_street_address1').value;
+        const billingPostcode = document.getElementById('id_billing_postcode').value;
 
-    // Get delivery prices from data attributes
-    const priceConfig = document.getElementById('price-config');
-    const deliveryPrice = parseFloat(priceConfig.getAttribute('data-delivery-price'));
-    const pickupPrice = parseFloat(priceConfig.getAttribute('data-pickup-price'));
-
-    // Function to update address visibility based on selected delivery option
-    function updateAddressFields() {
-        if (pickupRadio && pickupRadio.checked) {
-            differentDeliveryAddress.classList.add('d-none');
-            savedAddressDropdown.style.display = 'none';
-        } else if (deliveryBillingRadio && deliveryBillingRadio.checked) {
-            differentDeliveryAddress.classList.add('d-none');
-            savedAddressDropdown.style.display = 'none';
-        } else if (deliveryDifferentRadio && deliveryDifferentRadio.checked) {
-            differentDeliveryAddress.classList.remove('d-none');
-            savedAddressDropdown.style.display = 'block';  // Ensure the dropdown is shown for "Friends or Family"
-        }
+        return (
+            defaultDeliveryData.delivery_name !== billingName ||
+            defaultDeliveryData.delivery_street_address1 !== billingStreet ||
+            defaultDeliveryData.delivery_postcode !== billingPostcode
+        );
     }
 
+    // 2. Function to set the default delivery option based on address data
     function setDefaultDeliveryOption() {
-        if (deliveryAddressDiffers()) {
+        if (deliveryAddressDiffersFromBilling()) {
             deliveryDifferentRadio.checked = true;
+            populateWithDefaultDeliveryData();
             differentDeliveryAddress.classList.remove('d-none');
         } else {
             deliveryBillingRadio.checked = true;
             differentDeliveryAddress.classList.add('d-none');
         }
     }
-        pickupRadio.addEventListener('change', updateAddressFields);
-        deliveryBillingRadio.addEventListener('change', updateAddressFields);
-        deliveryDifferentRadio.addEventListener('change', updateAddressFields);
-
-    // Initialize with default settings
-    setDefaultDeliveryOption();
-    updateAddressFields();
-});
 
     // Populate delivery fields with default delivery data if it exists
     function populateWithDefaultDeliveryData() {
-        // Add this section: compare default delivery data with billing fields to see if they differ
-        const billingName = document.getElementById('id_billing_full_name').value;
-        const billingStreet = document.getElementById('id_billing_street_address1').value;
-        const billingPostcode = document.getElementById('id_billing_postcode').value;
-
-        // Set "Deliver to Different Address" only if delivery data differs from billing data
-        if (
-            defaultDeliveryData.delivery_name !== billingName ||
-            defaultDeliveryData.delivery_street_address1 !== billingStreet ||
-            defaultDeliveryData.delivery_postcode !== billingPostcode
-        ) {
-            deliveryDifferentRadio.checked = true; // Select "Deliver to Different Address"
-            differentDeliveryAddress.classList.remove('d-none'); // Show the delivery address section
-
-            // Populate fields with default delivery data
+        if (defaultDeliveryData) {
             document.getElementById('id_delivery_name').value = defaultDeliveryData.delivery_name || '';
             document.getElementById('id_delivery_street_address1').value = defaultDeliveryData.delivery_street_address1 || '';
             document.getElementById('id_delivery_street_address2').value = defaultDeliveryData.delivery_street_address2 || '';
@@ -89,13 +59,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Populate fields on page load if default delivery data is present
-
-    
-    if (defaultDeliveryData) {
-        populateWithDefaultDeliveryData();
-        updateAddressFields();
-    }
+    // Enable customer to select saved addresses
+    const savedAddressDropdown = document.getElementById('saved-address-dropdown');
+    const savedAddressSelect = document.getElementById('saved_address');
 
     // Populate delivery address fields based on saved address selection
     function populateAddressFields() {
@@ -112,15 +78,12 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('id_delivery_country').value = selectedOption.getAttribute('data-country') || '';
     }
 
-    // Event listener for the saved address dropdown
     savedAddressSelect.addEventListener('change', populateAddressFields);
 
-    // Ensure delivery fields are visible before form submission
-    function ensureDeliveryFieldsVisible() {
-        if (deliveryDifferentRadio.checked) {
-            differentDeliveryAddress.classList.remove('d-none');
-        }
-    }
+    // Get delivery prices from data attributes
+    const priceConfig = document.getElementById('price-config');
+    const deliveryPrice = parseFloat(priceConfig.getAttribute('data-delivery-price'));
+    const pickupPrice = parseFloat(priceConfig.getAttribute('data-pickup-price'));
 
     // Function to update delivery and grand total prices
     function updatePrices() {
@@ -144,21 +107,26 @@ document.addEventListener('DOMContentLoaded', function () {
         updatePrices();
     }
 
-    // Event listeners for delivery option changes
-    if (pickupRadio) pickupRadio.addEventListener('change', handleDeliveryOptionChange);
-    if (deliveryBillingRadio) deliveryBillingRadio.addEventListener('change', handleDeliveryOptionChange);
-    if (deliveryDifferentRadio) deliveryDifferentRadio.addEventListener('change', handleDeliveryOptionChange);
-
-    // Initial setup on page load
-    handleDeliveryOptionChange();
-
-    // Ensure delivery fields are visible before form submission
-    const checkoutForm = document.querySelector('form');
-    if (checkoutForm) checkoutForm.addEventListener('submit', ensureDeliveryFieldsVisible);
-
-    // Toggle save address option in the console (for debugging purposes)
-    const saveAddressCheckbox = document.getElementById('id-save-address');
-    function toggleSaveAddressOption() {
-        console.log(saveAddressCheckbox && saveAddressCheckbox.checked ? "The user wants to save this address." : "The user does not want to save this address.");
+    // Function to update address visibility based on selected delivery option
+    function updateAddressFields() {
+        if (pickupRadio && pickupRadio.checked) {
+            differentDeliveryAddress.classList.add('d-none');
+            savedAddressDropdown.style.display = 'none';
+        } else if (deliveryBillingRadio && deliveryBillingRadio.checked) {
+            differentDeliveryAddress.classList.add('d-none');
+            savedAddressDropdown.style.display = 'none';
+        } else if (deliveryDifferentRadio && deliveryDifferentRadio.checked) {
+            differentDeliveryAddress.classList.remove('d-none');
+            savedAddressDropdown.style.display = 'block';
+        }
     }
-    if (saveAddressCheckbox) saveAddressCheckbox.addEventListener('change', toggleSaveAddressOption);
+
+    // 3. Initial setup on page load: Set default delivery option and handle changes
+    setDefaultDeliveryOption(); // Set default delivery option based on conditions
+    handleDeliveryOptionChange(); // Update fields and prices based on initial selection
+
+    // Event listeners for delivery option changes
+    pickupRadio.addEventListener('change', handleDeliveryOptionChange);
+    deliveryBillingRadio.addEventListener('change', handleDeliveryOptionChange);
+    deliveryDifferentRadio.addEventListener('change', handleDeliveryOptionChange);
+});
