@@ -16,43 +16,45 @@
                 <table class="table table-sm table-borderless">
                     <thead class="text-black">
                         <tr>
-                            <th scope="col" class="col-3">Product Info</th>
-                            <th scope="col" class="col-2">Qty</th>
-                            <th scope="col" class="col-2">Subtotal</th>
+                            <th scope="col" style="width: 60%;">Product Info</th>
+                            <th scope="col" style="width: 20%;" class="text-center">Qty</th>
+                            <th scope="col" style="width: 20%;" class="text-center">Subtotal</th>
                         </tr>
                     </thead>
 
                     {% for item in bag_items %}
-                    <!-- Row 1: Product Image and Info, Price, and Product Subtotal -->
+                    <!-- Row 1: Product Image and Info, Quantity, Price, and Product Subtotal -->
                     <tr>
-                        <td class="p-3 w-50">
+                        <td style="width: 60%;" class="p-3">
                             <div class="d-flex align-items-center">
-                                <img class="img-fluid rounded" src="{{ item.product.image.url }}"
-                                    alt="{{ item.product.name }}" style="max-width: 80px; margin-right: 10px;">
+                                <img class="img-fluid rounded" src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="max-width: 80px; margin-right: 10px;">
                                 <div>
                                     <p class="my-0"><strong>{{ item.product.name }}</strong></p>
-                                    <p class="my-0">Size: {% if item.size %} {{ item.size }}g {% else %} N/A {% endif %}
-                                    </p>
+                                    <p class="my-0 small text-muted">Size: {% if item.size %} {{ item.size }}g {% else %} N/A {% endif %}</p>
                                     <p class="my-0 small text-muted">SKU: {{ item.product.sku|upper }}</p>
                                 </div>
                             </div>
                         </td>
-                        <td>{{ item.quantity }}</td>
-                        <td>€{{ item.item_subtotal|floatformat:2 }}</td>
+                        <td style="width: 20%;" class="text-center">
+                            <p class="my-0">{{ item.quantity }}</p>
+                        </td>
+                        <td style="width: 20%;" class="text-center">
+                            <p class="my-0">€{{ item.item_subtotal|floatformat:2 }}</p>
+                        </td>
                     </tr>
+
 
                     <!-- Row 2: Extra Service Display (if applicable) -->
                     {% if item.extra_service_cost > 0 %}
                     <tr>
-                        <td colspan="2">
-                            <p class="my-0">Freshly Ground Service: €{{ item.extra_service_cost|floatformat:2 }}</p>
-                        </td>
-                        <td>Service Subtotal: €{{ item.service_subtotal|floatformat:2 }}</td>
+                        <td style="width: 60%;">Freshly Ground Service:</td>>
+                        <td style="width: 20%;" class="text-center"></td>
+                        <td style="width: 20%;" class="text-center">€{{ item.service_subtotal|floatformat:2 }}</td>
                     </tr>
                     {% endif %}
 
                     <!-- Row 3: Quantity Controls, Update, and Remove Buttons -->
-                    <tr>
+                    <tr class="product-seperator">
                         <td colspan="3">
                             <p class="my-0"><strong>Adjust Bag</strong></p>
                             <br>
@@ -86,11 +88,12 @@
                                 </div>
 
                                 <!-- Update Bag and Remove Buttons -->
-                                <div class="d-flex">
-                                    <button type="submit" class="btn bag-update-link btn-info btn-sm mr-2"
+                                <div class="button-container d-flex">
+                                    <button type="submit" class="btn bag-button bag-update-link btn-info btn-sm mr-2"
                                         title="Update bag">Update Bag</button>
-                                        <a class="remove-item btn btn-danger bag-remove btn-sm" id="remove_{{ item.item_id }}"
-                                        data-product_size="{{ item.size }}" style="color: white;">Remove Product</small></a>
+                                    <a class="remove-item btn bag-button btn-danger bag-remove btn-sm"
+                                        id="remove_{{ item.item_id }}" data-product_size="{{ item.size }}"
+                                        style="color: white;">Remove Product</a>
                                 </div>
                             </form>
                         </td>

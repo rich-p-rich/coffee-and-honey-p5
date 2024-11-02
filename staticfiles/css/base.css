@@ -173,6 +173,37 @@ body {
     font-size: 0.5em;
 }
 
+.product-info-row img {
+    max-width: 80px;
+    margin-right: 10px;
+}
+
+/* Center-align text in quantity and subtotal columns */
+.table td.text-center {
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* Adjust padding and spacing */
+.product-info-row {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd; 
+}
+
+.product-info-row img {
+    max-width: 80px;
+    margin-right: 10px;
+}
+
+
+.product-seperator {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+.product-seperator .d-flex {
+    width: 100%;
+}
+
 #shopping-bag-container .table th,
 #shopping-bag-container .table td {
     padding-left: 10px;
@@ -228,7 +259,8 @@ body {
 
 
 .qty_input {
-    max-width: 50px;
+    max-width: 30%;
+    width: 100px;
 }
 
 /* Profile */
