@@ -126,6 +126,7 @@
                 <!-- Billing Address Section (always displayed) -->
                 <fieldset class="rounded px-3 mb-5">
                     <legend class="fieldset-label small text-black px-2 w-auto">Billing Address</legend>
+                    {{ order_form.billing_full_name | as_crispy_field }}
                     {{ order_form.billing_phone_number | as_crispy_field }}
                     {{ order_form.billing_street_address1 | as_crispy_field }}
                     {{ order_form.billing_street_address2 | as_crispy_field }}
@@ -232,6 +233,9 @@
 {% endblock %}
 
 {% block postloadjs %}
+<script id="default-delivery-data" type="application/json">
+    {{ default_delivery_data|default:"{}"|json_script:"default-delivery-data" }}
+</script>
 {{ block.super }}
 {{ stripe_public_key|json_script:"id_stripe_public_key" }}
 {{ client_secret|json_script:"id_client_secret" }}

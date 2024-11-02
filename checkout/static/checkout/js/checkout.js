@@ -14,10 +14,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const defaultDeliveryElement = document.getElementById('default_delivery_data');
     let defaultDeliveryData = null;
 
-    // Check if default delivery element exists before parsing
+    // Check if default delivery element exists
     if (defaultDeliveryElement) {
         defaultDeliveryData = JSON.parse(defaultDeliveryElement.textContent);
     }
+
+    console.log("defaultDeliveryData:", defaultDeliveryData);
 
     // Enable customer to select saved addresses
     const savedAddressDropdown = document.getElementById('saved-address-dropdown');
@@ -38,13 +40,41 @@ document.addEventListener('DOMContentLoaded', function () {
             savedAddressDropdown.style.display = 'none';
         } else if (deliveryDifferentRadio && deliveryDifferentRadio.checked) {
             differentDeliveryAddress.classList.remove('d-none');
-            savedAddressDropdown.style.display = 'block';
+            savedAddressDropdown.style.display = 'block';  // Ensure the dropdown is shown for "Friends or Family"
         }
     }
 
+    function setDefaultDeliveryOption() {
+        if (deliveryAddressDiffers()) {
+            deliveryDifferentRadio.checked = true;
+            differentDeliveryAddress.classList.remove('d-none');
+        } else {
+            deliveryBillingRadio.checked = true;
+            differentDeliveryAddress.classList.add('d-none');
+        }
+    }
+        pickupRadio.addEventListener('change', updateAddressFields);
+        deliveryBillingRadio.addEventListener('change', updateAddressFields);
+        deliveryDifferentRadio.addEventListener('change', updateAddressFields);
+
+    // Initialize with default settings
+    setDefaultDeliveryOption();
+    updateAddressFields();
+});
+
     // Populate delivery fields with default delivery data if it exists
     function populateWithDefaultDeliveryData() {
-        if (defaultDeliveryData) {
+        // Add this section: compare default delivery data with billing fields to see if they differ
+        const billingName = document.getElementById('id_billing_full_name').value;
+        const billingStreet = document.getElementById('id_billing_street_address1').value;
+        const billingPostcode = document.getElementById('id_billing_postcode').value;
+
+        // Set "Deliver to Different Address" only if delivery data differs from billing data
+        if (
+            defaultDeliveryData.delivery_name !== billingName ||
+            defaultDeliveryData.delivery_street_address1 !== billingStreet ||
+            defaultDeliveryData.delivery_postcode !== billingPostcode
+        ) {
             deliveryDifferentRadio.checked = true; // Select "Deliver to Different Address"
             differentDeliveryAddress.classList.remove('d-none'); // Show the delivery address section
 
@@ -60,6 +90,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Populate fields on page load if default delivery data is present
+
+    
     if (defaultDeliveryData) {
         populateWithDefaultDeliveryData();
         updateAddressFields();
@@ -130,4 +162,3 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log(saveAddressCheckbox && saveAddressCheckbox.checked ? "The user wants to save this address." : "The user does not want to save this address.");
     }
     if (saveAddressCheckbox) saveAddressCheckbox.addEventListener('change', toggleSaveAddressOption);
-});
