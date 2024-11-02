@@ -54,7 +54,7 @@
                     {% endif %}
 
                     <!-- Row 3: Quantity Controls, Update, and Remove Buttons -->
-                    <tr class="product-seperator">
+                    <tr class="product-seperator adjust-bag-row">
                         <td colspan="3">
                             <p class="my-0"><strong>Adjust Bag</strong></p>
                             <br>
@@ -106,36 +106,39 @@
                             <td colspan="3" class="text-right">
                                 <h6><strong>Bag Total: €{{ total|floatformat:2 }}</strong></h6>
                                 <h6>Delivery: €{{ delivery|floatformat:2 }}</h6>
-                                <h4><strong>Grand Total: €{{ grand_total|floatformat:2 }}</strong></h4>
+                                <h6><strong>Grand Total: €{{ grand_total|floatformat:2 }}</strong></h6>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="3" class="text-right">
-                                <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
-                                    <span class="icon">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </span>
-                                    <span class="text-uppercase">Keep Shopping</span>
-                                </a>
-
-                                {% if user.is_authenticated %}
-                                <a href="{% url 'checkout' %}" class="btn btn-black rounded-0 btn-lg">
-                                    <span class="text-uppercase">Secure Checkout</span>
-                                    <span class="icon">
-                                        <i class="fas fa-lock"></i>
-                                    </span>
-                                </a>
-                                {% else %}
-                                <button type="button" class="btn btn-black rounded-0 btn-lg" onclick="openModal()">
-                                    <span class="text-uppercase">Secure Checkout</span>
-                                    <span class="icon">
-                                        <i class="fas fa-lock"></i>
-                                    </span>
-                                </button>
-                                {% endif %}
+                                <div class="buttons-total-section">
+                                    <a href="{% url 'products' %}" class="btn btn-outline-black keep-shopping-button">
+                                        <span class="icon">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </span>
+                                        <span class="text-uppercase">Keep Shopping</span>
+                                    </a>
+                    
+                                    {% if user.is_authenticated %}
+                                    <a href="{% url 'checkout' %}" class="btn btn-black checkout-button">
+                                        <span class="text-uppercase">Secure Checkout</span>
+                                        <span class="icon">
+                                            <i class="fas fa-lock"></i>
+                                        </span>
+                                    </a>
+                                    {% else %}
+                                    <button type="button" class="btn btn-black checkout-button" onclick="openModal()">
+                                        <span class="text-uppercase">Secure Checkout</span>
+                                        <span class="icon">
+                                            <i class="fas fa-lock"></i>
+                                        </span>
+                                    </button>
+                                    {% endif %}
+                                </div>
                             </td>
                         </tr>
                     </div>
+                    
                 </table>
 
                 <!-- Modal for Sign In/Register Prompt -->

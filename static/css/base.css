@@ -169,10 +169,6 @@ body {
     box-sizing: border-box;
 }
 
-.bag-totals {
-    font-size: 0.5em;
-}
-
 .product-info-row img {
     max-width: 80px;
     margin-right: 10px;
@@ -202,7 +198,7 @@ body {
 }
 
 .bag-button {
-    width: 120px;
+    width: 50px;
     height: 40px;
     display: flex;
     align-items: center;
@@ -277,6 +273,36 @@ body {
     max-width: 30%;
     width: 100px;
 }
+
+/* Bag Totals Section */
+
+.bag-totals h6 {
+    font-size: 14px;
+    font-weight: normal;
+    margin: 0;
+}
+
+.bag-totals h4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.buttons-total-section {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: flex-end;
+}
+
+.keep-shopping-button,
+.checkout-button {
+    max-width: 30%;
+    width: 150px;
+    background-color:rgb(138, 138, 184);
+}
+
 
 /* Profile */
 
