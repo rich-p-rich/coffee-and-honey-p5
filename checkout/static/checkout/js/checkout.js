@@ -59,16 +59,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Enable customer to select saved addresses
+    // Enable customer to select saved addresses (visible only if authenticated)
     const savedAddressDropdown = document.getElementById('saved-address-dropdown');
     const savedAddressSelect = document.getElementById('saved_address');
+    if (savedAddressSelect) {
+        savedAddressSelect.addEventListener('change', populateAddressFields);
+    }
 
     // Populate delivery address fields based on saved address selection
     function populateAddressFields() {
         const selectedOption = savedAddressSelect.options[savedAddressSelect.selectedIndex];
         if (!selectedOption.value) return;
-        
-        // Fetch data attributes from selected option
+
         document.getElementById('id_delivery_name').value = selectedOption.getAttribute('data-recipient-name') || '';
         document.getElementById('id_delivery_street_address1').value = selectedOption.getAttribute('data-street-address1') || '';
         document.getElementById('id_delivery_street_address2').value = selectedOption.getAttribute('data-street-address2') || '';
@@ -77,8 +79,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('id_delivery_postcode').value = selectedOption.getAttribute('data-postcode') || '';
         document.getElementById('id_delivery_country').value = selectedOption.getAttribute('data-country') || '';
     }
-
-    savedAddressSelect.addEventListener('change', populateAddressFields);
 
     // Get delivery prices from data attributes
     const priceConfig = document.getElementById('price-config');
@@ -111,19 +111,19 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateAddressFields() {
         if (pickupRadio && pickupRadio.checked) {
             differentDeliveryAddress.classList.add('d-none');
-            savedAddressDropdown.style.display = 'none';
+            if (savedAddressDropdown) savedAddressDropdown.style.display = 'none';
         } else if (deliveryBillingRadio && deliveryBillingRadio.checked) {
             differentDeliveryAddress.classList.add('d-none');
-            savedAddressDropdown.style.display = 'none';
+            if (savedAddressDropdown) savedAddressDropdown.style.display = 'none';
         } else if (deliveryDifferentRadio && deliveryDifferentRadio.checked) {
             differentDeliveryAddress.classList.remove('d-none');
-            savedAddressDropdown.style.display = 'block';
+            if (savedAddressDropdown) savedAddressDropdown.style.display = 'block';
         }
     }
 
-    // 3. Initial setup on page load: Set default delivery option and handle changes
-    setDefaultDeliveryOption(); // Set default delivery option based on conditions
-    handleDeliveryOptionChange(); // Update fields and prices based on initial selection
+    // Initial setup on page load
+    setDefaultDeliveryOption();
+    handleDeliveryOptionChange();
 
     // Event listeners for delivery option changes
     pickupRadio.addEventListener('change', handleDeliveryOptionChange);
