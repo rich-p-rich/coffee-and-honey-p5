@@ -7,7 +7,7 @@
 {% block head_title %}{% trans "Sign Out" %}{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container-signout container">
     <div class="row">
         <div class="col-md-8 mt-3 offset-md-2">
             <h3>{% trans "Sign Out" %}</h3>
@@ -18,15 +18,18 @@
         <div class="col-md-8 mt-3 offset-md-2">
             <form method="post" action="{% url 'account_logout' %}" class="d-flex flex-column align-items-center">
                 {% csrf_token %}
-                {% if redirect_field_value %}
-                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                {% endif %}
-                <button class="btn btn-warning w-100 mb-3" type="submit" style="max-width: 600px;">{% trans 'Sign Out' %}</button>
-                <!--Pexels image 1251861-->
-                <img class="img-fluid account-img" src="{% static 'images/student-male-backpack.webp' %}" alt="A student leaving a building" style="max-width: 600px;" />
+                
+                <div class="account-form-group">
+                    {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                    {% endif %}
+                    <button class="btn btn-warning w-100 mb-3" type="submit" style="max-width: 600px;">{% trans 'Sign Out' %}</button>
+                </div>
+                
             </form>
         </div>
     </div>
 </div>
+
 
 {% endblock %}

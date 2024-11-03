@@ -10,26 +10,37 @@
 
 {% block content %}
 <div class="container-login container">
-    <div class="row">
-        <div class="col-md-8 mt-3 offset-md-2">
-            <h3>{% trans "Sign In" %}</h3>
-            <p>{% blocktrans %}Welcome back to Coffee and Honey. If
-                you have not created an account yet, then <a class="link" href="{{ signup_url }}">sign up</a>
-                first.{% endblocktrans %}</p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-8 mt-3 offset-md-2">
-            <form class="login needs-validation d-flex flex-column align-items-center" method="POST" action="{% url 'account_login' %}">
-                {% csrf_token %}
-                {{ form.as_p }}
-                {% if redirect_field_value %}
-                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                {% endif %}
-                <button class="btn btn-signup w-100 mb-3" type="submit" id="submit" style="max-width: 600px;">{% trans "Sign In" %}</button>
-            </form>
-        </div>
-    </div>
-</div>
+  <div class="row">
+      <div class="col-md-8 mt-3 offset-md-2">
+          <h3>{% trans "Sign In" %}</h3>
+          <p>{% blocktrans %}Welcome back to Coffee and Honey. If
+              you have not created an account yet, then <a class="link" href="{{ signup_url }}">sign up</a>
+              first.{% endblocktrans %}</p>
+      </div>
+  </div>
+  <div class="row">
+      <div class="col-md-8 mt-3 offset-md-2">
+          <form class="login needs-validation" method="POST" action="{% url 'account_login' %}">
+              {% csrf_token %}
+              
+              <div class="account-form-group">
+                  <label for="login">Login:</label>
+                  {{ form.login }}
+              </div>
 
+              <div class="account-form-group">
+                  <label for="password">Password:</label>
+                  {{ form.password }}
+                  <a href="{{ password_reset_url }}" class="forgot-password">Forgot your password?</a>
+              </div>
+              
+              {% if redirect_field_value %}
+                  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+              {% endif %}
+              
+              <button class="btn btn-signup w-100 mb-3" type="submit" id="submit" style="max-width: 600px;">{% trans "Sign In" %}</button>
+          </form>
+      </div>
+  </div>
+</div>
 {% endblock %}
