@@ -116,6 +116,57 @@ def add_to_bag(request, item_id):
 
 
 def adjust_bag(request, item_id):
+    """ Adjust the quantity of the specified product in the shopping bag """
+    product = get_object_or_404(Product, pk=item_id)
+    quantity = int(request.POST.get('quantity'))
+    size = request.POST.get('product_size', None)  # Fetch size from POST data
+    freshly_ground = 'freshly_ground' in request.POST  # Check if the extra service is selected
+    bag = request.session.get('bag', {})
+
+    # Retain existing size if only quantity is adjusted
+    if not size and item_id in bag:
+        # Keep the original size if no new size was specified
+        size = list(bag[item_id]['items_by_size'].keys())[0]
+
+    try:
+        # Look for the variant with the specified size
+        variant = product.variants.get(weight=size)
+        price = variant.price
+    except ProductVariant.DoesNotExist:
+        price = product.price  # Default to base price if variant not found
+
+    # Retrieve the existing extra service cost, if available
+    extra_service_cost = request.POST.get(
+        'extra_service_cost', 
+        bag[item_id]['items_by_size'][size].get('extra_service_cost', '0')
+    )
+
+    # Update session bag data
+    if quantity > 0:
+        # Update or add the item with the selected size and service
+        bag[item_id] = {
+            'items_by_size': {
+                size: {
+                    'quantity': quantity,
+                    'price': str(price),
+                    'extra_service_cost': str(extra_service_cost),
+                    'freshly_ground': freshly_ground,
+                }
+            }
+        }
+        messages.success(request, f'Updated {product.name} quantity to {quantity}')
+    else:
+        # Remove the item if quantity is zero
+        del bag[item_id]['items_by_size'][size]
+        if not bag[item_id]['items_by_size']:  # Remove item if no sizes remain
+            bag.pop(item_id)
+        messages.success(request, f'Removed {product.name} from your bag')
+
+    # Save updated bag data back to session
+    request.session['bag'] = bag
+    request.session.modified = True
+    return redirect(reverse('view_bag'))
+
     """ Adjust the quantity of the specified product to the shopping bag """
 
     product = get_object_or_404(Product, pk=item_id)
