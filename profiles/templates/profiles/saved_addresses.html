@@ -8,7 +8,7 @@
     <!-- List of Saved Addresses -->
     {% if addresses %}
     <div class="list-group mb-4">
-        <!-- Billing Address if Present -->
+        <!-- Billing Address -->
         <div class="list-group-item bg-light border-primary">
             <h5 class="mb-1">
                 Billing Address
@@ -60,9 +60,13 @@
 
     <!-- Button to Add New Address -->
     <a href="{% url 'add_address' %}" class="btn btn-primary">Add New Address</a>
+
+        
+    <!-- Button to Profile Page -->
+    <a href="{% url 'profile' %}" class="btn btn-secondary">Back to Profile Page</a>
 </div>
 
-<!-- Modal for Confirming Deletion (Moved Outside Loop) -->
+<!-- Modal for Confirming Addres Deletion -->
 <div class="modal fade" id="deleteAddressModal" tabindex="-1" aria-labelledby="deleteAddressModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
