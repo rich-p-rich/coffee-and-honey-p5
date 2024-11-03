@@ -67,6 +67,10 @@
                                 <input type="hidden" name="product_size" value="{{ item.size }}">
                                 {% endif %}
 
+                                {% if item.extra_service_cost > 0 %}
+                                <input type="hidden" name="extra_service_cost" value="{{ item.extra_service_cost }}">
+                                {% endif %}
+
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <button class="decrement-qty btn btn-sm btn-black rounded-0"
@@ -187,9 +191,13 @@
 <script type="text/javascript">
     // Update quantity on click
     $('.update-link').click(function(e) {
-        var form = $(this).prev('.update-form');
-        form.submit();
-    })
+    var form = $(this).prev('.update-form');
+    console.log("Submitting form with the following data:");
+    form.find("input").each(function() {
+        console.log($(this).attr('name') + ": " + $(this).val());
+    });
+    form.submit();
+});
 
     // Remove item and reload on click
     $('.remove-item').click(function(e) {
@@ -204,6 +212,11 @@
              location.reload();
          });
     })
+
+function openModal() {
+        var myModal = new bootstrap.Modal(document.getElementById('signInModal'));
+        myModal.show();
+    }
 </script>
 
 {% endblock %}

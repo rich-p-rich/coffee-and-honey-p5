@@ -208,22 +208,17 @@ def checkout(request):
             # Get the default delivery address if it exists
             default_delivery_address = RecipientAddresses.objects.filter(user_profile=user_profile, is_default=True).first()
             if default_delivery_address:
-                # Check to see if a default delivery address exists that is different to the billing address
-                 if (
-                    default_delivery_address.recipient_name != user_profile.user.get_full_name() or
-                    default_delivery_address.recipient_street_address1 != user_profile.default_street_address1 or
-                    default_delivery_address.recipient_postcode != user_profile.default_postcode
-                ): # Populate the delivery data only if billing and delivery are different     
-                    delivery_initial_data = {
-                        'delivery_name': default_delivery_address.recipient_name,
-                        'delivery_phone_number': default_delivery_address.recipient_phone_number,
-                        'delivery_street_address1': default_delivery_address.recipient_street_address1,
-                        'delivery_street_address2': default_delivery_address.recipient_street_address2,
-                        'delivery_town_or_city': default_delivery_address.recipient_town_or_city,
-                        'delivery_county': default_delivery_address.recipient_county,
-                        'delivery_postcode': default_delivery_address.recipient_postcode,
-                        'delivery_country': default_delivery_address.recipient_country,
-                    }
+                # If a default delivery address exists, add it to the context
+                delivery_initial_data = {
+                    'delivery_name': default_delivery_address.recipient_name,
+                    'delivery_phone_number': default_delivery_address.recipient_phone_number,
+                    'delivery_street_address1': default_delivery_address.recipient_street_address1,
+                    'delivery_street_address2': default_delivery_address.recipient_street_address2,
+                    'delivery_town_or_city': default_delivery_address.recipient_town_or_city,
+                    'delivery_county': default_delivery_address.recipient_county,
+                    'delivery_postcode': default_delivery_address.recipient_postcode,
+                    'delivery_country': default_delivery_address.recipient_country,
+                }
 
             # Call up saved addresses for logged-in customer
             saved_addresses = RecipientAddresses.objects.filter(user_profile=user_profile)
@@ -245,7 +240,7 @@ def checkout(request):
             'delivery_price': settings.STANDARD_DELIVERY_PRICE,
             'pickup_price': settings.PICKUP_DELIVERY_PRICE,
             'saved_addresses': saved_addresses,
-            'default_delivery_data': delivery_initial_data,
+            'default_delivery_data': delivery_initial_data,  # Use delivery_initial_data here
         }
 
         return render(request, 'checkout/checkout.html', context)
