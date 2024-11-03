@@ -44,7 +44,7 @@ def bag_contents(request):
                         if variant and variant.price:
                             # Calculate item and service subtotals
                             item_subtotal = Decimal(variant.price) * Decimal(quantity)
-                            service_subtotal = extra_service_cost * Decimal(quantity)
+                            service_subtotal = extra_service_cost
                             total += item_subtotal + service_subtotal
                             product_count += quantity
                             bag_items.append({

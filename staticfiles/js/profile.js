@@ -17,14 +17,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return cookieValue;
     }
 
-    // Retrieve CSRF token and store it in `csrftoken`
     const csrftoken = getCookie('csrftoken');
+    const messageContainer = document.getElementById('message-container');
 
     // Check if billingCheckbox exists before adding the event listener
     if (billingCheckbox) {
         billingCheckbox.addEventListener('change', function() {
             if (this.checked) {
-                // Send request to set the billing address as the default delivery address
                 fetch("{% url 'set_billing_as_default' %}", {
                     method: 'POST',
                     headers: {
@@ -35,10 +34,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(response => {
                     if (response.ok) {
-                        alert("Billing address is now the default delivery address.");
+                        displayMessage("Billing address is now the default delivery address.");
                         location.reload(); // Refresh to update UI
                     } else {
-                        alert("Failed to set default delivery address.");
+                        displayMessage("Failed to set default delivery address.", "alert-danger");
                     }
                 })
                 .catch(error => console.error('Error:', error));
@@ -46,28 +45,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Function to set the address ID for the delete modal
-    window.setAddressId = function(id) {
-        // Set the hidden input field
-        document.getElementById('address_id').value = id;
+    function displayMessage(message, type="alert-success") {
+        messageContainer.style.display = "block";
+        messageContainer.className = `alert ${type}`;
+        messageContainer.textContent = message;
+    }
 
-        // Dynamically set the form action URL
-        const form = document.getElementById('deleteAddressForm');
-        form.action = `/profile/delete_address/${id}/`;
-
-        // Manually show the modal
-        const deleteAddressModal = new bootstrap.Modal(document.getElementById('deleteAddressModal'));
-        deleteAddressModal.show();
-    };
-
-    // Add event listeners for "Set as Default" or "Remove Default" buttons
     document.querySelectorAll('.toggle-default-btn').forEach(button => {
         button.addEventListener('click', function() {
             const addressId = this.dataset.addressId;
             const isDefault = this.innerText.includes("Remove Default");
 
             if (isDefault) {
-                // Remove default designation and revert to billing address
                 fetch('/profile/set_billing_as_default/', {
                     method: 'POST',
                     headers: {
@@ -78,15 +67,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(response => {
                     if (response.ok) {
-                        alert("Default designation removed. Billing address is now the presumed default.");
+                        displayMessage("Default designation removed. Billing address is now the presumed default.");
                         location.reload(); // Refresh to update UI
                     } else {
-                        alert("Failed to remove default designation.");
+                        displayMessage("Failed to remove default designation.", "alert-danger");
                     }
                 })
                 .catch(error => console.error('Error:', error));
             } else {
-                // Set the clicked address as the default delivery address
                 fetch(`/profile/set_default_address/${addressId}/`, {
                     method: 'POST',
                     headers: {
@@ -96,10 +84,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(response => {
                     if (response.ok) {
-                        alert("Default address has been updated.");
+                        displayMessage("Default address has been updated.");
                         location.reload(); // Refresh to update UI
                     } else {
-                        alert("Failed to set default address.");
+                        displayMessage("Failed to set default address.", "alert-danger");
                     }
                 })
                 .catch(error => console.error('Error:', error));
