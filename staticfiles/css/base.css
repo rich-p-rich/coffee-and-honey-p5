@@ -300,9 +300,25 @@ body {
 .checkout-button {
     max-width: 30%;
     width: 150px;
-    background-color:rgb(138, 138, 184);
+    background-color:whitesmoke;
+    border: 1px solid black;
+    padding: 1px;
 }
 
+/* Log-in page */ 
+.container-login {
+    background-color: whitesmoke;
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    margin-bottom 15px;
+}
+
+.btn-signup {
+    background-color: goldenrod;
+    color: #000;
+}
 
 /* Profile */
 
@@ -311,6 +327,18 @@ body {
     padding-top: 50px;
     padding-left: 20px;
     padding-right: 20px;
+}
+
+/* Account pages - sign-in, sign-out etc */
+
+.account-template{
+max-width: 400px; /* Adjust as needed */
+    width: 100%;
+    padding: 20px;
+    background-color: transparent; /* Remove any background */
+    box-shadow: none; /* Remove shadow if applied */
+    margin: 0; /* Remove any margin */
+    text-align: center; /* Center-align text */
 }
 
 /* from Bulma */

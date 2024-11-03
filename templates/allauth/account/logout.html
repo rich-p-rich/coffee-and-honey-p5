@@ -7,7 +7,7 @@
 {% block head_title %}{% trans "Sign Out" %}{% endblock %}
 
 {% block content %}
-<div class="sign-in-out-container">
+<div class="container">
     <div class="row">
         <div class="col-md-8 mt-3 offset-md-2">
             <h3>{% trans "Sign Out" %}</h3>
@@ -22,6 +22,8 @@
                 <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                 {% endif %}
                 <button class="btn btn-warning w-100 mb-3" type="submit" style="max-width: 600px;">{% trans 'Sign Out' %}</button>
+                <!--Pexels image 1251861-->
+                <img class="img-fluid account-img" src="{% static 'images/student-male-backpack.webp' %}" alt="A student leaving a building" style="max-width: 600px;" />
             </form>
         </div>
     </div>
