@@ -3,25 +3,11 @@
 
 {% block content %}
 <div class="container profile-container mt-4">
-    <h2 class="mb-4">Manage Your Addresses</h2>
+    <h2 class="mb-4">Manage Your Delivery Addresses</h2>
 
     <!-- List of Saved Addresses -->
     {% if addresses %}
     <div class="list-group mb-4">
-        <!-- Billing Address -->
-        <div class="list-group-item bg-light border-primary">
-            <h5 class="mb-1">
-                Billing Address
-                <i class="fas fa-star text-warning" title="Default Billing Address"></i>
-            </h5>
-            <p class="mb-1">
-                {{ user_profile.default_street_address1 }}<br>
-                {% if user_profile.default_street_address2 %}{{ user_profile.default_street_address2 }}<br>{% endif %}
-                {{ user_profile.default_town_or_city }}, {{ user_profile.default_county }}<br>
-                {{ user_profile.default_postcode }}<br>
-                {{ user_profile.default_country }}
-            </p>
-        </div>
 
         <!-- List of Saved Recipient Addresses -->
         {% for address in addresses %}
@@ -41,7 +27,11 @@
             </p>
             <div class="btn-group" role="group">
                 <a href="{% url 'edit_address' address.id %}" class="btn btn-outline-secondary">Edit</a>
-                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAddressModal" onclick="setAddressId('{{ address.id }}')">
+                <button type="button" 
+                        class="btn btn-outline-danger" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#deleteAddressModal" 
+                        onclick="setAddressId('{{ address.id }}')">
                     Delete
                 </button>
                 <button type="button" 
@@ -50,6 +40,8 @@
                     {% if address.is_default %}Remove Default{% else %}Set as Default{% endif %}
                 </button>
             </div>
+
+            <div id="message-container" class="alert alert-success" style="display: none;"></div>
             
         </div>
         {% endfor %}
