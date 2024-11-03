@@ -181,55 +181,29 @@
 
 {% block postloadjs %}
 {{ block.super }}
+
 {% include 'products/includes/quantity_input_script.html' %}
 
 <script type="text/javascript">
     // Update quantity on click
-    $(document).ready(function () {
-        $('.increment-qty, .decrement-qty').click(function (e) {
-            e.preventDefault(); // Prevent form submission
+    $('.update-link').click(function(e) {
+        var form = $(this).prev('.update-form');
+        form.submit();
+    })
 
-            // Get the associated quantity input field
-            var itemId = $(this).data('item_id');
-            var quantityInput = $('#id_qty_' + itemId);
-            var currentQuantity = parseInt(quantityInput.val());
-
-            // Check if increment or decrement was clicked and adjust quantity
-            if ($(this).hasClass('increment-qty') && currentQuantity < 99) {
-                quantityInput.val(currentQuantity + 1);
-            } else if ($(this).hasClass('decrement-qty') && currentQuantity > 1) {
-                quantityInput.val(currentQuantity - 1);
-            }
-        });
-
-        // Submit the form when "Update Bag" is clicked
-        $('.bag-update-link').click(function (e) {
-            e.preventDefault();
-            $(this).closest('form').submit();
-        });
-    });
-
-
-
-    $('.remove-item').click(function (e) {
+    // Remove item and reload on click
+    $('.remove-item').click(function(e) {
         var csrfToken = "{{ csrf_token }}";
         var itemId = $(this).attr('id').split('remove_')[1];
         var size = $(this).data('product_size');
         var url = `/bag/remove/${itemId}/`;
-        var data = {
-            'csrfmiddlewaretoken': csrfToken,
-            'product_size': size
-        };
+        var data = {'csrfmiddlewaretoken': csrfToken, 'product_size': size};
 
         $.post(url, data)
-            .done(function () {
-                location.reload();
-            });
-    });
-
-    function openModal() {
-        var myModal = new bootstrap.Modal(document.getElementById('signInModal'));
-        myModal.show();
-    }
+         .done(function() {
+             location.reload();
+         });
+    })
 </script>
+
 {% endblock %}
