@@ -133,6 +133,27 @@ def set_default_address(request, address_id):
     return redirect('saved_addresses')
 
 @login_required
+def toggle_default_address(request, address_id):
+    user_profile = request.user.userprofile
+    address = get_object_or_404(RecipientAddresses, id=address_id, user_profile=user_profile)
+    
+    if address.is_default:
+        # Unset default
+        address.is_default = False
+        address.save()
+        message = "Default designation removed."
+    else:
+        # Set all addresses to not be the default
+        RecipientAddresses.objects.filter(user_profile=user_profile, is_default=True).update(is_default=False)
+        
+        # Set the selected address as the default
+        address.is_default = True
+        address.save()
+        message = "Default address has been updated."
+    
+    return JsonResponse({"message": message, "is_default": address.is_default}, status=200)
+
+@login_required
 def edit_address(request, address_id):
     """
     Edit a saved recipient address.

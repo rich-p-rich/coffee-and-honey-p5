@@ -44,12 +44,13 @@
                 <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAddressModal" onclick="setAddressId('{{ address.id }}')">
                     Delete
                 </button>
-                {% if not address.is_default %}
-                <a href="{% url 'set_default_address' address.id %}" class="btn btn-outline-primary">Set as Default</a>
-                {% else %}
-                <span class="badge badge-primary">Default</span>
-                {% endif %}
+                <button type="button" 
+                        class="btn {% if address.is_default %}btn-primary{% else %}btn-outline-primary{% endif %} toggle-default-btn" 
+                        data-address-id="{{ address.id }}">
+                    {% if address.is_default %}Remove Default{% else %}Set as Default{% endif %}
+                </button>
             </div>
+            
         </div>
         {% endfor %}
     </div>
