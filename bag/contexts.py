@@ -35,7 +35,8 @@ def bag_contents(request):
                 # Handle structured data with 'items_by_size'
                 for size, data in item_data.get('items_by_size', {}).items():
                     quantity = data.get('quantity', 1)
-                    price = Decimal(data.get('price', variant.price if variant else product.price))
+                    price = Decimal(data.get(
+                        'price', variant.price if variant else product.price))
                     extra_service_cost = Decimal(data.get('extra_service_cost', 0))
                     freshly_ground = data.get('freshly_ground', False)
 
@@ -43,7 +44,9 @@ def bag_contents(request):
                         variant = product.variants.get(weight=size)
                         if variant and variant.price:
                             # Calculate item and service subtotals
-                            item_subtotal = Decimal(variant.price) * Decimal(quantity)
+                            item_subtotal = (
+                                Decimal(variant.price) * Decimal(quantity)
+                            )
                             service_subtotal = extra_service_cost
                             total += item_subtotal + service_subtotal
                             product_count += quantity
@@ -65,7 +68,8 @@ def bag_contents(request):
 
         else:
             # Handle products without variants
-            quantity = item_data.get('quantity', 1) if isinstance(item_data, dict) else item_data
+            quantity = item_data.get('quantity', 1) if isinstance(
+                item_data, dict) else item_data
 
             if product.price:
                 item_subtotal = Decimal(product.price) * Decimal(quantity)
@@ -80,9 +84,11 @@ def bag_contents(request):
             else:
                 print(f"Warning: No price found for product {product.name}")
 
-    # Calculate delivery cost based on the total
-    delivery = Decimal(settings.STANDARD_DELIVERY_PRICE) if total > 0 else Decimal(0)
-    grand_total = delivery + total
+    # Delivery cost (a free shipping conditional could be added here)
+    delivery = Decimal(settings.STANDARD_DELIVERY_PRICE)
+
+    # Calculate grand total
+    grand_total = total + delivery
 
     # Context including the delivery and grand total
     context = {
