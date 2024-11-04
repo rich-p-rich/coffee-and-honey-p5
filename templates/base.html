@@ -19,14 +19,16 @@
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <!-- Google Fonts-->
-    <link
+    <!-- Google Fonts with preconnect to optimise loading performance-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect"
         href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Solitreo&display=swap"
         rel="stylesheet">
     <!-- Base.css-->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <!-- Mailchimp CSS -->
-    <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+    <!-- Mailchimp CSS with lazy loading tags-->
+    <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css" media="print" onload="this.media='all'">
     <!-- Favicon Pexels 718241-1556665-->
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
@@ -49,8 +51,10 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
     </script>
-    <!--Stripe-->
-    <script src="https://js.stripe.com/v3/"></script>
+    <!--Stripe with conditional loading-->
+    {% if 'checkout' in request.path %}
+    <script src="https://js.stripe.com/v3/" defer></script>
+    {% endif %}
     <!--Fontawesome-->
     <script src="https://kit.fontawesome.com/7a1565e963.js" crossorigin="anonymous"></script>
     {% endblock %}
