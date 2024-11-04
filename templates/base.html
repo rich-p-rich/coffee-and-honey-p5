@@ -51,9 +51,7 @@
     <!--Bootstrap-->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" defer></script>
     <!--Stripe with conditional loading-->
-    {% if 'checkout' in request.path %}
-    <script src="https://js.stripe.com/v3/" defer></script>
-    {% endif %}
+    <script src="https://js.stripe.com/v3/"></script>
     <!--Fontawesome-->
     <script src="https://kit.fontawesome.com/7a1565e963.js" crossorigin="anonymous"></script>
     {% endblock %}
