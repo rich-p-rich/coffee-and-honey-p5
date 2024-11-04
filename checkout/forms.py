@@ -7,11 +7,13 @@ class OrderForm(forms.ModelForm):
         model = Order
         fields = ['billing_full_name', 'billing_email', 'billing_phone_number',
                   'billing_street_address1', 'billing_street_address2',
-                  'billing_town_or_city', 'billing_postcode', 'billing_country',
-                  'billing_county', 
+                  'billing_town_or_city', 'billing_postcode',
+                  'billing_country', 'billing_county',
                   # these are delivery address fields
-                  'delivery_name', 'delivery_street_address1', 'delivery_street_address2',
-                  'delivery_town_or_city', 'delivery_postcode', 'delivery_country',
+                  'delivery_name', 'delivery_street_address1',
+                  'delivery_street_address2',
+                  'delivery_town_or_city', 'delivery_postcode',
+                  'delivery_country',
                   'delivery_county']
 
     def __init__(self, *args, **kwargs):
