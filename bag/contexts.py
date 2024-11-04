@@ -3,6 +3,7 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from products.models import Product, ProductVariant
 
+
 def bag_contents(request):
     bag_items = []
     total = Decimal(0)  # Initialize total as Decimal
@@ -37,7 +38,8 @@ def bag_contents(request):
                     quantity = data.get('quantity', 1)
                     price = Decimal(data.get(
                         'price', variant.price if variant else product.price))
-                    extra_service_cost = Decimal(data.get('extra_service_cost', 0))
+                    extra_service_cost = Decimal(
+                        data.get('extra_service_cost', 0))
                     freshly_ground = data.get('freshly_ground', False)
 
                     try:
@@ -62,7 +64,8 @@ def bag_contents(request):
                                 'service_subtotal': service_subtotal,
                             })
                         else:
-                            print(f"Warning: No price found for variant {variant}")
+                            print(
+                              f"Warning: No price found for variant {variant}")
                     except ProductVariant.DoesNotExist:
                         print(f"Warning: No variant found for size {size}")
 
