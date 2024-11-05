@@ -249,7 +249,7 @@ def checkout(request):
 def checkout_success(request, order_number):
     """Handle successful checkouts"""
     order = get_object_or_404(Order, order_number=order_number)
-    
+
     # Retrieve bag from session
     bag = request.session.get('bag', {})
     line_items = []  # Initialize an empty list for line items
@@ -257,17 +257,19 @@ def checkout_success(request, order_number):
     # Process each item in the bag
     for item_id, item_data in bag.items():
         product = get_object_or_404(Product, pk=item_id)
-        
-        # Check if the item has 'items_by_size' (for products with weight/price variations)
+
+        # Check if the item has 'items_by_size' (products with weight/price)
         if isinstance(item_data, dict) and 'items_by_size' in item_data:
             for size, details in item_data['items_by_size'].items():
                 # Fetch the specific variant based on product and weight (size)
-                variant = get_object_or_404(ProductVariant, product=product, weight=size)
+                variant = get_object_or_404(
+                    ProductVariant, product=product, weight=size)
                 price = float(details.get('price', 0))
                 quantity = int(details.get('quantity', 1))
-                extra_service_cost = float(details.get('extra_service_cost', 0))
+                extra_service_cost = float(details.get(
+                    'extra_service_cost', 0))
                 subtotal = (price * quantity) + extra_service_cost
-                
+
                 # Append item details to line_items
                 line_items.append({
                     'product': product,
@@ -278,12 +280,12 @@ def checkout_success(request, order_number):
                     'subtotal': subtotal,
                 })
         else:
-            # For items without sizes (for products with *no* weight/price variations)
+            # For items without sizes / *no* weight/price variations
             price = float(item_data.get('price', 0))
             quantity = int(item_data.get('quantity', 1))
             extra_service_cost = float(item_data.get('extra_service_cost', 0))
             subtotal = (price * quantity) + extra_service_cost
-            
+
             line_items.append({
                 'product': product,
                 'quantity': quantity,
