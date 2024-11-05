@@ -38,8 +38,9 @@ def cache_checkout_data(request):
 
 def calculate_delivery_cost(delivery_type):
     """
-    Calculate the delivery cost based on the order type using predefined settings.
-    - Delivery to billing or recipient address costs STANDARD_DELIVERY_PRICE.
+    Calculate the delivery cost based on the order type
+    using predefined settings.
+    - Delivery to billing or recipient address: STANDARD_DELIVERY_PRICE.
     - Pickup from cafe is free (PICKUP_DELIVERY_PRICE).
     """
     if delivery_type == "pickup":
@@ -82,19 +83,28 @@ def checkout(request):
             if delivery_type == 'pickup':
                 order.pick_up = True
                 order.different_delivery_address = False
-                messages.success(request, 'You have chosen to pick up your order from Coffee and Honey.')
+                messages.success(
+                    request, 'You have chosen to pick up your order from '
+                    'Coffee and Honey.')
                 order.save()
 
             elif delivery_type == 'delivery-different':
                 order.pick_up = False
                 order.different_delivery_address = True
-                order.delivery_name = request.POST.get('delivery_name', order.billing_full_name)
-                order.delivery_street_address1 = request.POST.get('delivery_street_address1')
-                order.delivery_street_address2 = request.POST.get('delivery_street_address2', '')
-                order.delivery_town_or_city = request.POST.get('delivery_town_or_city')
-                order.delivery_county = request.POST.get('delivery_county', '')
-                order.delivery_postcode = request.POST.get('delivery_postcode')
-                order.delivery_country = request.POST.get('delivery_country')
+                order.delivery_name = request.POST.get(
+                    'delivery_name', order.billing_full_name)
+                order.delivery_street_address1 = request.POST.get(
+                    'delivery_street_address1')
+                order.delivery_street_address2 = request.POST.get(
+                    'delivery_street_address2', '')
+                order.delivery_town_or_city = request.POST.get(
+                    'delivery_town_or_city')
+                order.delivery_county = request.POST.get(
+                    'delivery_county', '')
+                order.delivery_postcode = request.POST.get(
+                    'delivery_postcode')
+                order.delivery_country = request.POST.get(
+                    'delivery_country')
                 order.save()
 
             elif delivery_type == 'delivery-billing-same':
@@ -118,16 +128,16 @@ def checkout(request):
             for item_id, item_data in bag.items():
                 try:
                     product = Product.objects.get(id=item_id)
-                    
+
                     if isinstance(item_data, int):
                         # Single-price product
                         order_line_item = OrderLineItem(
                             order=order,
                             product=product,
                             quantity=item_data,
-                            unit_price=product.price  # Set the unit price for single-price products
+                            unit_price=product.price
+                            # Set the unit price for single-price products
                         )
-                        print(f"DEBUG: Product: {order_line_item.product.name}, Quantity: {order_line_item.quantity}, Unit Price: {order_line_item.unit_price}")
                         order_line_item.save()
 
                     else:
@@ -135,15 +145,15 @@ def checkout(request):
                         for size, data in item_data['items_by_size'].items():
                             quantity = int(data.get('quantity', 1))
                             variant = product.variants.get(weight=size)
-                            
+
                             order_line_item = OrderLineItem(
                                 order=order,
                                 product=product,
                                 quantity=quantity,
                                 product_size=size,
-                                unit_price=variant.price  # Set the unit price for variant products
+                                unit_price=variant.price
+                                # Set the unit price for variant products
                             )
-                            print(f"DEBUG: Product: {order_line_item.product.name}, Size: {order_line_item.product_size}, Quantity: {order_line_item.quantity}, Unit Price: {order_line_item.unit_price}")
                             order_line_item.save()
 
                 except Product.DoesNotExist:
@@ -155,7 +165,6 @@ def checkout(request):
                     order.delete()
                     return redirect(reverse('view_bag'))
 
-
             # Set order totals based on the bag's contents
             current_bag = bag_contents(request)
             order.order_total = current_bag['total']
@@ -164,16 +173,18 @@ def checkout(request):
             order.save()
 
             request.session['save_info'] = 'save-info' in request.POST
-            return redirect(reverse('checkout_success', args=[order.order_number]))
+            return redirect(reverse(
+                'checkout_success', args=[order.order_number]))
 
         else:
-            messages.error(request, 'There was an error with your form. Please double-check your information.')
+            messages.error(request, 'Please check the errors in your form.')
 
     # Handle GET requests
     else:
         bag = request.session.get('bag', {})
         if not bag:
-            messages.error(request, "There's nothing in your bag at the moment")
+            messages.error(
+                request, "There's nothing in your bag at the moment")
             return redirect(reverse('products'))
 
         current_bag = bag_contents(request)
@@ -188,50 +199,73 @@ def checkout(request):
         user_profile = None
         initial_data = {}
         saved_addresses = None
-        delivery_initial_data = {} 
+        delivery_initial_data = {}
 
         if request.user.is_authenticated:
             user_profile = request.user.userprofile
-            # Populate the billing address with shipping details if billing = delivery address
+            # Populate the billing address with shipping details
+            # if billing = delivery address
             initial_data = {
-                'billing_full_name': user_profile.user.get_full_name(),
-                'billing_email': user_profile.user.email,
-                'billing_phone_number': user_profile.default_phone_number,
-                'billing_street_address1': user_profile.default_street_address1,
-                'billing_street_address2': user_profile.default_street_address2,
-                'billing_town_or_city': user_profile.default_town_or_city,
-                'billing_county': user_profile.default_county,
-                'billing_postcode': user_profile.default_postcode,
-                'billing_country': user_profile.default_country,
+                'billing_full_name':
+                    user_profile.user.get_full_name(),
+                'billing_email':
+                    user_profile.user.email,
+                'billing_phone_number':
+                    user_profile.default_phone_number,
+                'billing_street_address1':
+                    user_profile.default_street_address1,
+                'billing_street_address2':
+                    user_profile.default_street_address2,
+                'billing_town_or_city':
+                    user_profile.default_town_or_city,
+                'billing_county':
+                    user_profile.default_county,
+                'billing_postcode':
+                    user_profile.default_postcode,
+                'billing_country':
+                    user_profile.default_country,
             }
 
             # Get the default delivery address if it exists
-            default_delivery_address = RecipientAddresses.objects.filter(user_profile=user_profile, is_default=True).first()
+            default_delivery_address = RecipientAddresses.objects.filter(
+                user_profile=user_profile, is_default=True).first()
             if default_delivery_address:
                 # If a default delivery address exists, add it to the context
                 delivery_initial_data = {
-                    'delivery_name': default_delivery_address.recipient_name,
-                    'delivery_phone_number': default_delivery_address.recipient_phone_number,
-                    'delivery_street_address1': default_delivery_address.recipient_street_address1,
-                    'delivery_street_address2': default_delivery_address.recipient_street_address2,
-                    'delivery_town_or_city': default_delivery_address.recipient_town_or_city,
-                    'delivery_county': default_delivery_address.recipient_county,
-                    'delivery_postcode': default_delivery_address.recipient_postcode,
-                    'delivery_country': default_delivery_address.recipient_country,
+                    'delivery_name':
+                        default_delivery_address.recipient_name,
+                    'delivery_phone_number':
+                        default_delivery_address.recipient_phone_number,
+                    'delivery_street_address1':
+                        default_delivery_address.recipient_street_address1,
+                    'delivery_street_address2':
+                        default_delivery_address.recipient_street_address2,
+                    'delivery_town_or_city':
+                        default_delivery_address.recipient_town_or_city,
+                    'delivery_county':
+                        default_delivery_address.recipient_county,
+                    'delivery_postcode':
+                        default_delivery_address.recipient_postcode,
+                    'delivery_country':
+                        default_delivery_address.recipient_country,
                 }
 
             # Call up saved addresses for logged-in customer
-            saved_addresses = RecipientAddresses.objects.filter(user_profile=user_profile)
-            print("DEBUG: Saved Addresses:", saved_addresses)  # Check the contents of saved_addresses
+            saved_addresses = RecipientAddresses.objects.filter(
+                user_profile=user_profile)
 
             # Prepare the form with both billing and delivery initial data
-            order_form = OrderForm(initial={**initial_data, **delivery_initial_data})
+            order_form = OrderForm(
+                initial={**initial_data, **delivery_initial_data}
+                )
 
         else:
             order_form = OrderForm()
 
         if not stripe_public_key:
-            messages.warning(request, 'Stripe public key is missing. Did you forget to set it in your environment?')
+            messages.warning(
+                request, 'Stripe public key is missing.'
+                'Did you forget to set it in your environment?')
 
         context = {
             'order_form': order_form,
@@ -240,7 +274,7 @@ def checkout(request):
             'delivery_price': settings.STANDARD_DELIVERY_PRICE,
             'pickup_price': settings.PICKUP_DELIVERY_PRICE,
             'saved_addresses': saved_addresses,
-            'default_delivery_data': delivery_initial_data,  # Use delivery_initial_data here
+            'default_delivery_data': delivery_initial_data,
         }
 
         return render(request, 'checkout/checkout.html', context)
