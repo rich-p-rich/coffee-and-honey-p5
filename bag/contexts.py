@@ -87,8 +87,9 @@ def bag_contents(request):
             else:
                 print(f"Warning: No price found for product {product.name}")
 
-    # Delivery cost (a free shipping conditional could be added here)
-    delivery = Decimal(settings.STANDARD_DELIVERY_PRICE)
+    # Keep delivery cost zero until product added to bag
+    delivery = Decimal(settings.STANDARD_DELIVERY_PRICE) if total > 0 else Decimal(0)
+    grand_total = delivery + total
 
     # Calculate grand total
     grand_total = total + delivery
