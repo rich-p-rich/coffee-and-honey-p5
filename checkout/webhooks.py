@@ -9,6 +9,7 @@ import stripe
 import logging
 logger = logging.getLogger(__name__)
 
+
 @require_POST
 @csrf_exempt
 def webhook(request):
@@ -20,10 +21,6 @@ def webhook(request):
     # Get the webhook data and verify its signature
     payload = request.body
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
-
-    # Debugging print to verify signature header is received
-    print("Webhook called")
-    print("Signature header received:", sig_header)
 
     event = None
 
@@ -53,8 +50,10 @@ def webhook(request):
 
     # Map webhook events to relevant handler functions
     event_map = {
-        'payment_intent.succeeded': handler.handle_payment_intent_succeeded,
-        'payment_intent.payment_failed': handler.handle_payment_intent_payment_failed,
+        'payment_intent.succeeded':
+            handler.handle_payment_intent_succeeded,
+        'payment_intent.payment_failed':
+            handler.handle_payment_intent_payment_failed,
     }
 
     # Get the webhook type from Stripe
