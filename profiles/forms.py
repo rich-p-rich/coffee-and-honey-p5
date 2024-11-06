@@ -28,34 +28,39 @@ class UserProfileForm(forms.ModelForm):
             if field != 'default_country':
                 if self.fields[field].required:
                     placeholder = f'{placeholders[field]} *'
-                else:  
+                else:
                     placeholder = placeholders[field]
-                self.fields[field].widget.attrs['placeholder'] = placeholder  
-            self.fields[field].widget.attrs['class'] = 'border-black rounded-0 profile-form-input'
+                self.fields[field].widget.attrs['placeholder'] = placeholder
+            self.fields[field].widget.attrs['class'] = (
+                'border-black rounded-0 '
+                'profile-form-input'
+            )
             self.fields[field].label = False
+
 
 class RecipientAddressesForm(forms.ModelForm):
     class Meta:
         model = RecipientAddresses
         fields = [
             'nickname',
-            'recipient_name', 
+            'recipient_name',
             'recipient_phone_number',
-            'recipient_street_address1', 
+            'recipient_street_address1',
             'recipient_street_address2',
-            'recipient_town_or_city', 
-            'recipient_county', 
-            'recipient_postcode', 
+            'recipient_town_or_city',
+            'recipient_county',
+            'recipient_postcode',
             'recipient_country'
         ]
-       
+
     def __init__(self, *args, **kwargs):
         """
         Add placeholders for storing the recipient's shipping details
         """
         super().__init__(*args, **kwargs)
         placeholders = {
-            'nickname': 'Address Nickname (e.g., Home, Office)',  # Add placeholder for 'nickname'
+            # Add placeholder for 'nickname'
+            'nickname': 'Address Nickname (e.g., Home, Office)',
             'recipient_name': 'Recipient Name (e.g., Parents, Office)',
             'recipient_phone_number': 'Recipient Phone Number',
             'recipient_street_address1': 'Street Address 1',
@@ -69,7 +74,12 @@ class RecipientAddressesForm(forms.ModelForm):
         self.fields['recipient_phone_number'].widget.attrs['autofocus'] = True
         for field in self.fields:
             if field != 'default_country':
-                placeholder = f"{placeholders[field]} *" if self.fields[field].required else placeholders[field]
-                self.fields[field].widget.attrs['placeholder'] = placeholder  
-            self.fields[field].widget.attrs['class'] = 'border-black rounded-0 profile-form-input'
+                placeholder = (
+                    f"{placeholders[field]} *" if self.fields[field].required
+                    else placeholders[field]
+                )
+                self.fields[field].widget.attrs['placeholder'] = placeholder
+            self.fields[field].widget.attrs['class'] = (
+                'border-black rounded-0 profile-form-input'
+            )
             self.fields[field].label = False
