@@ -71,9 +71,14 @@
                 Are you sure you want to delete this address from your profile?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <!-- Trigger the JavaScript deletion function -->
-                <button type="button" id="confirmDeleteButton" class="btn btn-danger">Yes, delete address</button>
+                <form id="deleteAddressForm" method="POST">
+                    {% csrf_token %}
+                    <!-- Hidden input to store the address ID -->
+                    <input type="hidden" id="address_id" name="address_id">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <!-- Trigger the JavaScript deletion function -->
+                    <button type="submit" class="btn btn-danger" id="confirmDeleteButton">Yes, delete address</button>
+                </form>
             </div>
         </div>
     </div>

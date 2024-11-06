@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => {
                     if (response.ok) {
                         displayMessage("Billing address is now the default delivery address.");
-                        location.reload();
+                        location.reload(); // Refresh to update UI
                     } else {
                         displayMessage("Failed to set default delivery address.", "alert-danger");
                     }
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => {
                     if (response.ok) {
                         displayMessage("Default designation removed. Billing address is now the presumed default.");
-                        location.reload();
+                        location.reload(); // Refresh to update UI
                     } else {
                         displayMessage("Failed to remove default designation.", "alert-danger");
                     }
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => {
                     if (response.ok) {
                         displayMessage("Default address has been updated.");
-                        location.reload();
+                        location.reload(); // Refresh to update UI
                     } else {
                         displayMessage("Failed to set default address.", "alert-danger");
                     }
@@ -94,4 +94,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Function to set the address ID for the delete modal
+    window.setAddressId = function(id) {
+        // Set the hidden input field
+        document.getElementById('address_id').value = id;
+    
+        // Dynamically set the form action URL
+        const form = document.getElementById('deleteAddressForm');
+        form.action = `/profile/delete_address/${id}/`;
+   
+        // Manually show the modal
+        const deleteAddressModal = new bootstrap.Modal(document.getElementById('deleteAddressModal'));
+        deleteAddressModal.show();
+    };
 });
