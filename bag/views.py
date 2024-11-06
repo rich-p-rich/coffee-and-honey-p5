@@ -43,18 +43,12 @@ def add_to_bag(request, item_id):
         print(
             f"DEBUG: No size selected, using product base price: {price}")
 
-    # Calculate the total extra service cost based on quantity if
-    # 'freshly_ground' is selected
-    if freshly_ground and size:  # Calc extra service only if size selected
-        extra_service_cost = (
-            Decimal(settings.FRESHLY_GROUND_BEANS) * Decimal(quantity))
-    print(
-        "DEBUG: Extra Service Cost after calculation:", extra_service_cost)
-    # Debug
+    # Apply freshly_ground price (in settings) as flatrate
+    if freshly_ground:
+        extra_service_cost = Decimal(settings.FRESHLY_GROUND_BEANS)
 
     # Get the current shopping bag from the session
     bag = request.session.get('bag', {})
-    print("DEBUG: Initial bag contents:", bag)
 
     # Handle products with sizes (variants)
     if size:
