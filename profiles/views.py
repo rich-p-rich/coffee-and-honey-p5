@@ -12,6 +12,7 @@ from .forms import UserProfileForm, RecipientAddressesForm
 
 from checkout.models import Order
 
+
 @login_required
 def profile(request):
     """ Display the user's profile. """
@@ -38,6 +39,7 @@ def profile(request):
 
     return render(request, template, context)
 
+
 @login_required
 def order_history(request, order_number):
     order = get_object_or_404(Order, order_number=order_number)
@@ -55,14 +57,20 @@ def order_history(request, order_number):
 
     return render(request, template, context)
 
+
 @login_required
 def set_billing_as_default(request):
     if request.method == 'POST':
         user_profile = request.user.userprofile
         # Ensure no other addresses are set as default
-        RecipientAddresses.objects.filter(user_profile=user_profile, is_default=True).update(is_default=False)
+        RecipientAddresses.objects.filter(
+             user_profile=user_profile, is_default=True
+        ).update(is_default=False)
         # The billing address is now the default
-        messages.success(request, "Your billing address is now your default shipping address.")
+        messages.success(
+            request,
+            "Your billing address is now your default shipping address."
+        )
         return JsonResponse({"success": True}, status=200)
     return JsonResponse({"error": "Invalid request"}, status=400)
 
@@ -74,7 +82,7 @@ def saved_addresses(request):
     - Save a new recipient address to the user's profile
     """
     user_profile = request.user.userprofile
-    
+
     if request.method == 'POST':
         form = RecipientAddressesForm(request.POST)
         if form.is_valid():
@@ -93,8 +101,9 @@ def saved_addresses(request):
         'form': form,
         'addresses': addresses,
     }
-    
+
     return render(request, 'profiles/saved_addresses.html', context)
+
 
 @login_required
 def add_address(request):
@@ -111,36 +120,46 @@ def add_address(request):
             return redirect('saved_addresses')
     else:
         form = RecipientAddressesForm()
-    
+
     context = {
         'form': form,
     }
-    
+
     return render(request, 'profiles/add_address.html', context)
 
 
 @login_required
 def set_default_address(request, address_id):
     user_profile = request.user.userprofile
-    address = get_object_or_404(RecipientAddresses, id=address_id, user_profile=user_profile)
-    
+    address = get_object_or_404(
+        RecipientAddresses,
+        id=address_id,
+        user_profile=user_profile
+    )
+
     # Set all addresses to not be the default
-    RecipientAddresses.objects.filter(user_profile=user_profile, is_default=True).update(is_default=False)
-    
+    RecipientAddresses.objects.filter(
+        user_profile=user_profile, is_default=True).update(is_default=False)
+
     # Set the selected address as the default
     address.is_default = True
     address.save()
-    
+
     messages.success(request, "Default address has been updated.")
     return redirect('saved_addresses')
+
 
 @login_required
 def edit_address(request, address_id):
     """
     Edit a saved recipient address.
     """
-    address = get_object_or_404(RecipientAddresses, id=address_id, user_profile=request.user.userprofile)
-    
+    address = get_object_or_404(
+        RecipientAddresses,
+        id=address_id,
+        user_profile=request.user.userprofile
+    )
+
     if request.method == 'POST':
         form = RecipientAddressesForm(request.POST, instance=address)
         if form.is_valid():
@@ -149,13 +168,14 @@ def edit_address(request, address_id):
             return redirect('saved_addresses')
     else:
         form = RecipientAddressesForm(instance=address)
-    
+
     context = {
         'form': form,
         'address': address,
     }
-    
+
     return render(request, 'profiles/edit_address.html', context)
+
 
 @login_required
 def delete_address(request, address_id):
@@ -163,9 +183,13 @@ def delete_address(request, address_id):
     Delete a saved recipient address.
     """
     if request.method == 'POST':
-        address = get_object_or_404(RecipientAddresses, id=address_id, user_profile=request.user.userprofile)
+        address = get_object_or_404(
+            RecipientAddresses,
+            id=address_id,
+            user_profile=request.user.userprofile
+        )
         address.delete()
         messages.success(request, 'Recipient address deleted successfully.')
         return redirect('saved_addresses')
-    
+
     return redirect('saved_addresses')
