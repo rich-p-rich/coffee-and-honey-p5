@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => {
                     if (response.ok) {
                         displayMessage("Billing address is now the default delivery address.");
-                        location.reload(); // Refresh to update UI
+                        location.reload();
                     } else {
                         displayMessage("Failed to set default delivery address.", "alert-danger");
                     }
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => {
                     if (response.ok) {
                         displayMessage("Default designation removed. Billing address is now the presumed default.");
-                        location.reload(); // Refresh to update UI
+                        location.reload();
                     } else {
                         displayMessage("Failed to remove default designation.", "alert-danger");
                     }
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => {
                     if (response.ok) {
                         displayMessage("Default address has been updated.");
-                        location.reload(); // Refresh to update UI
+                        location.reload();
                     } else {
                         displayMessage("Failed to set default address.", "alert-danger");
                     }

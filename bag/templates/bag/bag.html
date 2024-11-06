@@ -14,14 +14,13 @@
             {% if bag_items %}
             <div class="table-responsive rounded">
                 <table class="table table-sm table-borderless">
-                    <thead class="text-black">
+                    <thead class="text-black"> 
                         <tr>
                             <th scope="col" style="width: 60%;">Product Info</th>
                             <th scope="col" style="width: 20%;" class="text-center">Qty</th>
                             <th scope="col" style="width: 20%;" class="text-center">Subtotal</th>
                         </tr>
                     </thead>
-
                     {% for item in bag_items %}
                     <!-- Row 1: Product Image and Info, Quantity, Price, and Product Subtotal -->
                     <tr>
@@ -47,9 +46,9 @@
                     <!-- Row 2: Extra Service Display (if applicable) -->
                     {% if item.extra_service_cost > 0 %}
                     <tr>
-                        <td style="width: 60%;">Freshly Ground Service:</td>>
-                        <td style="width: 20%;" class="text-center"></td>
-                        <td style="width: 20%;" class="text-center">€{{ item.service_subtotal|floatformat:2 }}</td>
+                        <td class="service-description">Freshly Ground Service:</td>
+                        <td class="service-empty text-center"></td>
+                        <td class="service-price text-center">€{{ item.service_subtotal|floatformat:2 }}</td>
                     </tr>
                     {% endif %}
 
@@ -104,7 +103,7 @@
                     </tr>
                     {% endfor %}
 
-                    <!-- Totals Row -->
+                    <!--Totals Row-->
                     <div class="bag-totals">
                         <tr>
                             <td colspan="3" class="text-right">
@@ -142,7 +141,6 @@
                             </td>
                         </tr>
                     </div>
-                    
                 </table>
 
                 <!-- Modal for Sign In/Register Prompt -->
