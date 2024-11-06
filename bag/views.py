@@ -123,43 +123,46 @@ def adjust_bag(request, item_id):
     """ Adjust the quantity of the specified product in the shopping bag """
     product = get_object_or_404(Product, pk=item_id)
     quantity = int(request.POST.get('quantity'))
-    size = request.POST.get('product_size', None)  # Fetch size from POST data
-    freshly_ground = 'freshly_ground' in request.POST  # Check for xtra service
+    size = request.POST.get('product_size', None)
+    freshly_ground = 'freshly_ground' in request.POST  # Check if extra service was selected originally
     bag = request.session.get('bag', {})
 
     # Retain existing size if only quantity is adjusted
     if not size and item_id in bag:
-        # Keep the original size if no new size was specified
         size = list(bag[item_id]['items_by_size'].keys())[0]
 
+    # Retrieve or calculate price based on the selected variant or base price
     try:
-        # Look for the variant with the specified size
         variant = product.variants.get(weight=size)
         price = variant.price
     except ProductVariant.DoesNotExist:
-        price = product.price  # Default to base price if variant not found
+        price = product.price  # Use base price if no variant found
 
-    # Retrieve the existing extra service cost, if available
-    extra_service_cost = request.POST.get(
-        'extra_service_cost',
-        bag[item_id]['items_by_size'][size].get('extra_service_cost', '0')
-    )
+    # Use the flat extra service cost from settings for the freshly ground option
+    flat_service_cost = settings.FRESHLY_GROUND_BEANS if freshly_ground else 0
 
     # Update session bag data
     if quantity > 0:
-        # Update or add the item with the selected size and service
-        bag[item_id] = {
-            'items_by_size': {
-                size: {
-                    'quantity': quantity,
-                    'price': str(price),
-                    'extra_service_cost': str(extra_service_cost),
-                    'freshly_ground': freshly_ground,
+        # If the item already exists in the bag, update all details, keeping service cost flat
+        if item_id in bag and size in bag[item_id]['items_by_size']:
+            item = bag[item_id]['items_by_size'][size]
+            item['quantity'] = quantity
+            item['price'] = str(price)
+            item['total_extra_service_cost'] = str(flat_service_cost)  # Set flat rate from settings
+            item['freshly_ground'] = freshly_ground
+        else:
+            # Add the new item with all details, including flat service cost
+            bag[item_id] = {
+                'items_by_size': {
+                    size: {
+                        'quantity': quantity,
+                        'price': str(price),
+                        'total_extra_service_cost': str(flat_service_cost),
+                        'freshly_ground': freshly_ground,
+                    }
                 }
             }
-        }
-        messages.success(
-            request, f'Updated {product.name} quantity to {quantity}')
+        messages.success(request, f'Updated {product.name} quantity to {quantity}')
     else:
         # Remove the item if quantity is zero
         del bag[item_id]['items_by_size'][size]
@@ -168,62 +171,6 @@ def adjust_bag(request, item_id):
         messages.success(request, f'Removed {product.name} from your bag')
 
     # Save updated bag data back to session
-    request.session['bag'] = bag
-    request.session.modified = True
-    return redirect(reverse('view_bag'))
-
-    """ Adjust the quantity of the specified product to the shopping bag """
-
-    product = get_object_or_404(Product, pk=item_id)
-    quantity = int(request.POST.get('quantity'))
-    size = None
-    if 'product_size' in request.POST:
-        size = request.POST['product_size']
-    bag = request.session.get('bag', {})
-
-    if size:
-        # Retrieve the variant price if available, fallback to product price
-        try:
-            variant = product.variants.get(weight=size)
-            price = (
-                variant.price if variant and variant.price else product.price)
-        except ProductVariant.DoesNotExist:
-            price = product.price  # Use product base price if no variant
-
-        if quantity > 0:
-            bag[item_id]['items_by_size'][size] = {
-                'quantity': quantity,
-                'price': str(price),  # Convert to string for session storage
-                'extra_service_cost': (
-                    str(extra_service_cost)
-                    if 'extra_service_cost'
-                    in bag[item_id]['items_by_size'][size]
-                    else '0'
-                ),
-                'freshly_ground': (
-                    freshly_ground
-                    if 'freshly_ground' in bag[item_id]['items_by_size'][size]
-                    else False
-                ),
-            }
-        else:
-            del bag[item_id]['items_by_size'][size]
-            if not bag[item_id]['items_by_size']:
-                bag.pop(item_id)
-            messages.success(
-             request,
-             f'Removed size {size.upper()} {product.name} from your bag')
-
-    else:
-        if quantity > 0:
-            bag[item_id] = quantity
-            messages.success(
-                request,
-                f'Updated {product.name} quantity to {bag[item_id]}')
-        else:
-            bag.pop(item_id)
-            messages.success(request, f'Removed {product.name} from your bag')
-
     request.session['bag'] = bag
     request.session.modified = True
     return redirect(reverse('view_bag'))

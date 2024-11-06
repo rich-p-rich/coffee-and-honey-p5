@@ -59,7 +59,7 @@
     <a href="{% url 'profile' %}" class="btn btn-secondary">Back to Profile Page</a>
 </div>
 
-<!-- Modal for Confirming Addres Deletion -->
+<!-- Modal for Confirming Address Deletion -->
 <div class="modal fade" id="deleteAddressModal" tabindex="-1" aria-labelledby="deleteAddressModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -70,16 +70,15 @@
             <div class="modal-body">
                 Are you sure you want to delete this address from your profile?
             </div>
-            <form method="post" action="" id="deleteAddressForm">
-                {% csrf_token %}
-                <input type="hidden" name="address_id" id="address_id">
+            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" name="confirm_delete" class="btn btn-danger">Yes, delete address</button>
-            </form>
-            
+                <!-- Trigger the JavaScript deletion function -->
+                <button type="button" id="confirmDeleteButton" class="btn btn-danger">Yes, delete address</button>
+            </div>
         </div>
     </div>
 </div>
+
 
 {% endblock %}
 
