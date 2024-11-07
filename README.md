@@ -367,3 +367,91 @@ Similarly, I used Milestones to keep track of the bigger picture throughout my p
 
 This helped me break down the tasks into what felt were realistic and unified goals; like the rest of the Kanban board, it felt a genuine part of my project planning and I made regular updates to it.  
 
+# Deployment
+
+Here follows an overview of the steps I took to deploy the project.
+
+## GitHub and GitPod
+- Find and use the CodeInstitute's 'Gitpod' template: https://github.com/Code-Institute-Org/ci-full-template
+- Use this template -> create new repository
+- Ensure visibility is set to public
+- Create repository 
+- Open in GitPod
+- Run initial commit to ensure the GitPod repository is correctly linked to GitHub
+
+## GitHub User Stories
+- I chose to create my user stories on GitHub
+- In your project: click 'Board template' -> name it 
+- Go to the ellipses in the top-right and  choose 'Workflows' 
+- Click 'item added to project' -> edit -> deslect 'pull request'
+- Define as 'Status: ToDo' 
+- Save
+- Turn on workflow 
+- Create your user stories  
+
+## Django
+- Install Django with the pip3 install command
+- Create a new app
+- Update settings.py Installed_Apps with the app name
+- Import HttpReponse in views.py
+- Import the app into urls.py
+- Run the server at port 8000
+- Copy the hostname between square brackets and add it to the 'Allowed_Hosts' section of settings.py
+- Add requirements.txt file with pip3 freeze local > requirements.txt
+- Create the project with django-admin startproject <project name>
+- Create the env.py file, add to .gitignore, commit changes to check that env.py has been ignored
+- If successful, create a secret key and add to env.py
+
+## Database
+Sign-up to a database provider and get your database link
+- I chose to go with the CodeInstitute for this project: https://dbs.ci-dbs.net/
+- Add the database URL to env.py
+
+## Heroku: set up
+- First in your GitPod repo, install gunicorn and add to requirements
+- Then add the Procfile
+- Set DEBUG to False 
+- add '.herokuapp.com' to allowed_hosts in your settings file 
+- Create a new app on by going to the Heroku homepage -> 'new' -> 'create new app'.
+- Name it accordingly: I chose to give it the same name as my GitPod repository for clarity  
+- Go to Config Vars: add the secret key, port 8000  and database_url
+
+## Heroku: deploy
+- Enure your GitPushes are up-to-date
+- Disable collect static in Heroku's config vars
+- Enable automatic deloyment from GitHub
+- Deploy app and check
+- The remove the 'disable static' value from config vars
+- Re-deploy
+
+## Other technologies used
+- Am I responsive for the device image at the top of the ReadMe: [Am I Responsive? (ui.dev](https://ui.dev/amiresponsive)
+- Google Fonts: https://fonts.google.com/: Roboto and Libre Franklin
+- For generating the Favicon: https://favicon.io/
+- To generate a random secret key: https://randomkeygen.com/
+- Pexels for images: https://www.pexels.com/
+- I HEART IMG for resizing images: https://www.iloveimg.com/resize-image
+- CloudConvert for converting images to webp files: https://cloudconvert.com/jpg-to-webp
+
+# Acknowledgements
+As ever, a huge thank you to my mentor, Dick Vlaanderen, who saved me from many errors and made many helpful and creative suggestions. All errors remaining in the site are of course my own responsibility.  Thanks also to the CI Tutoring Team for their help on several occassions which saw me through some challenges! Big thanks to my family, my wife and three kids, who have been very patient and forgiving while I completed this project.
+
+# Some useful resources 
+I relied heavily on the 'I think therefore I blog' walk-through, which was great. Some other resources include the following: 
+- On Forms: https://docs.djangoproject.com/en/5.0/topics/forms/
+- On CSRF: https://docs.djangoproject.com/en/4.2/ref/csrf/
+- AllAuth: https://allauth.org/
+- Installed Apps: https://docs.djangoproject.com/en/1.8/ref/settings/#std:setting-INSTALLED_APPS
+- The Data Attribute: https://www.w3schools.com/tags/att_global_data.asp
+- A model for multi-choice questions: stackoverflow.com/questions/47867760/django-quiz-app-model-for-multiple-choice-questions
+- The bootstrap colours: https://github.com/meetdilip/Bootstrap-5-colours
+- Toggle password visibility: https://www.w3schools.com/howto/howto_js_toggle_password.asp
+- Error message formatting: https://stackoverflow.com/questions/29239837/style-django-form-error-message
+- Bootstrap grids: https://getbootstrap.com/docs/5.0/layout/grid/
+- Custom 404 page: https://stackoverflow.com/questions/35156134/how-to-properly-setup-custom-handler404-in-django
+- Footer Z-Index: https://stackoverflow.com/questions/35156134/how-to-properly-setup-custom-handler404-in-django
+
+The documenation for Bootstrap and Django were in general helpful, as was W3Schools:
+- https://docs.djangoproject.com/en/5.1/
+- https://getbootstrap.com/docs/4.1/getting-started/introduction/
+- https://www.w3schools.com/
