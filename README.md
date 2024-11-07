@@ -224,18 +224,21 @@ This method is designed to react to the customer’s chosen options, whether the
 **Copy Address method**: This (copy_address) is a helper method designed to populate the delivery address fields (or billing fields if adapted) with address information that the customer has saved to their profile. It supports the logic in the delivery_options method by allowing saved delivery or billing address details to be copied directly into the delivery address fields without manually setting each one individually.
 
 
-## Marketing: SEO, Facebook amd MailChimp
+## Marketing: Facebook, MailChimp and SEO
 
-**Facebook:** I set up a functioning Facebook business page and have documented it fully in this document. It is also linked from my footer although, as is known, it may get taken down by Facebook as it is not a genuine company.  
+**Facebook:** I set up a functioning Facebook business page and have fully documented it in this document. It is also linked from my footer although, as is known, it may get taken down by Facebook as it is not a genuine company. Given that it will probably get taken down, I have added a nofollow link to it. If this were a real business, however, I would not link it via nofollow, sa I would want the Facebook page to be fully linked to my website.
 
 **MailChimp and Newsletter sign-up:** I have set up a MailChimp account and embedded the newsletter sign-up in the footer of my project. The following screenshots demonstrate its functionality.
 
 **404 Page:** I have set up and tested a custom 404 page that directs the user back to the homepage.
 
 **SEO:**
-- No-follow links: the footer contains links to the company's Facebook page, Instagram homepage, Fairtrade Coffee and MailChimp, all of which include the rel="nofollow" attribute. 
+- No-follow links: the footer contains links to the company's Facebook page (see above), Instagram homepage, Fairtrade Coffee and MailChimp, all of which include the rel="nofollow" attribute. 
 - There are no orphan pages: all pages can be reached from another findable page either through the navigation menu, footer or in-page links.
- 
+- Block meta in base.html contains the meta title, keywords and description.
+- A sitemap is available in the root directory.
+- A robots.txt file is available in the root directory.
+- There is no lorem ipsum text at all.  
 
 # Planning and Agile Methodologies
 
