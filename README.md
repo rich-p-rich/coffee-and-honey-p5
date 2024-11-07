@@ -233,7 +233,9 @@ This method is designed to react to the customer’s chosen options, whether the
 **404 Page:** I have set up and tested a custom 404 page that directs the user back to the homepage.
 
 **SEO:**
-- 
+- No-follow links: the footer contains links to the company's Facebook page, Instagram homepage, Fairtrade Coffee and MailChimp, all of which include the rel="nofollow" attribute. 
+- There are no orphan pages: all pages can be reached from another findable page either through the navigation menu, footer or in-page links.
+ 
 
 # Planning and Agile Methodologies
 
