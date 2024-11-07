@@ -142,10 +142,16 @@ This model also allows filtering and display of product variants via the navigat
 
 I could not fit this into the standard Product model in a neat way, which is why I created a separate model. Additionally, this approach supports future maintenance by clearly distinguishing products with weight categories from those without, making it easier to add new products as needed.
 
-**Services model**: This model defines optional service add-ons for products. In this MVP, I’ve included only bean grinding, but this could easily be expanded to options like gift-wrapping in the future—an attractive feature for customers and a potential revenue stream for the business.
+**Services model:** This model defines optional service add-ons for products. In this MVP, I’ve included only bean grinding, but this could easily be expanded to options like gift-wrapping in the future—an attractive feature for customers and a potential revenue stream for the business.
 
 The Service model is linked to the Product model through a Many-to-Many relationship in a field called extra_services. This setup is important because it allows certain services to be offered only for specific products (e.g., coffee bean grinding should not appear on honey product detail pages). However, other services, like gift-wrapping, could be made available across multiple product categories. This approach is straightforward and supports both scalability and reusability as the product portfolio grows.
  
+## The Profile App
+**Recipient Address model:** I added a RecipientAddresses model to my profiles app to enable an 'Address Book' type feature for my customers. It is linked to the UserProfile, which serves as the FK for this model, linking any details stored in the model to the relevant user, and only to that user. The Django framework sets an id to each address, which serves as the PK within the model itself.  
+
+I wanted to make the checkout process as smooth as possible; Amazon's checkout inspired this section, as the Address Book feature is excellent. I also wanted to avoid the customers having to re-type in addresses they have already used on the site in order to encourage repeat business from returning customers.  
+
+The model itself is quite straightforward in the sense that it is simply the recipient address details, together with an optional nickname to save the address under, and the option to set it as the default shipping address. This I thought would be a nice option for people ordering for family or even for businesses.   
 
 ## Checkout: Order model and Delivery Options method
 

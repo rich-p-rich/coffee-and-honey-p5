@@ -59,7 +59,6 @@ class RecipientAddressesForm(forms.ModelForm):
         """
         super().__init__(*args, **kwargs)
         placeholders = {
-            # Add placeholder for 'nickname'
             'nickname': 'Address Nickname (e.g., Home, Office)',
             'recipient_name': 'Recipient Name (e.g., Parents, Office)',
             'recipient_phone_number': 'Recipient Phone Number',
