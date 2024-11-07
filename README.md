@@ -133,7 +133,19 @@ Whatever option is chosen, the delivery address is shown on the checkout success
 
 # Database and Models
 
-My database is supported by a PostgreSQL database issued by the Code Institute. Here follows an overview of the models I created, plus the methods I added to the models I took from Boutique Ado.  
+My database is supported by a PostgreSQL database issued by the Code Institute. Here follows an overview of the models I created, the methods I added to the models I took from Boutique Ado together with any other important changes I made to the fields in the models from Boutique Ado.
+
+## The Products App
+**Product Variant model:** This model was necessary as I wanted to offer the same product but in different weight categories, e.g. coffee beans in weight classes of 250g, 500g, 750g and 1000g, and honey in 340g and 500g. The price increases along with the weight. In this model, the product field is a FK, structuring a weight class variant to a specific product, allowing for the above weight structure, and allowing the admin to structure multiple price categories per product per weight.  
+
+This model also allows filtering and display of product variants via the navigation bar, as well as enabling a drop-down display of the different weights / prices on the PDP without requiring a different page per weight class, which would naturally be rather clunky. 
+
+I could not fit this into the standard Product model in a neat way, which is why I created a separate model. Additionally, this approach supports future maintenance by clearly distinguishing products with weight categories from those without, making it easier to add new products as needed.
+
+**Services model**: This model defines optional service add-ons for products. In this MVP, I’ve included only bean grinding, but this could easily be expanded to options like gift-wrapping in the future—an attractive feature for customers and a potential revenue stream for the business.
+
+The Service model is linked to the Product model through a Many-to-Many relationship in a field called extra_services. This setup is important because it allows certain services to be offered only for specific products (e.g., coffee bean grinding should not appear on honey product detail pages). However, other services, like gift-wrapping, could be made available across multiple product categories. This approach is straightforward and supports both scalability and reusability as the product portfolio grows.
+ 
 
 ## Checkout: Order model and Delivery Options method
 

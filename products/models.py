@@ -29,9 +29,8 @@ class Product(models.Model):
     )  # products no variants
     strength_rating = models.DecimalField(
         max_digits=3, decimal_places=1, null=True, blank=True
-    )  # For the coffee
+    )  # Extra services field, e.g. bean grinding
     extra_services = models.ManyToManyField('Service', blank=True)
-    # Allows multiple services: bean grinding and gift wrapping
     rating = models.DecimalField(
         max_digits=6, decimal_places=2, null=True, blank=True
     )
@@ -54,7 +53,7 @@ class ProductVariant(models.Model):
 
 
 class Service(models.Model):
-    # Linked in product model extra_services = models.ManyToManyField(...
+    # Linked in product model extra_services
     name = models.CharField(max_length=254)
     description = models.TextField(null=True, blank=True)
     # Price of the added service
