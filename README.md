@@ -109,6 +109,9 @@ As I struggled to find product images for the coffee and honey, I used OpenAI's 
 ## Homepage
 I designed the homepage to make the navigation redundant for customers who know what they want, and who want to checkout as quickly as possible. Particularly on mobile, I wanted the customer to be able to choose their product and checkout via the shortest possible route; therefore the two main product categories are listed at the very top of the page and allow the user to access the products directly, without going via the navigation. The navigation is of course still there and functional, but on mobile and tablet it is hopefully not necessary. 
 
+![wireframe](readme_images/homepage-vs-navbar.PNG)
+
+
 ![mobile-home-links](readme_images/homepage_mobile.PNG)
 
 
@@ -126,7 +129,7 @@ I took inspiration from two large corporations for two other features on the che
 
 - Pick up option: Lego's German site has the option to have your delivery shipped to a pick-up shop; as Coffee and Honey is imagined to be a local cafe, I thought this would be a realistic and useful feature to implement in the checkout. It also saves the customer money on shipping costs, which they might well spend in the cafe on food and drink.
 
-Lego Germany (English language version): https://www.lego.com/en-de/
+Lego Germany -> add item to cart, proceed to checkout (English language version): https://www.lego.com/en-de/
 
 ![lego-pickup](readme_images/lego-checkout.PNG)
 
@@ -335,8 +338,6 @@ Link to page: https://www.facebook.com/profile.php?id=61567575580447
 - There is no lorem ipsum text at all.  
 
 
-
-
 # Planning and Agile Methodologies
 
 I followed the Agile methodlogoy as outlined in the "I think therefore I blog" according to the MoSCow proiritization. Following feedback on my Project 4, I also tried to make use of epics and milestones in my workflow.  
@@ -430,6 +431,7 @@ Sign-up to a database provider and get your database link
 - For generating the Favicon: https://favicon.io/
 - To generate a random secret key: https://randomkeygen.com/
 - Pexels for images: https://www.pexels.com/
+- Dall-E for generating product and Facebook images: https://openai.com/index/dall-e-3/
 - I HEART IMG for resizing images: https://www.iloveimg.com/resize-image
 - CloudConvert for converting images to webp files: https://cloudconvert.com/jpg-to-webp
 
