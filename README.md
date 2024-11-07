@@ -3,7 +3,13 @@
 ## A note on Testing
 I have separated the results of my site testing into a different file called Test Results.
 
-## Background and Business Case
+## Why and what is 'Coffee and Honey'?
+
+One of my hobbies is beekeeping, and I briefly considered setting up a website that sells beekeeping equipment; however, I thought there are more possibilities in cafe-style business, such as bookings (tables, function room and hive-tours) than in a straight-forward e-commerce shop, so decided to merge my two ideas and interests. This has some parallels in real-life: many bakeries were I live in southern Germany sell jars of honey from local beekeepers (although these bakeries do not usually have an online presence) and I thought that would be an interesting add-on to the type of coffee shop that are familiar to me from England and Ireland.  
+
+Merging the two ideas also gives a catchy and memorable name that describes the website's buisness in concise and clear terms. 
+
+## Background and goals
 I have long been a fan of coffee shops where you can enjoy decent coffee and cake, maybe a freshly made sandwich, and spend time either meeting friends, reading a book
 or simply staring out of the window. I am as happy in a good chain or franchise as I am in an independent, but a good independent coffee shop
 will always hold a special place in my heart. Sadly, I have seen several such independents go out of business because the margins are so fine 
@@ -17,13 +23,23 @@ an interesting project to take on for P5: how could an independent coffee shop e
 - offer a hive-tour for anyone interested in bees and beekeeing (see below for background)
 - and by doing all this, expand its business by becoming better known locally 
 
-These are therefore the aims of my P5 project website Coffee and Honey.
+These are therefore the aims of my P5 project website and fictional company Coffee and Honey.
 
-## Why 'Coffee and Honey'?
+## Business Case
+Coffee and Honey is imagined as a local indpendent coffee shop. It is a B2C business focusing primarily on adults aged 30 and up. It opens 8:00 - 18:00 Monday - Friday, and for shorter days at the weekends, so local people, office workers, parents and retired people are the likely week-day clientele, whereas Saturdays and Sundays might well have a younger audience of people who want to meet friends or revive themselves with a leisurely coffee after a busy night out / long week.  
 
-One of my hobbies is beekeeping, and I briefly considered setting up a website that sells beekeeping equipment; however, I thought there are more possibilities in cafe-style business, such as bookings (tables, function room and hive-tours) than in a straight-forward e-commerce shop, so decided to merge my two ideas and interests. This has some parallels in real-life: many bakeries were I live in southern Germany sell jars of honey from local beekeepers (although these bakeries do not usually have an online presence) and I thought that would be an interesting add-on to the type of coffee shop that are familiar to me from England and Ireland.  
+Social media would certainly be necessary and I envisage both Facebook and Instagram being popular.
+- Facebook as a business page with business details (opening hours, reviews, interactions etc)
+- Instagram because the subjects are photogenic and interesting. People who enjoy coffee often enjoy photos of coffee and coffee-related items, from the raw beans to the foam on a cappucinno. Honey and beekeeping is also photogenic and it would be fairly straightforward to post interesting photos and videos on a regular basis to generate interest and appeal to the customers. 
+- The type of content would be a mix of information (basic business information) but primarily enterainment, with enjoyable and interesting photos of Coffee and Honey's primary topics: coffee, honey and cake.  
 
-Merging the two ideas also gives a catchy and memorable name that describes the website's buisness in concise and clear terms. 
+As it is a small independent business, I removed the 'free shipping' threshold. I imagine the basket size would not be much more than 30 - 40€, and probably more likely around the 20€ mark, including shipping; offering free shipping would be cost that business could probably not afford, and I'm doubtful that it would work as an incentive for customers to buy either more coffee or honey. Instead, I have offered the customers the chance to pick up their order for free in the cafe as an alternative to having it shipped by post.  
+
+As the website in this case would start off being more supplementary to the company rather than the main earner, there would be little marketing budget to spend on online advertising. Given the subject matter, however, clever use of social media and SEO would be a cost-effective and overall effective way of raising the coffee shop's profile amongst local people, and engaging in word-of-mouth marketing.  
+
+Since gift-wrapping would be a nice add-on in a future iteration of this project, an occasional newsletter with gift ideas at Christmas, or a monthly newsletter letting people know about the beekeeping year and suggesting birthday gift ideas, would be a realistic option. 
+
+I got further into the marketing requirements of this project in the "Marketing: Facebook, MailChimp and SEO" section below.  
 
 ## Key Technology
 Django Web Framework
