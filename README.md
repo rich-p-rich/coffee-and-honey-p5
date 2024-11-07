@@ -136,11 +136,11 @@ Whatever option is chosen, the delivery address is shown on the checkout success
 My database is supported by a PostgreSQL database issued by the Code Institute. Here follows an overview of the models I created, the methods I added to the models I took from Boutique Ado together with any other important changes I made to the fields in the models from Boutique Ado.
 
 ## The Products App
-**Product Variant model:** This model was necessary as I wanted to offer the same product but in different weight categories, e.g. coffee beans in weight classes of 250g, 500g, 750g and 1000g, and honey in 340g and 500g. The price increases along with the weight. In this model, the product field is a FK, structuring a weight class variant to a specific product, allowing for the above weight structure, and allowing the admin to structure multiple price categories per product per weight.  
+**Product Variant model:** This model was necessary as I wanted to offer variations of the same product based on different weight categories, e.g. coffee beans in weight classes of 250g, 500g, 750g and 1000g, and honey in 340g and 500g. In this model, the product field is a FK, structuring a weight class variant to a specific product, allowing for the above weight structure, and allowing the admin to structure multiple price categories per product per weight.  
 
-This model also allows filtering and display of product variants via the navigation bar, as well as enabling a drop-down display of the different weights / prices on the PDP without requiring a different page per weight class, which would naturally be rather clunky. 
+This approach enables a drop-down display of the different weights / prices on the PDP without requiring a different page per weight class, which would naturally be rather clunky. In a future iteration it should also be possible to filter relevant products by weight class via a search field or the navigation bar.
 
-I could not fit this into the standard Product model in a neat way, which is why I created a separate model. Additionally, this approach supports future maintenance by clearly distinguishing products with weight categories from those without, making it easier to add new products as needed.
+I could not fit this into the standard Product model in a neat way, which is why I created a separate model. Additionally, this approach supports future maintenance by clearly distinguishing products with weight categories from those without, making it easier to add new products.
 
 **Services model:** This model defines optional service add-ons for products. In this MVP, I’ve included only bean grinding, but this could easily be expanded to options like gift-wrapping in the future—an attractive feature for customers and a potential revenue stream for the business.
 
@@ -154,6 +154,34 @@ I wanted to make the checkout process as smooth as possible; Amazon's checkout i
 The model itself is quite straightforward in the sense that it is simply the recipient address details, together with an optional nickname to save the address under, and the option to set it as the default shipping address. This I thought would be a nice option for people ordering for family or even for businesses.   
 
 ## Checkout: Order model and Delivery Options method
+**Order Model**: I have expanded the Order model and added several methods to make the checkout process as seamless as possible for customers. 
+
+To start with: in order to differentiate between billing and delivery addresses, I have prefixed each address-related field with "billing_". This  helps clearly distinguish the default billing address from a separate delivery address, in cases where they differ. 
+
+Additionally, I added a number of new fields to manage delivery and pick-up options:
+
+- different_delivery_address (models.BooleanField(default=False)): This field allows the database to capture a different delivery address if specified by the customer. By default, this field is set to False, meaning that the billing address is used as the delivery address unless the customer specifies otherwise. When the customer chooses to have their order delivered to a different address, this field is set to True, and opens the way to capturing the customer's delivery address details in the fields prefixed with 'delivery_' listed further down the model. This provides flexibility for cases where the order needs to be shipped to a different location.
+
+- pick_up (models.BooleanField(default=False)): This field enables a pick-up option, allowing customers to collect their orders 'in-store' at the cafe instead of having them delivered. When pick_up is selected, delivery costs are set to zero, and the system bypasses the delivery address fields, making the checkout experience simpler and more efficient for local customers. Given that "Coffee and Honey" is a local independent cafe, this feature offers a realistic and user-friendly option, catering to customers who prefer pick-up to avoid shipping costs.
+
+**Delivery Options method:** This method (delivery_options) provides flexibility in the checkout process by catering to different delivery and pick-up scenarios:
+
+- self.pick_up: This flag handles the scenario described above where the customer wants to pick up their order at the cafe. When selected, the delivery cost is set to zero, and only the billing address fields are shown.  
+
+- self.different_delivery_address: This flag opens up three options for delivery:
+i. Saved Address: If the customer has saved delivery addresses in their profile, they can select one from a drop-down menu in the checkout.
+ii. New or Unsaved Address: If the customer doesn’t have any saved addresses, is checking out as a guest, or if they wish to ship to a new address, they can enter a new delivery address here.
+iii. The else condition - Default Billing Address: In the absence of any specific delivery address, the else condition pre-fills the delivery fields with the billing address by default.
+
+For instances where the address fields are to be populated with saved data, this method makes a call to the 'copy_address' helper method (see below).
+
+This method is designed to react to the customer’s chosen options, whether they’re using saved addresses, entering a new address, or opting for in-store pick-up. This flexibility should in theory help optimise the conversion rate from baskets into actual sales.  
+
+
+**Copy Address method**: This (copy_address) is a helper method designed to populate the delivery address fields (or billing fields if adapted) with address information that the customer has saved to their profile. It supports the logic in the delivery_options method by allowing saved delivery or billing address details to be copied directly into the delivery address fields without manually setting each one individually.
+
+
+
 
 ## Products: Product model add-ons
 Extra services 

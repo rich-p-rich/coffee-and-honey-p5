@@ -32,10 +32,10 @@ class Order(models.Model):
     billing_street_address2 = models.CharField(
         max_length=80, null=True, blank=True)
     billing_county = models.CharField(max_length=80, null=True, blank=True)
-    different_delivery_address = models.BooleanField(default=False)  # Default
-    #  is billing address == shipping address
+    different_delivery_address = models.BooleanField(default=False)
+    #  Default 1: unless specified, billing address == shipping address
+    #  Default 2: if the customer has nominated another address as default
     pick_up = models.BooleanField(default=False)  # pick up the order in cafe
-
     # Delivery fields for different billing / delivery address
     delivery_name = models.CharField(max_length=50, null=True, blank=True)
     delivery_street_address1 = models.CharField(
@@ -178,10 +178,8 @@ class OrderLineItem(models.Model):
         and update the order total.
         """
 
-        # Extract quantity from the dict if it's a dict
         if isinstance(self.quantity, dict):
             self.quantity = self.quantity.get('quantity', 1)
-            # Default to 1 if 'quantity' key is missing
 
         # If the product has variants, use the variant price
         if self.product.variants.exists():
