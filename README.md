@@ -1,5 +1,8 @@
 ## Welcome to my Project 5: Coffee and Honey
 
+## A note on Testing
+I have separated the results of my site testing into a different file called Test Results.
+
 ## Background and Business Case
 I have long been a fan of coffee shops where you can enjoy decent coffee and cake, maybe a freshly made sandwich, and spend time either meeting friends, reading a book
 or simply staring out of the window. I am as happy in a good chain or franchise as I am in an independent, but a good independent coffee shop
@@ -20,11 +23,22 @@ These are therefore the aims of my P5 project website Coffee and Honey.
 
 One of my hobbies is beekeeping, and I briefly considered setting up a website that sells beekeeping equipment; however, I thought there are more possibilities in cafe-style business, such as bookings (tables, function room and hive-tours) than in a straight-forward e-commerce shop, so decided to merge my two ideas and interests. This has some parallels in real-life: many bakeries were I live in southern Germany sell jars of honey from local beekeepers (although these bakeries do not usually have an online presence) and I thought that would be an interesting add-on to the type of coffee shop that are familiar to me from England and Ireland.  
 
-Merging the two ideas also gives (I think) a catchy and memorable name, that describes the website's buisness in concise and clear terms. People are generally well-disposed to either coffe or honey, often both, and 
+Merging the two ideas also gives a catchy and memorable name that describes the website's buisness in concise and clear terms. 
+
+## Key Technology
+Django Web Framework
+Python
+Bootstrap front-end framework, with Bootstrap CSS and JS
+HTML
+CSS
+Javascript
+PostgreSQL supported by the CodeInstitute (https://dbs.ci-dbs.net/)
+Stripe 
+
 
 # Overview: Website and Functionality
 
-As will be clear, the website relies heavily on the Boutique Ado Walk-Through project, particularly for the shopping bag and checkout process. However, my imagined Coffee and Honey shop is a bit more limited in terms of the number of products it offers, and sells a different type of project with different pricing structure. Additionally, I have focused on fleshing out the My Profile section by adding an address book, and linking that to the checkout so that the customers have flexibilty in terms of delivery address; additionally, I have set the checkout up to prepopulate with saved billing / delivery addresses, and enabled a pick-up option for the customers to pickup their order directly from the cafe. 
+As will be clear, the website relies heavily on the Boutique Ado Walk-Through project, particularly for the shopping bag and checkout process. However, my imagined Coffee and Honey cafe is a bit more limited in terms of the number of products it offers, and sells a different type of project with different pricing structure. Additionally, I have focused on fleshing out the My Profile section by adding an address book, and linking that to the checkout so that the customers have flexibilty in terms of delivery address; additionally, I have set the checkout up to prepopulate with saved billing / delivery addresses, and enabled a pick-up option for the customers to pickup their order directly from the cafe. 
 
 I have hopefully provided sufficient independent development away from the Boutique Ado example.  
 
@@ -50,9 +64,12 @@ The price of both product category is calculated according to the weight.
 
 ## Admin
 The admin interface can be accessed by a superuser who can do the following: 
-- TO DO
-
-
+- Add categories
+- Add products to the categories
+- Upload product images, add descriptive text, provide product details and set the price 
+- Set extra services (such as coffee bean grinding or gitf wrapping)
+- View user information (username, email address, etc)
+- Set different permission levels: staff and superuser  
 
 ## Security
 All sensitive information such as the secret key is set in env.py which is added to .gitignore in Gitpod, and to the Heroku config vars for deployment. Debug is set to False.  
@@ -64,13 +81,27 @@ The front-end and back-end security is provided by the @login_required decorator
 ## Design and brand image
 I wanted to create a slightly warm or cosy image, and settled on the 'goldenrod' base colour as a midway point between coffee brown and the different shades of honey.
 
-I have chosen pictures that transmitted to me a warm and slightly vintage feel which I feel would be appropriate for a typical customer, who I imagine would be between 30 and late 50s (maybe older).  
+I have chosen pictures that transmitted to me a warm and slightly vintage feel which I feel would be appropriate for a typical customer, who I imagine would be between 30 and late 50s (maybe older).
+
+As I struggled to find product images for the coffee and honey, I used OpenAI's Dall-E image creation functionality to generate product images appropriate to my website. All other product images are from Pexels and have been acknowledged with comments in the code.  
 
 ## Homepage
-I designed the homepage to make the navigation basically redundant. Particularly on mobile, I wanted the customer to be able to choose their product and checkout via the shortest possible route; therefore links to the two product categories are listed at the very top of the page and allow the user to access the products directly, without going via the navigation. The navigation is of course still there and functional, but on mobile and tablet it is hopefully not necessary. 
+I designed the homepage to make the navigation redundant for customers who know what they want, and who want to checkout as quickly as possible. Particularly on mobile, I wanted the customer to be able to choose their product and checkout via the shortest possible route; therefore the two main product categories are listed at the very top of the page and allow the user to access the products directly, without going via the navigation. The navigation is of course still there and functional, but on mobile and tablet it is hopefully not necessary. 
+
+## Checkout
+I made a couple of changes to the Boutique Ado format in order to streamline the checkout process for the customer:
+
+Firstly: users who are logged in and have a billing address will have the billing address prepopulated for them. As this is assumed to be the default shipping address, unless otherwise stated by the customer, this saves the customer time and repetitive entry of data which the shop already has stored. This is a good way to optimise the conversion rate.  
+
+I took inspiration from two large corporations for two other features on the checkout page:
+
+- Address book: I find Amazon's address book incredibly useful, especially as I live abroad away from my family and many of my friends. I decided to integrate a similar functionality to my website project so that customers can ship the products as gifts, and save the address information for future purchases.
+
+- Pick up option: Lego's German site has the option to have your delivery shipped to a pick-up shop; as Coffee and Honey is imagined to be a local cafe, I thought this would be a realistic and useful feature to implement in the checkout. It also saves the customer money on shipping costs, which they might well spend in the cafe on food and drink.  
+
 
 # Site Overview
-In this section, I focus on functionalties that were not present in the Boutique Ado project.  
+In this section, I focus on other functionalties that were not present in the Boutique Ado project.  
 
 ## Products: type and pricing 
 Unlike the products on Boutique Ado, the prices of both coffee and honey are linked to their weight; therefore I set up the product model to allow for products with a straight-forward price class (as on Boutique Ado) and for products like mine where the price is linked to the weight (i.e. size).
@@ -104,7 +135,19 @@ In this page, you can simply change an existing address; you can also click on a
 ## Delete Address
 By clicking on delete address, you trigger a modal to check that you want to really want to delete it, in which you can either cancel the deletion or confirm it. If you delete a default delivery address, the default resorts to the billing address.  
 
-# Checkout
+## Welcome message and Toasts
+I liked the feature introduced to us in Project 4 whereby the user is welcomed with their username if logged in, or prompted to log in, at the top right of the screen, so I added it to this project as well as a reminder to the customer where they are in the process.  
+
+I also implemented the Toast functionality from the Boutique Ado with some minor changes, such as changing the 'Go to Checkout' at the PDP to 'Go to Bag' to more accurately reflect the process (this could also have been my misunderstanding of the walk-through project, however. )
+
+## Bag
+In the Bag, the customer can change the quantity of the products or empty the bag altogether. I have tried to line up the overview a bit more precisely by using a table.
+
+The customer can proceed to the checkout from the bag as a guest user, but I added a modal to the 'proceed to checkout' button to prompt them to log in, or confirm the checkout as guest, if that's what they want.
+
+Finally, there was some horizontal scroll in the mobile version of the Boutique Ado Bag - this was probably due to my faulty implementation of it! I worked on eliminating it by changing button sizes and responsiveness, but at a width of 320px there is still some minor horizontal scroll that I could not quite eliminate for this MVP.
+
+## Checkout
 Upon reaching the checkout, the customer has an overview of the products in the bag, and three shipping options: to billing, friends and family or pick-up at the cafe itsef.
 
 An overview of the differences: 
@@ -118,7 +161,7 @@ For logged-in customers:
 3. A drop-down menu appears for the customer to choose from an existing saved address. If they choose one, it prepopulates all fields apart from the country field.  
 4. If they want to ship to a new address, they can simply complete the fields with the new details.
 
-For the guest purchaser: 
+For the guest customer: 
 1. The address fields appear to be filled in, but no dropdown menu with saved addresses is shown.  
 
 - Pick-up at the Cafe:
@@ -181,29 +224,41 @@ This method is designed to react to the customer’s chosen options, whether the
 **Copy Address method**: This (copy_address) is a helper method designed to populate the delivery address fields (or billing fields if adapted) with address information that the customer has saved to their profile. It supports the logic in the delivery_options method by allowing saved delivery or billing address details to be copied directly into the delivery address fields without manually setting each one individually.
 
 
+## Marketing: SEO, Facebook amd MailChimp
 
+**Facebook:** I set up a functioning Facebook business page and have documented it fully in this document. It is also linked from my footer although, as is known, it may get taken down by Facebook as it is not a genuine company.  
 
-## Products: Product model add-ons
-Extra services 
+**MailChimp and Newsletter sign-up:** I have set up a MailChimp account and embedded the newsletter sign-up in the footer of my project. The following screenshots demonstrate its functionality.
 
-## Products: Product Variant model
+**404 Page:** I have set up and tested a custom 404 page that directs the user back to the homepage.
 
-## Products: Service model
-
-## User Profile: Recipient Addresses model
-
-
+**SEO:**
+- 
 
 # Planning and Agile Methodologies
 
 I followed the Agile methodlogoy as outlined in the "I think therefore I blog" according to the MoSCow proiritization. Following feedback on my Project 4, I also tried to make use of epics and milestones in my workflow.  
 
-Here is the link to my project board.  
-
 ## Commit messages
-Following feedback on my 4th project on 1st October, I started writing my commit messages according to the conventions listed here: https://www.conventionalcommits.org/en/v1.0.0/#summary
-Therefore there is a change in the style of the commit messages from that date. However, I think it is worth making the change in order to improve as a developer.
+Also following feedback on my 4th project on 1st October, I started writing my commit messages according to the conventions listed here: https://www.conventionalcommits.org/en/v1.0.0/#summary
+Therefore there is a change in the style of the commit messages from that date.
 
+## User Stories, Epics and Milestones
+Here is the link to my Kanban board: https://github.com/users/rich-p-rich/projects/7
 
+At the time of writing, I have completed 47 user stories which I divided up into 10 epics and 8 milestones. Here are the epics; I completed the MVP for each of them apart from Epic 10 'The Function Room', for which I ran out of time.
 
+I also followed the MoSCow prorisation principle for organising my work, as I did with Project 4. One difference between Project 4 and 5 that I cut my stories up into smaller slices which I think helped keep a better overview; additionally, it provided a welcome feeling of momentum and I feel that the Kanban board was well integrated into my project this time around as it served as my primary planning tool throughout the project.  
+
+Similarly, I used Milestones to keep track of the bigger picture throughout my project. I set them up as follows:
+- Milestone 1: basic website layout, navigation, user registration, basic bag functionality 
+- Milestone 2: edit bag, Toasts, proceed to checkout, Stripe implementation with Webhook handlers 
+- Milestone 3: profile app fleshed out with view account details, order history, save addresses, CRUD functionality for saved addresses 
+- Milestone 4: checkout aoo fleshed out with address fields pre-population from saved addresses, fix delivery prices, default shipping 
+- Milestone 5: Heroku connection, deployment in stages, deployment testing 
+- Milestone 6: marketing including sitemap and robots.txt, Facebook page, newsletter signup, meta keyword optimisation, no-follow links and 404 page
+- Milestone 7: code validation (e.g. PEP8) and ighthouse testing
+- Milestone 8: site testing, documentation of results, complete ReadMe
+
+This helped me break down the tasks into what felt were realistic and unified goals; like the rest of the Kanban board, it felt a genuine part of my project planning and I made regular updates to it.  
 
