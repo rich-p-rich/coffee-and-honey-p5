@@ -1,7 +1,13 @@
 ## Welcome to my Project 5: Coffee and Honey
 
+![responsive](readme_images/responsive.PNG)
+
+
+**Link to deployed site:**  https://coffee-and-honey-p5-fc5ef8bcd788.herokuapp.com/
+
+
 ## A note on Testing
-I have separated the results of my site testing into a different file called Test Results.
+I have separated the results of my site testing into a different file called Test Results that covers lighthouse testing, code validators and a detailed overview of the site's functionality here: [Test Results](test-results.md).
 
 ## Why 'Coffee and Honey', and what is it?
 
@@ -103,7 +109,7 @@ The front-end and back-end security is provided by the @login_required decorator
 
 # Design and UX
 
-A PDF of my wireframes is available here via this link. 
+A PDF of my wireframes is available in the readme_documentation folder: the file is called wireframes.pdf
 
 ## Design and brand image
 I wanted to create a slightly warm or cosy image, and settled on the 'goldenrod' base colour as a midway point between coffee brown and the different shades of honey.
@@ -325,6 +331,8 @@ This (copy_address) is a helper method designed to populate the delivery address
 **Facebook:** I set up a functioning Facebook business page and have fully documented it in this document. It is also linked from my footer although, as is known, it may get taken down by Facebook as it is not a genuine company. Given that it will probably get taken down, I have added a nofollow link to it. If this were a real business, however, I would not link it via nofollow, as I would want the Facebook page to be fully linked to my website.
 
 Link to page: https://www.facebook.com/profile.php?id=61567575580447
+
+A PDF of the mock-ups for my Facebook site can be found in the readme_documentation folder: the file is called coffee-and-honey_facebook.pdf
 
 
 ![facebook](readme_images/facebook-page.PNG)

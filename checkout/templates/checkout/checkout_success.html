@@ -99,8 +99,8 @@
             </div>
             <div class="row">
                 <div class="col-12 col-md-4">Delivery:</div>
-                <div class="col-12 col-md-8 text-md-right">€{{ order.delivery_cost|floatformat:2 }}</div>
-            </div>
+                <div class="col-12 col-md-8 text-md-right">€{{ delivery|floatformat:2 }}</div>
+            </div>            
             <div class="row">
                 <div class="col-12 col-md-4">Grand Total:</div>
                 <div class="col-12 col-md-8 text-md-right">€{{ order.grand_total|floatformat:2 }}</div>
