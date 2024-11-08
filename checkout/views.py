@@ -78,69 +78,99 @@ def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
 
+    # Initialize Stripe
     stripe.api_key = stripe_secret_key
     intent = None
 
     if request.method == 'POST':
         bag = request.session.get('bag', {})
-        form_data = get_order_form_data(request)
+        form_data = {
+            'billing_full_name': request.POST['billing_full_name'],
+            'billing_email': request.POST['billing_email'],
+            'billing_phone_number': request.POST['billing_phone_number'],
+            'billing_country': request.POST['billing_country'],
+            'billing_postcode': request.POST['billing_postcode'],
+            'billing_town_or_city': request.POST['billing_town_or_city'],
+            'billing_street_address1': request.POST['billing_street_address1'],
+            'billing_street_address2': request.POST['billing_street_address2'],
+            'billing_county': request.POST['billing_county'],
+        }
         order_form = OrderForm(form_data)
 
         if order_form.is_valid():
             order = order_form.save(commit=False)
 
-            # Set user profile if user is authenticated
-            if request.user.is_authenticated:
-                order.user_profile = request.user.userprofile
-
-            # Determine delivery type and set delivery cost
+            # Determine delivery type and calculate delivery cost
             delivery_type = request.POST.get('delivery_type')
             set_delivery_cost(order, delivery_type, request)
 
-            # Calculate totals
+            # Adjust order fields based on delivery type
+            if delivery_type == 'pickup':
+                order.pick_up = True
+                order.different_delivery_address = False
+                messages.success(
+                    request, 'You have chosen to pick up your order from Coffee and Honey.'
+                )
+            elif delivery_type == 'delivery-different':
+                order.pick_up = False
+                order.different_delivery_address = True
+                order.delivery_name = request.POST.get('delivery_name', order.billing_full_name)
+                order.delivery_street_address1 = request.POST.get('delivery_street_address1')
+                order.delivery_street_address2 = request.POST.get('delivery_street_address2', '')
+                order.delivery_town_or_city = request.POST.get('delivery_town_or_city')
+                order.delivery_county = request.POST.get('delivery_county', '')
+                order.delivery_postcode = request.POST.get('delivery_postcode')
+                order.delivery_country = request.POST.get('delivery_country')
+            elif delivery_type == 'delivery-billing-same':
+                order.pick_up = False
+                order.different_delivery_address = False
+                order.delivery_name = order.billing_full_name
+                order.delivery_street_address1 = order.billing_street_address1
+                order.delivery_street_address2 = order.billing_street_address2
+                order.delivery_town_or_city = order.billing_town_or_city
+                order.delivery_county = order.billing_county
+                order.delivery_postcode = order.billing_postcode
+                order.delivery_country = order.billing_country
+
+            pid = request.POST.get('client_secret').split('_secret')[0]
+            order.stripe_pid = pid
+            order.original_bag = json.dumps(bag)
+
+            # Calculate order_total and grand_total
             current_bag = bag_contents(request)
             order.order_total = Decimal(current_bag['total'])
-            order.grand_total = order.order_total + order.delivery_cost
-            print(f"[DEBUG] Order Total: {order.order_total}")
-            print(f"[DEBUG] Delivery Cost: {order.delivery_cost}")
-            print(f"[DEBUG] Grand Total (Order): {order.grand_total}")
+            order.grand_total = order.order_total + Decimal(order.delivery_cost)
             order.save()
 
-            # Stripe payment intent based on grand total
-            stripe_total = round(order.grand_total * 100)
-            print(f"[DEBUG] Stripe Total (Amount to be Charged): {stripe_total}")
-            intent = stripe.PaymentIntent.create(
-                amount=stripe_total,
-                currency=settings.STRIPE_CURRENCY,
-            )
-
-            # Process each item in the bag
+            # Save each item in the bag as an OrderLineItem
             for item_id, item_data in bag.items():
                 try:
                     product = Product.objects.get(id=item_id)
                     if isinstance(item_data, int):
-                        OrderLineItem.objects.create(
+                        order_line_item = OrderLineItem(
                             order=order,
                             product=product,
                             quantity=item_data,
                             unit_price=product.price
                         )
+                        order_line_item.save()
                     else:
                         for size, data in item_data['items_by_size'].items():
+                            quantity = int(data.get('quantity', 1))
                             variant = product.variants.get(weight=size)
-                            OrderLineItem.objects.create(
+                            order_line_item = OrderLineItem(
                                 order=order,
                                 product=product,
-                                quantity=int(data['quantity']),
+                                quantity=quantity,
                                 product_size=size,
                                 unit_price=variant.price
                             )
+                            order_line_item.save()
                 except Product.DoesNotExist:
                     messages.error(request, "One of the products in your bag wasn't found in our database. Please call us for assistance!")
                     order.delete()
                     return redirect(reverse('view_bag'))
 
-            # Redirect to success page
             request.session['save_info'] = 'save-info' in request.POST
             return redirect(reverse('checkout_success', args=[order.order_number]))
 
@@ -154,17 +184,24 @@ def checkout(request):
             return redirect(reverse('products'))
 
         current_bag = bag_contents(request)
-        total = current_bag['grand_total']
-        print(f"[DEBUG] Grand Total from Bag (for GET request): {total}")
-        
-        # Use grand_total from order calculations to create payment intent
-        stripe_total = round(total * 100)
+        total = Decimal(current_bag['total'])
+        delivery_cost = Decimal(0)  # Default to 0 for initial page load
+
+        # Display delivery and pickup options in the context
+        delivery_price = settings.STANDARD_DELIVERY_PRICE
+        pickup_price = settings.PICKUP_DELIVERY_PRICE
+
+        # Calculate grand_total based on initial delivery cost (if any)
+        grand_total = total + delivery_cost
+
+        # Stripe intent creation
+        stripe_total = round(grand_total * 100)
         intent = stripe.PaymentIntent.create(
             amount=stripe_total,
             currency=settings.STRIPE_CURRENCY,
         )
 
-        # Prepare order form and context data
+        # Prepare initial data for the form and context
         user_profile = None
         initial_data = {}
         saved_addresses = None
@@ -184,12 +221,12 @@ def checkout(request):
                 'billing_country': user_profile.default_country,
             }
 
-            saved_addresses = RecipientAddresses.objects.filter(user_profile=user_profile)
-            default_delivery_address = saved_addresses.filter(is_default=True).first()
+            # Load the default delivery address if it exists
+            default_delivery_address = RecipientAddresses.objects.filter(
+                user_profile=user_profile, is_default=True).first()
             if default_delivery_address:
                 delivery_initial_data = {
                     'delivery_name': default_delivery_address.recipient_name,
-                    'delivery_phone_number': default_delivery_address.recipient_phone_number,
                     'delivery_street_address1': default_delivery_address.recipient_street_address1,
                     'delivery_street_address2': default_delivery_address.recipient_street_address2,
                     'delivery_town_or_city': default_delivery_address.recipient_town_or_city,
@@ -198,24 +235,26 @@ def checkout(request):
                     'delivery_country': default_delivery_address.recipient_country,
                 }
 
-        order_form = OrderForm(initial={**initial_data, **delivery_initial_data})
-        
-        print(f"Order Total: {total if 'total' in locals() else 0.00}, "
-                f"Delivery Cost: {delivery if 'delivery' in locals() else 0.00}, "
-                f"Grand Total: {grand_total if 'grand_total' in locals() else 0.00}")
+            # Load saved addresses
+            saved_addresses = RecipientAddresses.objects.filter(user_profile=user_profile)
 
+        order_form = OrderForm(initial={**initial_data, **delivery_initial_data})
+
+        # Set context for rendering the checkout page
         context = {
             'order_form': order_form,
             'stripe_public_key': stripe_public_key,
             'client_secret': intent.client_secret if intent else '',
-            'delivery_price': settings.STANDARD_DELIVERY_PRICE,
-            'pickup_price': settings.PICKUP_DELIVERY_PRICE,
+            'delivery_price': delivery_price,
+            'pickup_price': pickup_price,
             'saved_addresses': saved_addresses,
             'default_delivery_data': delivery_initial_data,
+            'total': total,
+            'delivery': delivery_cost,
+            'grand_total': grand_total,
         }
 
         return render(request, 'checkout/checkout.html', context)
-
 
 
 def checkout_success(request, order_number):
