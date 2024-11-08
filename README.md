@@ -3,11 +3,13 @@
 ## A note on Testing
 I have separated the results of my site testing into a different file called Test Results.
 
-## Why and what is 'Coffee and Honey'?
+## Why 'Coffee and Honey', and what is it?
 
-One of my hobbies is beekeeping, and I briefly considered setting up a website that sells beekeeping equipment; however, I thought there are more possibilities in cafe-style business, such as bookings (tables, function room and hive-tours) than in a straight-forward e-commerce shop, so decided to merge my two ideas and interests. This has some parallels in real-life: many bakeries were I live in southern Germany sell jars of honey from local beekeepers (although these bakeries do not usually have an online presence) and I thought that would be an interesting add-on to the type of coffee shop that are familiar to me from England and Ireland.  
+One of my hobbies is beekeeping, and I briefly considered setting up a website that sells beekeeping equipment; however, I thought there are more possibilities in cafe-style business, such as bookings (tables, function room and hive-tours) than in a straight-forward e-commerce shop, so decided to merge my two ideas and interests. This has some parallels in real-life: many bakeries where I live in southern Germany sell jars of honey from local beekeepers (although these bakeries do not usually have an online presence) and I thought that would be an interesting add-on to the type of coffee shop that are familiar to me from England and Ireland.  
 
 Merging the two ideas also gives a catchy and memorable name that describes the website's buisness in concise and clear terms. 
+
+A further note on my background: I worked in e-commerce from 2011 - 2019, primarily in operations and logistics. However, as my first job in e-commerce was at a start-up company, and IT was central everywhere I worked, I developed a long-standing interest in the subject. This is why I chose the e-commerce option for my P5.  
 
 ## Background and goals
 I have long been a fan of coffee shops where you can enjoy decent coffee and cake, maybe a freshly made sandwich, and spend time either meeting friends, reading a book
@@ -26,16 +28,16 @@ an interesting project to take on for P5: how could an independent coffee shop e
 These are therefore the aims of my P5 project website and fictional company Coffee and Honey.
 
 ## Business Case
-Coffee and Honey is imagined as a local indpendent coffee shop. It is a B2C business focusing primarily on adults aged 30 and up. It opens 8:00 - 18:00 Monday - Friday, and for shorter days at the weekends, so local people, office workers, parents and retired people are the likely week-day clientele, whereas Saturdays and Sundays might well have a younger audience of people who want to meet friends or revive themselves with a leisurely coffee after a busy night out / long week.  
+Coffee and Honey is imagined as a local indpendent coffee shop. It is a B2C business focusing primarily on adults aged 30 and up. It opens 8:00 - 17:00 Monday - Friday, 09:00 - 15:00 on Saturdays, and10:00 - 15:00 on Sundays. During the week, local people, office workers, parents and retired people are the likely clientele, whereas Saturdays and Sundays might well have a younger audience of people who want to meet friends or revive themselves with a leisurely coffee after a busy night out / long week.  
 
-Social media would certainly be necessary and I envisage both Facebook and Instagram being popular.
+Social media would certainly be necessary and I envisage both Facebook and Instagram being popular:
 - Facebook as a business page with business details (opening hours, reviews, interactions etc)
-- Instagram because the subjects are photogenic and interesting. People who enjoy coffee often enjoy photos of coffee and coffee-related items, from the raw beans to the foam on a cappucinno. Honey and beekeeping is also photogenic and it would be fairly straightforward to post interesting photos and videos on a regular basis to generate interest and appeal to the customers. 
+- Instagram because the subjects are photogenic and interesting. People who enjoy coffee often enjoy photos of coffee and coffee-related items, from the raw beans to the foam on a cappucinno. Honey and beekeeping is also photogenic and it would be fairly straightforward to post interesting photos and videos on a regular basis to generate interest and appeal to the customers. In this sense, Instagram would be a channel for pursing a content marketing strategy: regular and visually appealing posts about these topics would be designed to keep the audience engaged, attract new followers, and help generate a brand image or identity.
 - The type of content would be a mix of information (basic business information) but primarily enterainment, with enjoyable and interesting photos of Coffee and Honey's primary topics: coffee, honey and cake.  
 
-As it is a small independent business, I removed the 'free shipping' threshold. I imagine the basket size would not be much more than 30 - 40€, and probably more likely around the 20€ mark, including shipping; offering free shipping would be cost that business could probably not afford, and I'm doubtful that it would work as an incentive for customers to buy either more coffee or honey. Instead, I have offered the customers the chance to pick up their order for free in the cafe as an alternative to having it shipped by post.  
+As it is a small independent business, I removed the 'free shipping' threshold. I imagine the basket size would not be much more than 30 - 40€, and probably more likely around the 20€ mark, including shipping; free shipping would be a cost that business could probably not afford, and I'm doubtful that it would work as an incentive for customers to buy either more coffee or honey. Instead, I have offered the customers the chance to pick up their order for free in the cafe as an alternative to having it shipped by post.  
 
-As the website in this case would start off being more supplementary to the company rather than the main earner, there would be little marketing budget to spend on online advertising. Given the subject matter, however, clever use of social media and SEO would be a cost-effective and overall effective way of raising the coffee shop's profile amongst local people, and engaging in word-of-mouth marketing.  
+As the website in this case would start off being more supplementary to the company rather than the main source of revenue, there would be little marketing budget to spend on online advertising. Given the subject matter, however, clever use of social media and SEO would be a cost-effective and overall effective way of raising the coffee shop's profile amongst local people, and triggering some word-of-mouth marketing.  
 
 Since gift-wrapping would be a nice add-on in a future iteration of this project, an occasional newsletter with gift ideas at Christmas, or a monthly newsletter letting people know about the beekeeping year and suggesting birthday gift ideas, would be a realistic option. 
 
@@ -66,8 +68,10 @@ The MVP allows customers to:
 - add items to the shopping bag, and edit the shopping bag 
 - create an account in which their basic details and order history are saved
 - choose between home delivery, delivery to friends / family, or pick-up in the cafe
-- complete an order as a 'guest', i.e. not logged in
+- checkout as a 'guest', i.e. not logged in
+- or checkout as an authenticated user
 - complete an order using their credit card hosted by Stripe (currently test data only!)
+- reach an order success page after the purchase
 - the account also allows them to add / edit / delete addresses which are saved to their profile.
 
 In this sense, CRUD functionality is available both in the shopping bag and in the profile.  
@@ -77,6 +81,11 @@ The MVP version of my project takes orders for the following:
 - customers can choose to pay a small surcharge to have them freshly ground before shipping 
 - jars of honey in two different sizes: 340g and 500g  
 The price of both product category is calculated according to the weight.  
+
+## What is live for the MVP and what not
+The homepage has several section:
+- The links to the coffee and honey products are live
+- The links to the visit us, function room, about us and bee hive tour are not live 
 
 ## Admin
 The admin interface can be accessed by a superuser who can do the following: 
@@ -94,6 +103,8 @@ The front-end and back-end security is provided by the @login_required decorator
 
 # Design and UX
 
+A PDF of my wireframes is available here via this link. 
+
 ## Design and brand image
 I wanted to create a slightly warm or cosy image, and settled on the 'goldenrod' base colour as a midway point between coffee brown and the different shades of honey.
 
@@ -104,7 +115,8 @@ I wanted to create a slightly warm or cosy image, and settled on the 'goldenrod'
 
 I have chosen pictures that transmitted to me a warm and slightly vintage feel which I feel would be appropriate for a typical customer, who I imagine would be between 30 and late 50s (maybe older).
 
-As I struggled to find product images for the coffee and honey, I used OpenAI's Dall-E image creation functionality to generate product images appropriate to my website. All other product images are from Pexels and have been acknowledged with comments in the code.  
+## Images on the website
+As I struggled to find product images for the coffee and honey, I used OpenAI's Dall-E image creation functionality to generate product images appropriate to my website. All other images are from Pexels and have been acknowledged with comments in the code.  
 
 ## Homepage
 I designed the homepage to make the navigation redundant for customers who know what they want, and who want to checkout as quickly as possible. Particularly on mobile, I wanted the customer to be able to choose their product and checkout via the shortest possible route; therefore the two main product categories are listed at the very top of the page and allow the user to access the products directly, without going via the navigation. The navigation is of course still there and functional, but on mobile and tablet it is hopefully not necessary. 
@@ -119,9 +131,9 @@ I designed the homepage to make the navigation redundant for customers who know 
 
 
 ## Checkout
-I made a couple of changes to the Boutique Ado format in order to streamline the checkout process for the customer:
+I made a few changes to the Boutique Ado format in order to streamline the checkout process for the customer:
 
-Firstly: users who are logged in and have a billing address will have the billing address prepopulated for them. As this is assumed to be the default shipping address, unless otherwise stated by the customer, this saves the customer time and repetitive entry of data which the shop already has stored. This is a good way to optimise the conversion rate.  
+Firstly: users who are logged in and have a billing address will have the billing address prepopulated for them. As this is assumed to be the default shipping address, unless otherwise stated by the customer, this saves the customer time and avoids the repetitive entry of data which the shop already has stored. This is a good way to optimise the conversion rate.  
 
 I took inspiration from two large corporations for two other features on the checkout page:
 
@@ -146,7 +158,7 @@ I offer three types of coffee: Arabia, Colombian and Robusta. Each type is offer
 ## Extra Service
 For coffee I have implemented an optional extra service called 'Freshly Ground' which allows the customers to have their coffee beans ground on the day of shipping. This is a flat-rate for all weight classes, though the price could be refined in next iterations. It is a good option for the customer who might not have a coffee grinder at home, and it helps increase the basket size for the business.
 
-The 'extra service' option is currently only available for the coffee product cateory. However, it need not be limited to only grinding coffee beans, and could be easily rolled out to  on in the future to offer gift-wrapping, for examplem for both coffee and honey, and any other product categories which could be added to the site (coffee mugs, honey dippers, etc). 
+The 'extra service' option is currently only available for the coffee product cateory. However, it need not be limited to only grinding coffee beans, and could be easily rolled out to  on in the future to offer gift-wrapping, for example for people sending either both coffee or honey (or both!) to friends or family. 
 
 Additionally, a future iteration could see this option remain available in the shopping bag for any customers who didn't choose it on the product detail page. 
 
@@ -171,6 +183,9 @@ By clicking on delete address, you trigger a modal to check that you want to rea
 
  ![address-book](readme_images/address.book.PNG)
 
+
+![delete-address-modal](readme_images/delete-address-modal.PNG)
+
 ## Welcome Message and Toasts
 I liked the feature introduced to us in Project 4 whereby the user is welcomed with their username if logged in, or prompted to log in, at the top right of the screen, so I added it to this project as well as a reminder to the customer where they are in the process.  
 
@@ -180,6 +195,8 @@ I also implemented the Toast functionality from the Boutique Ado with some minor
 In the Bag, the customer can change the quantity of the products or empty the bag altogether. I have tried to line up the overview a bit more precisely by using a table.
 
 The customer can proceed to the checkout from the bag as a guest user, but I added a modal to the 'proceed to checkout' button to prompt them to log in, or confirm the checkout as guest, if that's what they want.
+
+![guest-modal](readme_images/guest-modal.PNG)
 
 Finally, there was some horizontal scroll in the mobile version of the Boutique Ado Bag - this was probably due to my faulty implementation of it! I worked on eliminating it by changing button sizes and responsiveness, but at a width of 320px there is still some minor horizontal scroll that I could not quite eliminate for this MVP.
 
@@ -198,7 +215,7 @@ For logged-in customers:
 
 ![different-address](readme_images/delivery-different-address.PNG)  
 
-2. If the customer is logged in and has set a default shipping address that is different to their billing address, this is prepopulated.
+2. If the customer is logged in and has set a default shipping address that is different to their billing address, this is prepopulated as can be seen in the above screenshot.
 
 3. A drop-down menu appears for the customer to choose from an existing saved address. If they choose one, it prepopulates all fields apart from the country field.  
 
@@ -213,6 +230,8 @@ For the guest customer:
 In this case, the billing address remains constant on-screen, but the delivery price switches to zero as there is no charge for a pick-up.  
 
 Whatever option is chosen, the delivery address is shown on the checkout success page as appropriate.  
+
+![pick-up-confirmed](readme_images/pick-up-confirmation.PNG)  
 
 ## Features not implemented 
 - Function Room
@@ -301,7 +320,7 @@ This (copy_address) is a helper method designed to populate the delivery address
 
 ## Marketing: Facebook, MailChimp and SEO
 
-**Facebook:** I set up a functioning Facebook business page and have fully documented it in this document. It is also linked from my footer although, as is known, it may get taken down by Facebook as it is not a genuine company. Given that it will probably get taken down, I have added a nofollow link to it. If this were a real business, however, I would not link it via nofollow, sa I would want the Facebook page to be fully linked to my website.
+**Facebook:** I set up a functioning Facebook business page and have fully documented it in this document. It is also linked from my footer although, as is known, it may get taken down by Facebook as it is not a genuine company. Given that it will probably get taken down, I have added a nofollow link to it. If this were a real business, however, I would not link it via nofollow, as I would want the Facebook page to be fully linked to my website.
 
 Link to page: https://www.facebook.com/profile.php?id=61567575580447
 
