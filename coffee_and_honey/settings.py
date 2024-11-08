@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+from decimal import Decimal
 from pathlib import Path
 import os
 import dj_database_url
@@ -198,9 +198,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Stripe
-FRESHLY_GROUND_BEANS = 1.50
-STANDARD_DELIVERY_PRICE = 4.99
-PICKUP_DELIVERY_PRICE = 0.00
+FRESHLY_GROUND_BEANS = Decimal('1.50')
+STANDARD_DELIVERY_PRICE = Decimal('4.99')
+PICKUP_DELIVERY_PRICE = Decimal('0.00')
 STRIPE_CURRENCY = 'eur'
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')

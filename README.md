@@ -11,7 +11,7 @@ I have separated the results of my site testing into a different file called Tes
 
 ## Why 'Coffee and Honey', and what is it?
 
-One of my hobbies is beekeeping, and I briefly considered setting up a website that sells beekeeping equipment; however, I thought there are more possibilities in cafe-style business, such as bookings (tables, function room and hive-tours) than in a straight-forward e-commerce shop, so decided to merge my two ideas and interests. This has some parallels in real-life: many bakeries where I live in southern Germany sell jars of honey from local beekeepers (although these bakeries do not usually have an online presence) and I thought that would be an interesting add-on to the type of coffee shop that are familiar to me from England and Ireland.  
+One of my hobbies is beekeeping, and I briefly considered setting up a website that sells beekeeping equipment; however, I thought there are more possibilities in cafe-style business, such as bookings (tables, function room and hive-tours) than in a straight-forward e-commerce shop, so decided to merge my two ideas and interests. This has some parallels in real-life: many bakeries where I live in southern Germany sell jars of honey from local beekeepers (although these bakeries do not usually have an online presence) and I thought that would be an interesting add-on to the type of coffee shops that are familiar to me from England and Ireland.  
 
 Merging the two ideas also gives a catchy and memorable name that describes the website's buisness in concise and clear terms. 
 
@@ -39,9 +39,9 @@ Coffee and Honey is imagined as a local indpendent coffee shop. It is a B2C busi
 Social media would certainly be necessary and I envisage both Facebook and Instagram being popular:
 - Facebook as a business page with business details (opening hours, reviews, interactions etc)
 - Instagram because the subjects are photogenic and interesting. People who enjoy coffee often enjoy photos of coffee and coffee-related items, from the raw beans to the foam on a cappucinno. Honey and beekeeping is also photogenic and it would be fairly straightforward to post interesting photos and videos on a regular basis to generate interest and appeal to the customers. In this sense, Instagram would be a channel for pursing a content marketing strategy: regular and visually appealing posts about these topics would be designed to keep the audience engaged, attract new followers, and help generate a brand image or identity.
-- The type of content would be a mix of information (basic business information) but primarily enterainment, with enjoyable and interesting photos of Coffee and Honey's primary topics: coffee, honey and cake.  
+- The type of content would be a mix of information (basic business information) but primarily enterainment, with enjoyable and interesting photos of Coffee and Honey's primary products: coffee and honey, plus cake as a natural and fun extra offering in the cafe.
 
-As it is a small independent business, I removed the 'free shipping' threshold. I imagine the basket size would not be much more than 30 - 40€, and probably more likely around the 20€ mark, including shipping; free shipping would be a cost that business could probably not afford, and I'm doubtful that it would work as an incentive for customers to buy either more coffee or honey. Instead, I have offered the customers the chance to pick up their order for free in the cafe as an alternative to having it shipped by post.  
+As it is a small independent business, I removed the 'free shipping' threshold. I imagine the basket size would not be much more than 30 - 40€, and probably more likely around the 20€ mark; free shipping would be a cost that business could probably not afford, and I'm doubtful that it would work as an incentive for customers to buy either more coffee or more honey. Instead, I have offered the customers the chance to pick up their order for free in the cafe as an alternative to having it shipped by post.  
 
 As the website in this case would start off being more supplementary to the company rather than the main source of revenue, there would be little marketing budget to spend on online advertising. Given the subject matter, however, clever use of social media and SEO would be a cost-effective and overall effective way of raising the coffee shop's profile amongst local people, and triggering some word-of-mouth marketing.  
 
@@ -122,7 +122,7 @@ I wanted to create a slightly warm or cosy image, and settled on the 'goldenrod'
 I have chosen pictures that transmitted to me a warm and slightly vintage feel which I feel would be appropriate for a typical customer, who I imagine would be between 30 and late 50s (maybe older).
 
 ## Images on the website
-As I struggled to find product images for the coffee and honey, I used OpenAI's Dall-E image creation functionality to generate product images appropriate to my website. All other images are from Pexels and have been acknowledged with comments in the code.  
+As I struggled to find product images for the coffee and honey, I used OpenAI's Dall-E image creation functionality to generate product images of coffee and honey appropriate to my website. All other images are from Pexels and have been acknowledged with comments in the code.  
 
 ## Homepage
 I designed the homepage to make the navigation redundant for customers who know what they want, and who want to checkout as quickly as possible. Particularly on mobile, I wanted the customer to be able to choose their product and checkout via the shortest possible route; therefore the two main product categories are listed at the very top of the page and allow the user to access the products directly, without going via the navigation. The navigation is of course still there and functional, but on mobile and tablet it is hopefully not necessary. 
@@ -195,7 +195,7 @@ By clicking on delete address, you trigger a modal to check that you want to rea
 ![delete-address-modal](readme_images/delete-address-modal.PNG)
 
 ## Welcome Message and Toasts
-I liked the feature introduced to us in Project 4 whereby the user is welcomed with their username if logged in, or prompted to log in, at the top right of the screen, so I added it to this project as well as a reminder to the customer where they are in the process.  
+I liked the feature introduced to us in Project 4 whereby the user is welcomed with their username if logged in, or prompted to log in, at the top right of the screen, if they are not. I therefore added it to this project as well as a reminder to the customer where they are in the process.  
 
 I also implemented the Toast functionality from the Boutique Ado with some minor changes, such as changing the 'Go to Checkout' at the PDP to 'Go to Bag' to more accurately reflect the process (this could also have been my misunderstanding of the walk-through project, however. )
 
@@ -464,6 +464,8 @@ Sign-up to a database provider and get your database link
 - Dall-E for generating product and Facebook images: https://openai.com/index/dall-e-3/
 - I HEART IMG for resizing images: https://www.iloveimg.com/resize-image
 - CloudConvert for converting images to webp files: https://cloudconvert.com/jpg-to-webp
+- Zoho for creating product SKUs: https://www.zoho.com/de-de/inventory/sku-generator/
+
 
 # Acknowledgements
 As ever, a huge thank you to my mentor, Dick Vlaanderen, who saved me from many errors and made many helpful and creative suggestions. All errors remaining in the site are of course my own responsibility.  Thanks also to the CI Tutoring Team for their help on several occassions which saw me through some challenges! Big thanks to my family, my wife and three kids, who have been very patient and forgiving while I completed this project.
