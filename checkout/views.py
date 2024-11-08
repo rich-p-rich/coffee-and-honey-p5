@@ -69,11 +69,15 @@ def checkout(request):
             'billing_street_address2': request.POST['billing_street_address2'],
             'billing_county': request.POST['billing_county'],
         }
-
         order_form = OrderForm(form_data)
 
         if order_form.is_valid():
             order = order_form.save(commit=False)
+
+            # Set user_profile if the user is authenticated
+            if request.user.is_authenticated:
+                user_profile = request.user.userprofile
+                order.user_profile = user_profile  # Associate profile with order
 
             # Identify delivery type and set price accordingly
             delivery_type = request.POST.get('delivery_type')
