@@ -326,6 +326,17 @@ This method is designed to react to the customer’s chosen options, whether the
 This (copy_address) is a helper method designed to populate the delivery address fields (or billing fields if adapted) with address information that the customer has saved to their profile. It supports the logic in the delivery_options method by allowing saved delivery or billing address details to be copied directly into the delivery address fields without manually setting each one individually.
 
 
+## Remaining bugs and issues
+There are several things which I have not been able to fix before submission, despite the help of the tutoring service, my mentor and many of my own independent attempts. 
+Key among them are: 
+
+- The checkout opens with the default shipping address as 'Delivery to friends and family' when I want it to open at 'Ship to billing address' as default. 
+- I cannot get the billing name to prepopulate in the relevant field.
+- When the customer chooses 'pickup from cafe' as their preferred shipping option, my code is still transmitting the shipping price of €4.99 to Stripe and charging them for it, even though everything is correct on the frontend. I cannot get to the bottom of this.
+- Finally, when 'pick up' is chose, the checkout success page still itemises the delivery cost as €4.99, even though I have set it as €0.00.
+
+Unfornately, I have had to cut my losses with these bugs as I do not have time to fix them for this MVP.
+
 ## Marketing: Facebook, MailChimp and SEO
 
 **Facebook:** I set up a functioning Facebook business page and have fully documented it in this document. It is also linked from my footer although, as is known, it may get taken down by Facebook as it is not a genuine company. Given that it will probably get taken down, I have added a nofollow link to it. If this were a real business, however, I would not link it via nofollow, as I would want the Facebook page to be fully linked to my website.
@@ -352,7 +363,9 @@ A PDF of the mock-ups for my Facebook site can be found in the readme_documentat
 
 ![mailchimp-2](readme_images/mailchimp-admin-2.PNG)
 
-**404 Page:** I have set up and tested a custom 404 page that directs the user back to the homepage.
+**404 Page:** I have set up and tested a custom 404 page that directs the user back to the homepage. As per the relevant part of the project walk-through, I added the the handler to views.py in the Coffee and Honey app, and imported it to the main urls file.
+
+The html is stored in my main templates folde and is called 404.html, as shown in the guidance. I have added a photo of some swarming bees and some custom text, plus a button to guide the user back to the homepage.
 
 **SEO:**
 - No-follow links: the footer contains links to the company's Facebook page (see above), Instagram homepage, Fairtrade Coffee and MailChimp, all of which include the rel="nofollow" attribute. 
