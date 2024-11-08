@@ -168,73 +168,38 @@ Browsers used:
 |Bag - go to checkout       | Brings customer to checkout | Pass  | yes
 
 
+**Test 5. Checkout and Payment**
+| Test                                   | Expected outcome                                        | Result | Passed all tested Browsers? |
+|----------------------------------------|---------------------------------------------------------|--------|-----------------------|
+|Checkout                 | Only accessible via bag          | Pass  | yes
+|Checkout                 | Only accessible if bag has items          | Pass  | yes
+|Checkout                 | Three delivery options are displayed          | Pass  | yes
+|Checkout - Home/Billing address | Opens on Home Delivery as default          |  | 
+|Checkout - Home/Billing address | No other delivery address fields are shown          | Pass  | yes
+|Checkout - Home/Billing address | Billing name is prepopulated          | No -> Bug  | 
+|Checkout - Home/Billing address | Billing address is prepopulated          | Pass  | yes
+|Checkout - Delivery to Friends & Family | Opens Delivery Address fields          | Pass  | yes
+|Checkout - Delivery to Friends & Family | Billing details remain visible and are populated with user's details         | Pass  | yes
+|Checkout - Delivery to Friends & Family | Prepopulated if a Delivery Address is marked as default in profile          | Pass  | yes
+|Checkout - Delivery to Friends & Family | Empty if no address marked as default          | Pass  | yes
+|Checkout - Delivery to Friends & Family | Address drop-down enables user to select from saved addresses          | Pass  | yes
+|Checkout - Delivery to Friends & Family | Clicking on save address saves the address to the profile        |No -> Bug   | 
+|Checkout - Delivery to Friends & Family | Removing check from save address means address is not saved to the profile        | Pass  | yes
+|Checkout - Pick-up at Cafe                | Only billing address is shown          | Pass  | yes
+|Checkout - Pick-up at Cafe                | Sets delivery costs to zero         | Pass  | yes
+|Checkout - Order summary                |  Correct image, items and prices are shown are shown         | Pass  | yes
+|Checkout - Order summary                |  Correct order total, shipping costs and grand total       | Pass  | yes
+|Checkout - Payment               |  Stripe credit card field is accessible     | Pass  | yes
+|Checkout - Payment               |  Stripe credit card requires month and check number     | Pass  | yes
+|Checkout - Payment               |  Transaction recorded in Stripe Dashboard         | Pass  | yes
+|Checkout - Payment               |  Waiting screen between payment / payment success       | Pass  | yes
+|Checkout - Checkout success page           |  Order nr present         | Pass  | yes
+|Checkout - Checkout success page           |  Order details correct         | Pass  | yes
+|Checkout - Checkout success page           |  Delivery details correct         | Pass  | yes
+|Checkout - Checkout success page           |  Delivery costs correct         | No -> bug   | yes
 
 
 
-|Saved addresses page                | Billing address does not show       | Pass  | yes
-|Saved addresses page                | Any saved addresses can be viewed         | Pass  | yes
-|Saved addresses page                | A new address can be added        | Pass  | yes
-|Saved addresses page                | Any address can edited, partly or wholly        | Pass  | yes
-|Saved addresses page                | Any address can deleted, partly or wholly        | Pass  | yes
-|Saved addresses page                | Delete button triggers warning modal to confirm deletion      | Pass  | yes
-|Saved addresses page                | Any delivery address can be marked as default shipping address    | Pass  | yes
-|Saved addresses page                | It is possible to remove default shipping status from any address    | Pass  | yes
-|Saved addresses page                | If default status is removed, and no other delivery address is marked as default, billing address is default shipping address    | Pass  | yes
-|Saved addresses page                | Only one address at a time can be marked as default   | Pass  | yes
-|Saved addresses page                | Back to profile page button leads back to profile page  | Pass  | yes
-
-
-|Hompage - click Sign-in button                 | Not visible or accessible          | Pass   | yes
-|Hompage - click Sign-in button                 | Not visible or accessible          | Pass   | yes
-|Hompage - Sign-out button                 | visible         | Pass   | yes 
-|Hompage - click Sign-in button                 | Successful sign-in leads to full functionality         | Pass   | yes 
-|Hompage - Registration page                    | Successful registration: user welcomed by name on top-right of page             | Pass  | yes
-|Hompage - card elements                        | Can be opened and closed individually         | Pass   | yes 
-|Hompage - card elements: registration link     | Leads to registration page         | Pass   | yes 
-|Hompage - card elements: book a call  link     | Opens sign-in Modal         | Pass   | yes 
-|Hompage - card elements: book a call - Modal   | Links to sign-in and registration work        | Pass   | yes 
-|Hompage - accordion elements                   | Can be opened and closed individually          | Pass   | yes 
-
-**Test 3. User signed in: appointments - making, changing and cancelling**
-|Test                                           | Expected outcome	                |  Result             | Passed all Browsers?
-| ---------------------------------------------	| ---------------------------------	| -------------------	 | -------------------
-|Book appointment - navbar links                  | All navbar options are visible         | Pass   |  yes
-|Book appointment - appt form                  | Accessible via burger icon for mobile & tablet         | Pass   |  yes
-|Book appointment - click link                   | opens book appointment page            	        | Pass    	      	| yes
-|Book appointment - meeting date                     | can choose date             	        | Pass    	      	| yes
-|Book appointment - meeting time        | can choose time         	        | Pass    | yes
-|Book appointment - add optional message                    | can add message             	        | Pass  | yes
-|Book appointment - empty optional message                    | can book appt without message             	        | Pass  | yes
-|Book appointment - validation: date                    | can't choose a time in the past             	        | Pass  | yes
-|Book appointment - validation: date                    | can't choose a time more than 4 weeks in the future             	        | Pass  | yes
-|Book appointment - validation: date error messages                    | error messages show            	        | Pass  | yes
-|Book appointment - validation: morning time                    | appts available 08:00 - 12:30 only            	        | Pass  | yes
-|Book appointment - validation: afternoon time                    | appts available 14:00 - 18:00 only            	        | Pass  | yes
-|Book appointment - validation: meeting clash                    | can't schedule 2 appointments at the same time           	        | Pass  | yes
-|Book appointment - success                   | confirmation page is shown with appt details          	        | Pass  | yes
-|Book appointment - confirmation page                   | links to manage appts and homepage are shown and work          	        | Pass  | yes
-|Manage your appointment(s): click link                    | if there are no appointments, 'no appointments' message is shown        	        | Pass  | yes
-|Manage your appointment(s): overview               | if there are appointments, they are listed          	        | Pass  | yes
-|Manage your appointment(s): overview                    | if there are appointments, they are listed with edit and cancel options         	        | Pass  | yes
-|Manage your appointment(s): overview               | if there are appointments, they are listed          	        | Pass  | yes
-|Manage your appointment(s): click edit               | it is possible to change date, time, date and time    	        | Pass  | yes
-|Manage your appointment(s): click edit               | same validation is applied as 'book appointments'  	        | Pass  | yes
-|Manage your appointment(s): click edit               | can save new appointment  	        | Pass  | yes
-|Manage your appointment(s): click edit               | confirmation is shown  	        | Pass  | yes
-|Manage your appointment(s): click cancel               | triggers confirmation modal  	        | Pass  | yes
-|Manage your appointment(s): click cancel               | modal allows for user to keep original appt   	        | Pass  | yes
-|Manage your appointment(s): click cancel               | modal allows user to cancel appointment   	        | Pass  | yes
-|Manage your appointment(s): click cancel               | cancellation is shown   	        | Pass  | yes
-
-
-**Test 4: User signed in: games and exercises**
-|Test                                           | Expected outcome	                |  Result             | Passed all Browsers?
-| ---------------------------------------------	| ---------------------------------	| -------------------	 | -------------------
-|Games and Exercises - click navbar link                  | triggers dropdown menue         | Pass   |  yes
-|Games and Exercises - navbar language section            | each language section A2 - C1 is clickable and leads to the relevant section | Pass   |  yes
-|Games and Exercises - click language section A2 - C1           | opens the section page displaying exercise topics         | Pass    	      	| yes
-|Games and Exercises - click the language topic           | reveals the exercises        | Pass    	      	| yes
-|Games and Exercises - click submit for answers                    | get feedback on correct, incorrect, reminder to add an answer  | Pass    	      	| yes
 
 **Test 5: Admin section**
 
