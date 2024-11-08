@@ -50,27 +50,47 @@ I added the following comments to JSHint so it recognised which version to use, 
 Note: I did not check auto-generated files such as migrations and ___init__.py.  
 In some cases, no new line was detected when cross-checking files copied from GitHub rather than GitPod. I could not find a clear reason for this on StackOverflow or any other online discussion.
 
+
 |Test file                                          | Outcome	                |  Comments              
 | ---------------------------------------------	| ---------------------------------	| -------------------	  	
-|Appointments - admin.py                    |  Clear      | -    |  
-|Appointments - forms.py                   |  Clear      | -    |  
-|Appointments - models.py                   | Clear      | -    |   
-|Appointments - urls.py                   | Clear      | -    |   
-|Appointments - views.py                   | Clear      | -    |  
-|English_tutor - settings.py                   | Clear       | Blank and trailing spaces corrected; otherwise I followed Joanna Gorska's advice here https://www.youtube.com/watch?t=1648&v=6j9dZTW4owI&feature=youtu.be and added # noqa as appropriate -    |   
-|English_tutor - urls.py                   | Clear      | -    |   
-|English_tutor - views.py                   | Clear      | -    |   
-|Games_and_exercises - admin.py                    | Clear       | -    |  
-|Games_and_exercises - forms.py                   |   Clear     | -    |  
-|Games_and_exercises - models.py                   | Clear       | -    |   
-|Games_and_exercises - urls.py                   |  Clear     | -    |   
-|Games_and_exercises - views.py                   |   Clear    | -    |   
+|Bag - apps.py                    |  Clear      | -    |  
+|Bag - contexts.py                   |  Clear      | -    |  
+|Bag - urls.py                   | Clear      | -    |   
+|Bag - views.py                     | Clear      | -    |   
+|                    |       |    |   
+|Checkout - init.py                     | Clear      | -    |  
+|Checkout - admin.py                     | Clear      | -    |    
+|Checkout - apps.py                     | Clear      | -    |   
+|Checkout - forms.py                     | Clear      | -    |   
+|Checkout - models.py                     | Clear      | -    |  
+|Checkout - signals.py                     | Clear      | -    |  
+|Checkout - urls.py                     | Clear      | -    |  
+|Checkout - views.py                     | Clear      | -    |  
+|Checkout - webhook_handler.py                     | Clear      | -    |  
+|Checkout - webhooks                     | Clear      | -    |
+|                    |       |    |   
+|Coffee and Honey - asgi.py                    | Clear       | -    |  
+|Coffee and Honey - settings.py                   | Clear       | Blank and trailing spaces corrected; otherwise I followed Joanna Gorska's advice here https://www.youtube.com/watch?t=1648&v=6j9dZTW4owI&feature=youtu.be and added # noqa as appropriate -    |   
+|Coffee and Honey - urls.py                     | Clear      | -    |  
+|Coffee and Honey - wsgi.py                     | Clear      | -    | 
+|                    |       |    |   
+|Home - apps.py                     |  Clear     | -    |   
 |Home - urls.py                     |  Clear     | -    |   
 |Home - views.py                   |   Clear    | -    | 
-|user_accounts - admin.py                     |  Clear     | -    |   
-|user_accounts - models.py                     |  Clear     | -    |   
-|user_accounts - urls.py                     |  Clear      | -    |   
-|user_accounts - views.py                   |    Clear    | -    | 
+|                    |       |    |   
+|Products - admin.py                     |  Clear     | -    |  
+|Products - apps.py                     |  Clear     | -    |  
+|Products - models.py                     |  Clear     | -    |   
+|Products - urls.py                     |  Clear     | -    |   
+|Products - views.py                   |   Clear    | -    | 
+|                    |       |    |   
+|Profiles - apps.py                     |  Clear     | -    |  
+|Profiles - forms.py                     |  Clear     | -    |   
+|Profiles - models.py                     |  Clear     | -    |   
+|Profiles - urls.py                     |  Clear     | -    |   
+|Profiles - views.py                   |   Clear    | -    | 
+|                    |       |    |   
+|Root directory - manage.py                   |   Clear    | -    | 
 
 
 
@@ -174,7 +194,7 @@ Browsers used:
 |Checkout                 | Only accessible via bag          | Pass  | yes
 |Checkout                 | Only accessible if bag has items          | Pass  | yes
 |Checkout                 | Three delivery options are displayed          | Pass  | yes
-|Checkout - Home/Billing address | Opens on Home Delivery as default          |  | 
+|Checkout - Home/Billing address | Opens on Home Delivery as default          |No -> Bug  | 
 |Checkout - Home/Billing address | No other delivery address fields are shown          | Pass  | yes
 |Checkout - Home/Billing address | Billing name is prepopulated          | No -> Bug  | 
 |Checkout - Home/Billing address | Billing address is prepopulated          | Pass  | yes
