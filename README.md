@@ -152,6 +152,8 @@ In this section, I focus on other functionalties that were not present in the Bo
 ## Products: type and pricing 
 Unlike the products on Boutique Ado, the prices of both coffee and honey are linked to their weight; therefore I set up the product model to allow for products with a straight-forward price class (as on Boutique Ado) and for products like mine where the price is linked to the weight (i.e. size).
 
+Originally, I planned to offer both pre-ground coffee and as well as beans, which is why I have kept the navbar link to first the category and then the product detail page. Similarly with honey, I planned to offer both creamed set honey in addition to the more common liquid honey. Due to lack of time I could not do this, but thought it worth keeping the category alive for this MVP project and building on that in a later itertion.  
+
 ## Coffee
 I offer three types of coffee: Arabia, Colombian and Robusta. Each type is offered in 4 weight variants (250g, 500g, 750g, 1000g) with the price increasing accordingly (5.99, 9.99, 14.99, 19.99)
 
@@ -348,6 +350,7 @@ Link to page: https://www.facebook.com/profile.php?id=61567575580447
 - No-follow links: the footer contains links to the company's Facebook page (see above), Instagram homepage, Fairtrade Coffee and MailChimp, all of which include the rel="nofollow" attribute. 
 - There are no orphan pages: all pages can be reached from another findable page either through the navigation menu, footer or in-page links.
 - Block meta in base.html contains the meta title, keywords and description.
+- All images are named in a way that that search engines can identify them as site-relevant
 
 ![meta](readme_images/meta-info.PNG)
 

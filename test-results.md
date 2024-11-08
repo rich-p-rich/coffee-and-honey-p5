@@ -78,10 +78,13 @@ In some cases, no new line was detected when cross-checking files copied from Gi
 
 Browsers used:
 - Google Chrome
+
+<!-- 
 - Mozilla Firefox
 - Microsoft Edge
 - Apple Safari (from I-Pad)
 - Samsung Internet version 25.0.1.3 on a Samsung A33
+--> 
 
 **Test 1. Homepage and Base.html frame**
 |Test                                           | Expected outcome	                |  Result             | Passed all Browsers?
@@ -104,13 +107,84 @@ Browsers used:
 
 
 **Test 2. Products: Coffee and Honey**
-|Test                                           | Expected outcome	                |  Result             | Passed all Browsers?
-| ---------------------------------------------	| ---------------------------------	| -------------------	 | -------------------
-|Hompage - navbar links                  | All navbar options are visible         | Pass   |  yes
-|Hompage - navbar links                  | Accessible via burger icon for mobile & tablet         | Pass   |  yes
-|Navbar - click burger bar (mobile only)        | Opens navigation         	        | Pass    | yes
-|Hompage - click Home button                    | Refresh page             	        | Pass  | yes
-|Hompage - click Register button                | Not visible or accessible              | Pass  | yes
+| Test                                   | Expected outcome                                        | Result | Passed all Browsers? |
+|----------------------------------------|---------------------------------------------------------|--------|-----------------------|
+| Hompage - All products                 | All product categories can be reached to Arabica category | Pass   | yes                  |
+| Hompage - All PDPs                     | Have a product image and description                    | Pass   | yes                  |
+| Hompage - All PDPs                     | Have functioning 'keep shopping' and 'add to bag' buttons | Pass   | yes                  |
+| Hompage - Coffee - Arabica             | Leads to Arabica category                               | Pass   | yes                  |
+| Hompage - Coffee - Colombian           | Leads to Colombian category                             | Pass   | yes                  |
+| Navbar - Coffee - Robusta              | Leads to Robusta category                               | Pass   | yes                  |
+| Navbar - Coffee - PDPs                 | All PDPs have 4 weight/price classes which are selectable | Pass   | yes                  |
+| Navbar - Coffee - PDPs                 | All PDPs have the option to choose 'freshly ground' extra service | Pass | yes               |
+| Navbar - Coffee - PDPs                 | All PDPs have the option to add any weight class to bag, either single or multiple without extra service | Pass | yes |
+| Navbar - Coffee - PDPs                 | All PDPs have the option to add the extra service to the product, either single or multiple without extra service | Pass | yes |
+| Hompage - Honey - Flower               | Leads to Flower honey                                   | Pass   | yes                  |
+| Hompage - Honey - Forest               | Leads to Forest honey                                   | Pass   | yes                  |
+| Hompage - Honey - Heather              | Leads to Heather honey                                  | Pass   | yes                  |
+| Navbar - Honey - PDPs                  | All PDPs have the option to add any weight class to bag, either single or multiple | Pass | yes |
+
+
+**Test 3. Account: My Profile**
+| Test                                   | Expected outcome                                        | Result | Passed all Browsers? |
+|----------------------------------------|---------------------------------------------------------|--------|-----------------------|
+|My profile page                | Only available to logged in and authenticated users            | Pass  | yes
+|My profile page                | Displays billing address, order history and a link to manage my addresses            | Pass  | yes
+|My profile page                | Billing details can be updated            | Pass  | yes
+|My profile page                | Manage my addresses button leads to 'saved addresses          | Pass  | yes
+|Saved addresses page                | Billing address does not show       | Pass  | yes
+|Saved addresses page                | Any saved addresses can be viewed         | Pass  | yes
+|Saved addresses page                | A new address can be added        | Pass  | yes
+|Saved addresses page                | Any address can edited, partly or wholly        | Pass  | yes
+|Saved addresses page                | Any address can deleted, partly or wholly        | Pass  | yes
+|Saved addresses page                | Delete button triggers warning modal to confirm deletion      | Pass  | yes
+|Saved addresses page                | Any delivery address can be marked as default shipping address    | Pass  | yes
+|Saved addresses page                | It is possible to remove default shipping status from any address    | Pass  | yes
+|Saved addresses page                | If default status is removed, and no other delivery address is marked as default, billing address is default shipping address    | Pass  | yes
+|Saved addresses page                | Only one address at a time can be marked as default   | Pass  | yes
+|Saved addresses page                | Back to profile page button leads back to profile page  | Pass  | yes
+
+
+**Test 4. Shopping Bag**
+| Test                                   | Expected outcome                                        | Result | Passed all Browsers? |
+|----------------------------------------|---------------------------------------------------------|--------|-----------------------|
+|Bag                 | Accessible from every page           | Pass  | yes
+|Bag - empty               | Empty bag message shown           | Pass  | yes
+|Bag - product info               | Image, size and SKU visible         | Pass  | yes
+|Bag - product info            | Quantity accurate and itemised        | Pass  | yes
+|Bag - product info            | Correct price shown        | Pass  | yes
+|Bag - extra service            | If chosen in PDP, itemised in bag        | Pass  | yes
+|Bag - extra service            | If chosen in PDP, correct price shown        | Pass  | yes
+|Bag - extra service            | Shown only once as a flatrate, regardliness of how many packs of coffee shown  | Pass  | yes
+|Bag - extra service            | Absent if not chosen   | Pass  | yes
+|Bag - adjust bag            | increments / decrements chosen quantity accurately   | Pass  | yes
+|Bag - adjust bag            | Subtotal adjusts accurately according to quantity  | Pass  | yes
+|Bag - adjust bag            | Extra service does not increment  | Pass  | yes
+|Bag - remove product         | Removes product from bag compeletely  | Pass  | yes
+|Bag - bag total        | Correctly sums up the price of all products and services  | Pass  | yes
+|Bag - delivery        | Displays shipping costs | Pass  | yes
+|Bag - grand total        | Correctly calculates bag total plus delivery | Pass  | yes
+|Bag - keep shopping       | Brings customer to all products | Pass  | yes
+|Bag - go to checkout       | Brings customer to checkout | Pass  | yes
+
+
+
+
+
+|Saved addresses page                | Billing address does not show       | Pass  | yes
+|Saved addresses page                | Any saved addresses can be viewed         | Pass  | yes
+|Saved addresses page                | A new address can be added        | Pass  | yes
+|Saved addresses page                | Any address can edited, partly or wholly        | Pass  | yes
+|Saved addresses page                | Any address can deleted, partly or wholly        | Pass  | yes
+|Saved addresses page                | Delete button triggers warning modal to confirm deletion      | Pass  | yes
+|Saved addresses page                | Any delivery address can be marked as default shipping address    | Pass  | yes
+|Saved addresses page                | It is possible to remove default shipping status from any address    | Pass  | yes
+|Saved addresses page                | If default status is removed, and no other delivery address is marked as default, billing address is default shipping address    | Pass  | yes
+|Saved addresses page                | Only one address at a time can be marked as default   | Pass  | yes
+|Saved addresses page                | Back to profile page button leads back to profile page  | Pass  | yes
+
+
+|Hompage - click Sign-in button                 | Not visible or accessible          | Pass   | yes
 |Hompage - click Sign-in button                 | Not visible or accessible          | Pass   | yes
 |Hompage - Sign-out button                 | visible         | Pass   | yes 
 |Hompage - click Sign-in button                 | Successful sign-in leads to full functionality         | Pass   | yes 
