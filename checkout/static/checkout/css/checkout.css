@@ -131,7 +131,6 @@ select option[value=""] {
 .order-number {
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
   max-width: 100px;
   display: block;
 }

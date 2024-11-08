@@ -1,15 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-
-# Create your views here.
-
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+
 from .models import UserProfile, RecipientAddresses
 from .forms import UserProfileForm, RecipientAddressesForm
-
 from checkout.models import Order
 
 
