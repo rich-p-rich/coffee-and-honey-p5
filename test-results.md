@@ -44,7 +44,7 @@ Testing method: open an incognito tab -> open project link -> open DevToops -> r
 
 |Test file                                          | Outcome	                |  Comments              
 | ---------------------------------------------	| ---------------------------------	| -------------------
-|Bag - bag.js                   | Clear      | It is calling Bootstrap an 'undefined variable' but it is 3rd party and is necessary for the checkin modal, so I have left it    |  	  	
+|Bag - bag.js                   | Clear      | It is calling Bootstrap an 'undefined variable' but it is 3rd party and is necessary for the log-in modal, so I have left it    |  	  	
 |Checkout - checkout.js                    |  Clear      | -    |  
 |Checkout - stripe_elements.js                     |  Clear      | It is calling Stripe an undefined variable, but as I haven taken this code from the Walkthrough, I have left this unchanged    |  
 |Profiles - countryfield.js                   | Clear      | -    |   
@@ -113,8 +113,6 @@ Browsers used:
 
 <!-- 
 - Mozilla Firefox
-- Microsoft Edge
-- Apple Safari (from I-Pad)
 - Samsung Internet version 25.0.1.3 on a Samsung A33
 --> 
 
@@ -141,7 +139,7 @@ Browsers used:
 **Test 2. Products: Coffee and Honey**
 | Test                                   | Expected outcome                                        | Result | Passed all Browsers? |
 |----------------------------------------|---------------------------------------------------------|--------|-----------------------|
-| Hompage - All products                 | All product categories can be reached to Arabica category | Pass   | yes                  |
+| Hompage - All products                 | All product categories can be reached  | Pass   | yes                  |
 | Hompage - All PDPs                     | Have a product image and description                    | Pass   | yes                  |
 | Hompage - All PDPs                     | Have functioning 'keep shopping' and 'add to bag' buttons | Pass   | yes                  |
 | Hompage - Coffee - Arabica             | Leads to Arabica category                               | Pass   | yes                  |
@@ -168,7 +166,7 @@ Browsers used:
 |Saved addresses page                | Any saved addresses can be viewed         | Pass  | yes
 |Saved addresses page                | A new address can be added        | Pass  | yes
 |Saved addresses page                | Any address can edited, partly or wholly        | Pass  | yes
-|Saved addresses page                | Any address can deleted, partly or wholly        | Pass  | yes
+|Saved addresses page                | Any address can deleted      | Pass  | yes
 |Saved addresses page                | Delete button triggers warning modal to confirm deletion      | Pass  | yes
 |Saved addresses page                | Any delivery address can be marked as default shipping address    | Pass  | yes
 |Saved addresses page                | It is possible to remove default shipping status from any address    | Pass  | yes
