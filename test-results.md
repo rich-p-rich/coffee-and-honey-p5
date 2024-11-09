@@ -110,11 +110,11 @@ In some cases, no new line was detected when cross-checking files copied from Gi
 
 Browsers used:
 - Google Chrome
-
-<!-- 
-- Mozilla Firefox
 - Samsung Internet version 25.0.1.3 on a Samsung A33
---> 
+- Mozilla Firefox
+
+Limited testing done on Microsoft Edge to test general look and functionalities from PDP to checkout.  
+
 
 **Test 1. Homepage and Base.html frame**
 |Test                                           | Expected outcome	                |  Result             | Passed all Browsers?
