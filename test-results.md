@@ -113,7 +113,7 @@ Browsers used:
 - Samsung Internet version 25.0.1.3 on a Samsung A33
 - Mozilla Firefox
 
-Limited testing done on Microsoft Edge to test general look and functionalities from PDP to checkout.  
+Limited testing done on Microsoft Edge to test general look and functionalities from PDP to completing a purchase.
 
 
 **Test 1. Homepage and Base.html frame**
