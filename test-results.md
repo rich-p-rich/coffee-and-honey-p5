@@ -24,6 +24,7 @@ Testing method: open an incognito tab -> open project link -> open DevToops -> r
 
 - Resource used: https://validator.w3.org/
 - No Errors
+- Checked before submission
 - Method of testing: direct input
 
 ![HTML Validator](test-results-images/html-test-results.PNG)
@@ -31,6 +32,7 @@ Testing method: open an incognito tab -> open project link -> open DevToops -> r
 ## CSS
 - Resource used: https://jigsaw.w3.org/css-validator/
 - No Errors
+- Checked before submission
 - Method of testing: direct input
 
 ![CSS Validator](test-results-images/css-test-results.PNG)
@@ -38,6 +40,14 @@ Testing method: open an incognito tab -> open project link -> open DevToops -> r
 ## Javascript
 - Resource used: JSHint: https://jshint.com/
 - My JS passes throws no errors
+
+
+|Test file                                          | Outcome	                |  Comments              
+| ---------------------------------------------	| ---------------------------------	| -------------------	  	
+|Checkout - checkout.js                    |  Clear      | -    |  
+|Checkout - checkout.js                     |  Clear      | It is calling Stripe an undefined variable, but as I haven taken this code from the Walkthrough, I have left this unchanged    |  
+|Bag - urls.py                   | Clear      | -    |   
+|Bag - views.py                     | Clear      | -    |   
 
 I added the following comments to JSHint so it recognised which version to use, and that I was using Bootstrap in my project: 
 
@@ -72,6 +82,7 @@ In some cases, no new line was detected when cross-checking files copied from Gi
 |Coffee and Honey - asgi.py                    | Clear       | -    |  
 |Coffee and Honey - settings.py                   | Clear       | Blank and trailing spaces corrected; otherwise I followed Joanna Gorska's advice here https://www.youtube.com/watch?t=1648&v=6j9dZTW4owI&feature=youtu.be and added # noqa as appropriate -    |   
 |Coffee and Honey - urls.py                     | Clear      | -    |  
+|Coffee and Honey - views.py                     | Clear      | -    |  
 |Coffee and Honey - wsgi.py                     | Clear      | -    | 
 |                    |       |    |   
 |Home - apps.py                     |  Clear     | -    |   

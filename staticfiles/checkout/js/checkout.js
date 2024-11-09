@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const orderTotalElement = document.querySelector('.order-total');
     const deliveryCostElement = document.querySelector('.delivery-cost');
     const grandTotalElement = document.querySelector('.grand-total');
+    const chargeNoticeElement = document.querySelector('.submit-button .small.text-danger strong');
 
     // Delivery and Pickup options    
     const pickupRadio = document.getElementById('pickup');
@@ -18,6 +19,17 @@ document.addEventListener('DOMContentLoaded', function () {
     if (defaultDeliveryElement) {
         defaultDeliveryData = JSON.parse(defaultDeliveryElement.textContent);
     }
+
+    // Debugging output for initial elements
+    console.log("[DEBUG] Initial Elements:", {
+        orderTotalElement,
+        deliveryCostElement,
+        grandTotalElement,
+        chargeNoticeElement,
+        pickupRadio,
+        deliveryBillingRadio,
+        deliveryDifferentRadio
+    });
 
     // 1. Function to check if the delivery address differs from the billing address
     function deliveryAddressDiffersFromBilling() {
@@ -85,6 +97,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const deliveryPrice = parseFloat(priceConfig.getAttribute('data-delivery-price'));
     const pickupPrice = parseFloat(priceConfig.getAttribute('data-pickup-price'));
 
+    // Debugging output for initial prices
+    console.log("[DEBUG] Initial Prices:", {
+        deliveryPrice,
+        pickupPrice
+    });
+
     // Function to update delivery and grand total prices
     function updatePrices() {
         let deliveryCost = deliveryPrice;
@@ -93,11 +111,21 @@ document.addEventListener('DOMContentLoaded', function () {
             deliveryCost = pickupPrice;
         }
 
+        console.log("[DEBUG] Selected Delivery Cost:", deliveryCost); // Debugging output
+
         // Update the displayed delivery cost and grand total
         if (deliveryCostElement) deliveryCostElement.textContent = `€${deliveryCost.toFixed(2)}`;
         if (orderTotalElement && grandTotalElement) {
             const orderTotal = parseFloat(orderTotalElement.textContent.replace('€', ''));
-            grandTotalElement.textContent = `€${(orderTotal + deliveryCost).toFixed(2)}`;
+            const grandTotal = orderTotal + deliveryCost;
+            console.log("[DEBUG] Order Total:", orderTotal); // Debugging output
+            console.log("[DEBUG] Grand Total:", grandTotal); // Debugging output
+            grandTotalElement.textContent = `€${grandTotal.toFixed(2)}`;
+
+            // Update the charge notice element to reflect the new grand total
+            if (chargeNoticeElement) {
+                chargeNoticeElement.textContent = `€${grandTotal.toFixed(2)}`;
+            }
         }
     }
 
@@ -126,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
     handleDeliveryOptionChange();
 
     // Event listeners for delivery option changes
-    pickupRadio.addEventListener('change', handleDeliveryOptionChange);
-    deliveryBillingRadio.addEventListener('change', handleDeliveryOptionChange);
-    deliveryDifferentRadio.addEventListener('change', handleDeliveryOptionChange);
+    if (pickupRadio) pickupRadio.addEventListener('change', handleDeliveryOptionChange);
+    if (deliveryBillingRadio) deliveryBillingRadio.addEventListener('change', handleDeliveryOptionChange);
+    if (deliveryDifferentRadio) deliveryDifferentRadio.addEventListener('change', handleDeliveryOptionChange);
 });
