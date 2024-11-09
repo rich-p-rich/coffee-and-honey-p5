@@ -243,23 +243,13 @@ Browsers used:
 |Admin - email addresses           | can be deleted | Pass   |  yes
 |Admin - email addresses: click on one           | displays user details | Pass   |  yes
 |Admin - email addresses: click on one           | is linked to a specific user number | Pass   |  yes
-|Admin - email addresses: click on one           | not possible to change the user number to one assigned to a different user | Pass   |  yes
-|Admin - email addresses: click on one           | can click through to the specific user | Pass   |  yes
-|Admin - appointments           | displays all appointments | Pass   |  yes
-|Admin - appointments           | can delete an appointments | Pass   |  yes
-|Admin - appointments           | can make a new appointment | Pass   |  yes
-|Admin - authentication and authorisation - groups           | not currently in use | n/a   |  n/a 
-|Admin - authentication and authorisation - users           | can add a user | pass   |  yes
-|Admin - authentication and authorisation - personal info           | can first name, last name, new email | pass   |  yes
-|Admin - django summernote           | not currently in use | n/a   |  n/a 
-|Admin - games and exercises           | can add a quiz question | pass   |  yes
-|Admin - games and exercises           | can edit a quiz question | pass   |  yes
-|Admin - games and exercises           | can delete a quiz question | pass   |  yes
-|Admin - games and exercises           | can link a quiz question to a section | pass   |  yes
-|Admin - games and exercises           | can add a section | pass   |  yes
-|Admin - games and exercises           | can edit a section | pass   |  yes
-|Admin - games and exercises           | can delete a section | pass   |  yes
-|Admin - No other sections are currently in use.          | n/a | n/a   |  n/a
-
+|Admin - categories           | can add a category | Pass   |  yes
+|Admin - categories           | can delete a category | Pass   |  yes
+|Admin - categories           | can edit name / friendly name | Pass   |  yes 
+|Admin - product variant           | CRUD functionality | pass   |  yes
+|Admin - products           | CRUD functionality | pass   |  yes
+|Admin - products           | can also add a variant on this page | pass   |  yes
+|Admin - products           | can assign / remove extra services  | pass   |  yes
+|Admin - services           | can define services and price  | pass   |  yes
 
 # END OF DOCUMENT
