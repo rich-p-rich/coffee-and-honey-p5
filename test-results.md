@@ -43,11 +43,12 @@ Testing method: open an incognito tab -> open project link -> open DevToops -> r
 
 
 |Test file                                          | Outcome	                |  Comments              
-| ---------------------------------------------	| ---------------------------------	| -------------------	  	
+| ---------------------------------------------	| ---------------------------------	| -------------------
+|Bag - bag.js                   | Clear      | It is calling Bootstrap an 'undefined variable' but it is 3rd party and is necessary for the checkin modal, so I have left it    |  	  	
 |Checkout - checkout.js                    |  Clear      | -    |  
-|Checkout - checkout.js                     |  Clear      | It is calling Stripe an undefined variable, but as I haven taken this code from the Walkthrough, I have left this unchanged    |  
-|Bag - urls.py                   | Clear      | -    |   
-|Bag - views.py                     | Clear      | -    |   
+|Checkout - stripe_elements.js                     |  Clear      | It is calling Stripe an undefined variable, but as I haven taken this code from the Walkthrough, I have left this unchanged    |  
+|Profiles - countryfield.js                   | Clear      | -    |   
+|Profiles - profile.js                   | Clear      | It is calling Bootstrap an 'undefined variable' but it is 3rd party and is necessary for the checkin modal, so I have left it     |     
 
 I added the following comments to JSHint so it recognised which version to use, and that I was using Bootstrap in my project: 
 
@@ -101,7 +102,7 @@ In some cases, no new line was detected when cross-checking files copied from Gi
 |Profiles - urls.py                     |  Clear     | -    |   
 |Profiles - views.py                   |   Clear    | -    | 
 |                    |       |    |   
-|Root directory - manage.py                   |   Clear    | -    | 
+|Root directory - manage.py                   |   Clear    | Checked only for white spaces   | 
 
 
 

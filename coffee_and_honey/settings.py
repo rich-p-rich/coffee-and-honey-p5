@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 import dj_database_url
 if os.path.isfile('env.py'):
-    import env
+    import env  # noqa
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -32,17 +32,17 @@ SECRET_KEY = os.environ.get("SECRET_KEY", '')
 # Debug is False for production and submission
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net',
-                '8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net', 'localhost',
-                'https://8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net',
-                '.herokuapp.com']
+ALLOWED_HOSTS = ['https://8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net',  # noqa
+                '8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net', 'localhost',  # noqa
+                'https://8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net',  # noqa
+                '.herokuapp.com']  # noqa
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost',
-    'https://8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net',
+    'https://8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net',  # noqa
     'https://*.gitpod.io',
     'https://*.herokuapp.com',
-    'https://8000-richprich-englishtutord-94zz8190n00.ws.codeinstitute-ide.net',
+    'https://8000-richprich-englishtutord-94zz8190n00.ws.codeinstitute-ide.net',  # noqa
 ]
 
 # Application definition
@@ -97,7 +97,7 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request', # required by allauth
+                'django.template.context_processors.request',  # required by allauth  # noqa
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
@@ -157,16 +157,16 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',  # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',  # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',  # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',  # noqa
     },
 ]
 

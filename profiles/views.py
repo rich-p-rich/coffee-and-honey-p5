@@ -186,4 +186,3 @@ def delete_address(request, address_id):
         address.delete()
         messages.success(request, 'Recipient address deleted successfully.')
         return redirect('saved_addresses')
-

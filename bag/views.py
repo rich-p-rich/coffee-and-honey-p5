@@ -118,7 +118,7 @@ def adjust_bag(request, item_id):
     product = get_object_or_404(Product, pk=item_id)
     quantity = int(request.POST.get('quantity'))
     size = request.POST.get('product_size', None)
-    freshly_ground = 'freshly_ground' in request.POST  # Check if extra service was selected originally
+    freshly_ground = 'freshly_ground' in request.POST  # Check for extra srvice
     bag = request.session.get('bag', {})
 
     # Retain existing size if only quantity is adjusted
@@ -132,17 +132,18 @@ def adjust_bag(request, item_id):
     except ProductVariant.DoesNotExist:
         price = product.price  # Use base price if no variant found
 
-    # Use the flat extra service cost from settings for the freshly ground option
+    # Use the flat extra service cost from settings
     flat_service_cost = settings.FRESHLY_GROUND_BEANS if freshly_ground else 0
 
     # Update session bag data
     if quantity > 0:
-        # If the item already exists in the bag, update all details, keeping service cost flat
+        # If  item exists in the bag, update details / keep service cost flat
         if item_id in bag and size in bag[item_id]['items_by_size']:
             item = bag[item_id]['items_by_size'][size]
             item['quantity'] = quantity
             item['price'] = str(price)
-            item['total_extra_service_cost'] = str(flat_service_cost)  # Set flat rate from settings
+            # Set flat rate from settings
+            item['total_extra_service_cost'] = str(flat_service_cost)
             item['freshly_ground'] = freshly_ground
         else:
             # Add the new item with all details, including flat service cost
@@ -156,7 +157,8 @@ def adjust_bag(request, item_id):
                     }
                 }
             }
-        messages.success(request, f'Updated {product.name} quantity to {quantity}')
+        messages.success(
+             request, f'Updated {product.name} quantity to {quantity}')
     else:
         # Remove the item if quantity is zero
         del bag[item_id]['items_by_size'][size]
