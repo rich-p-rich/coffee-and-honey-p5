@@ -242,9 +242,19 @@ Whatever option is chosen, the delivery address is shown on the checkout success
 ![pick-up-confirmed](readme_images/pick-up-confirmation.PNG)  
 
 ## Features not implemented 
-- Function Room
-- Bee hive tour  
+- **Function Room:**
+The function room would be the next feature to implement on this website. It would would be set up like the appointments function in my P4, with fields to capture basic details
+like name, address, time, number of people and type of catering. This would not go through the checkout as payment would be conducted by invoice and bank transfer, and the cafe business would want to speak to the booker before confirming all details. Here is a screenshot from the Wireframe I sketched out: 
 
+![function-room](readme_images/function-room.PNG)  
+
+- **Table reservation:** 
+I wanted to include an option to offer a certain number of tables in the cafe as reservable and thought I could base this on the appointments booking from my P4. It would need date validation, number of people (max 4) and time of arrival. Here is a sketch from my wireframes: 
+
+![table-reserve](readme_images/table-reservation.PNG)  
+
+- **Bee hive tour:**  
+This would have been a limited offer available only 1 day per week, either Saturday or Sunday, from April through to September; there would have been only 1 - 2 slots available on the day, each 10:00 - 11:00, and 11:30 - 12:30; each slot would be limited to 10 participants with a standard price for adults, and discounts for kids and pensioniers. Since this would have involved a charge, it would have needed to go through the checkout. I did not flesh out a wireframe for this, but I will add it when I come to revise this project in the future. I view this as more of a marketing move to generate interest among the local community rather than a source of revenue, but it would be  a nice addition for a local independent business.
 
 # Database and Models
 
@@ -332,10 +342,11 @@ Key among them are:
 
 - The checkout opens with the default shipping address as 'Delivery to friends and family' when I want it to open at 'Ship to billing address' as default. 
 - I cannot get the billing name to prepopulate in the relevant field.
+- The 'save to profile' link does not work for delivery addresses in the checkout. By clicking the checkbox at the end of the delivery fields, the customer should be able to save this address information to their 'saved addresses' page, but this currently does not work.  
 - When the customer chooses 'pickup from cafe' as their preferred shipping option, my code is still transmitting the shipping price of €4.99 to Stripe and charging them for it, even though everything is correct on the frontend. I cannot get to the bottom of this.
 - Finally, when 'pick up' is chose, the checkout success page still itemises the delivery cost as €4.99, even though I have set it as €0.00.
 
-Unfornately, I have had to cut my losses with these bugs as I do not have time to fix them for this MVP.
+Unfornately, I have had to cut my losses with these bugs as I do not have time to fix them for this MVP before submission.
 
 ## Marketing: Facebook, MailChimp and SEO
 
