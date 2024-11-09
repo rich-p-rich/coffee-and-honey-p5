@@ -50,14 +50,16 @@ Since gift-wrapping would be a nice add-on in a future iteration of this project
 I got further into the marketing requirements of this project in the "Marketing: Facebook, MailChimp and SEO" section below.  
 
 ## Key Technology
-Django Web Framework
-Python
-Bootstrap front-end framework, with Bootstrap CSS and JS
-HTML
-CSS
-Javascript
-PostgreSQL supported by the CodeInstitute (https://dbs.ci-dbs.net/)
-Stripe 
+- Django Web Framework
+- Python
+- Bootstrap front-end framework, with Bootstrap CSS and JS
+- HTML
+- CSS
+- Javascript
+- PostgreSQL supported by the CodeInstitute (https://dbs.ci-dbs.net/)
+- Stripe for payment processing
+- Amazon Webservices for hosting product images and static files
+- Heroku for hosting the deployed version of my site 
 
 
 # Overview: Website and Functionality
@@ -109,7 +111,7 @@ The front-end and back-end security is provided by the @login_required decorator
 
 # Design and UX
 
-A PDF of my wireframes is available in the readme_documentation folder: the file is called wireframes.pdf
+A PDF of my wireframes is available in the readme_documentation folder: the file is called wireframes_coffee-and-honey.pdf
 
 ## Design and brand image
 I wanted to create a slightly warm or cosy image, and settled on the 'goldenrod' base colour as a midway point between coffee brown and the different shades of honey.
@@ -123,6 +125,15 @@ I have chosen pictures that transmitted to me a warm and slightly vintage feel w
 
 ## Images on the website
 As I struggled to find product images for the coffee and honey, I used OpenAI's Dall-E image creation functionality to generate product images of coffee and honey appropriate to my website. All other images are from Pexels and have been acknowledged with comments in the code.  
+
+In case I have overseen any in the code, the Pexels images I used are:
+
+pexels-daniel-reche-718241-1556665 : for favicon
+pexels-shottrotter-1309778 : for order coffee image on homepage
+amelia-bartlett-9HajXdvKpIk-unsplash : for honey image on homepage
+pexels-apgpotr-683039 : fir visit us on hompage
+pexels-thngocbich-2362392 : for function room on hompage
+pexels-chris-clark-1933184-12062925 : for 404 page
 
 ## Homepage
 I designed the homepage to make the navigation redundant for customers who know what they want, and who want to checkout as quickly as possible. Particularly on mobile, I wanted the customer to be able to choose their product and checkout via the shortest possible route; therefore the two main product categories are listed at the very top of the page and allow the user to access the products directly, without going via the navigation. The navigation is of course still there and functional, but on mobile and tablet it is hopefully not necessary. 
@@ -241,7 +252,10 @@ Whatever option is chosen, the delivery address is shown on the checkout success
 
 ![pick-up-confirmed](readme_images/pick-up-confirmation.PNG)  
 
-## Features not implemented 
+## Features not implemented
+
+- **Emails and Social Media Account Log-in**: although this was a key aim, I ran out of time to implement the automated email feature and social media account log-in. I will however add my superuser details to the submission, as well as the log-in of an existing regular user, in case the assessors need to verify an account / email for test purchases.
+
 - **Function Room:**
 The function room would be the next feature to implement on this website. It would would be set up like the appointments function in my P4, with fields to capture basic details
 like name, address, time, number of people and type of catering. This would not go through the checkout as payment would be conducted by invoice and bank transfer, and the cafe business would want to speak to the booker before confirming all details. Here is a screenshot from the Wireframe I sketched out: 
@@ -495,19 +509,15 @@ Sign-up to a database provider and get your database link
 As ever, a huge thank you to my mentor, Dick Vlaanderen, who saved me from many errors and made many helpful and creative suggestions. All errors remaining in the site are of course my own responsibility.  Thanks also to the CI Tutoring Team for their help on several occassions which saw me through some challenges! Big thanks to my family, my wife and three kids, who have been very patient and forgiving while I completed this project.
 
 # Some useful resources 
-I relied heavily on the 'I think therefore I blog' walk-through, which was great. Some other resources include the following: 
+I relied heavily on the 'Boutique Ado' walk-through, which was great. Some other resources include the following: 
 - On Forms: https://docs.djangoproject.com/en/5.0/topics/forms/
 - On CSRF: https://docs.djangoproject.com/en/4.2/ref/csrf/
 - AllAuth: https://allauth.org/
 - Installed Apps: https://docs.djangoproject.com/en/1.8/ref/settings/#std:setting-INSTALLED_APPS
 - The Data Attribute: https://www.w3schools.com/tags/att_global_data.asp
-- A model for multi-choice questions: stackoverflow.com/questions/47867760/django-quiz-app-model-for-multiple-choice-questions
 - The bootstrap colours: https://github.com/meetdilip/Bootstrap-5-colours
-- Toggle password visibility: https://www.w3schools.com/howto/howto_js_toggle_password.asp
-- Error message formatting: https://stackoverflow.com/questions/29239837/style-django-form-error-message
 - Bootstrap grids: https://getbootstrap.com/docs/5.0/layout/grid/
-- Custom 404 page: https://stackoverflow.com/questions/35156134/how-to-properly-setup-custom-handler404-in-django
-- Footer Z-Index: https://stackoverflow.com/questions/35156134/how-to-properly-setup-custom-handler404-in-django
+- Custom 404 page: https://stackoverflow.com/questions/35156134/how-to-properly-setup-custom-handler404-in-djang
 
 The documenation for Bootstrap and Django were in general helpful, as was W3Schools:
 - https://docs.djangoproject.com/en/5.1/
