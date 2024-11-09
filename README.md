@@ -298,6 +298,9 @@ This model defines optional service add-ons for products. In this MVP, I’ve in
 
 The Service model is linked to the Product model through a Many-to-Many relationship in a field called extra_services. This setup is important because it allows certain services to be offered only for specific products (e.g., coffee bean grinding should not appear on honey product detail pages). However, other services, like gift-wrapping, could be made available across multiple product categories. This approach is straightforward and supports both scalability and reusability as the product portfolio grows.
 
+# Product Management
+For this MVP, I thought it was enough to manage the creation, editing and deletion of products and services via the admin section using superuser access. I will add these credentials to my submission for the assessors.  
+
 ## The Profile App
 **Recipient Address model:** 
 
@@ -493,6 +496,11 @@ Sign-up to a database provider and get your database link
 - The remove the 'disable static' value from config vars
 - Re-deploy
 
+## AWS and Stripe
+I relied on the walk-though project for the implementation of these, as well as help and advice from the tutoring service. And as shown in the tutor videos:
+- I added my product images to a media file in my AWS bucket
+- I added the deployed version of my app's checkout as an endpoint to Stripe's webhooks
+
 ## Other technologies used
 - Am I responsive for the device image at the top of the ReadMe: [Am I Responsive? (ui.dev](https://ui.dev/amiresponsive)
 - Google Fonts: https://fonts.google.com/: Roboto and Libre Franklin
@@ -506,7 +514,7 @@ Sign-up to a database provider and get your database link
 
 
 # Acknowledgements
-As ever, a huge thank you to my mentor, Dick Vlaanderen, who saved me from many errors and made many helpful and creative suggestions. All errors remaining in the site are of course my own responsibility.  Thanks also to the CI Tutoring Team for their help on several occassions which saw me through some challenges! Big thanks to my family, my wife and three kids, who have been very patient and forgiving while I completed this project.
+As ever, a huge thank you to my mentor, Dick Vlaanderen, who saved me from many errors and made many helpful and creative suggestions. All errors remaining in the site are of course my own responsibility.  Thanks also to the CI Tutoring Team for their help on several occassions which saw me through some challenges! Big thanks to my wife Patricia and three kids, Zacharias, Valerie and Livia who have been very patient and forgiving while I completed this project.
 
 # Some useful resources 
 I relied heavily on the 'Boutique Ado' walk-through, which was great. Some other resources include the following: 
