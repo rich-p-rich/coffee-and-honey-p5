@@ -3,7 +3,7 @@
 ![responsive](readme_images/responsive.PNG)
 
 
-**Link to deployed site:**  https://coffee-and-honey-p5-fc5ef8bcd788.herokuapp.com/
+**Link to deployed site:**  https://coffee-and-honey-p5-fc5ef8bcd788.herokuapp.com/ 
 
 
 ## A note on Testing
