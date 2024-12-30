@@ -41,6 +41,7 @@ ALLOWED_HOSTS = ['https://8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstit
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost',
     'https://8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net',  # noqa
+    'https://8000-richprich-coffeeandhone-mqbn4aejdcg.ws.codeinstitute-ide.net/accounts/login/' # noqa
     'https://*.gitpod.io',
     'https://*.herokuapp.com',
     'https://8000-richprich-englishtutord-94zz8190n00.ws.codeinstitute-ide.net',  # noqa
