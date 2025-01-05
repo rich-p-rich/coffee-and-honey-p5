@@ -9,6 +9,9 @@
 ## A note on Testing
 I have separated the results of my site testing into a different file called Test Results that covers lighthouse testing, code validators and a detailed overview of the site's functionality here: [Test Results](test-results.md).
 
+## Resubmission
+Unfortunately, I failed my first attempt at this project; I failed criteria 1.7 and 4.1, which meant that 4.3, 4.4 and 4.6 could not be assessed. I have added an overview of my fixes to these criteria to the end of this ReadMe.  
+
 ## Why 'Coffee and Honey', and what is it?
 
 One of my hobbies is beekeeping, and I briefly considered setting up a website that sells beekeeping equipment; however, I thought there are more possibilities in cafe-style business, such as bookings (tables, function room and hive-tours) than in a straight-forward e-commerce shop, so decided to merge my two ideas and interests. This has some parallels in real-life: many bakeries where I live in southern Germany sell jars of honey from local beekeepers (although these bakeries do not usually have an online presence) and I thought that would be an interesting add-on to the type of coffee shops that are familiar to me from England and Ireland.  
@@ -438,6 +441,36 @@ Similarly, I used Milestones to keep track of the bigger picture throughout my p
 - Milestone 8: site testing, documentation of results, complete ReadMe
 
 This helped me break down the tasks into what felt were realistic and unified goals; like the rest of the Kanban board, it felt a genuine part of my project planning and I made regular updates to it.  
+
+# Resubmission 
+As mentioned above, I failed my first attempt at this project based on criteria 1.7 and 4.1; it was not possible to test 4.3, 4.4 and 4.6 given the problems with 4.1. Here is an overview of my fixes:
+- 1.7. Problem: broken 'Bookings' link in the navbar. 
+    - Solution: I have removed that link altogether. I originally included it to show the scope of the site, but clicking on it just refreshed the page. As the 'Bookings' page is not ready, I have removed the link. 
+
+- 4.1. Problem: new users cannot register
+    - Solution: I have implemented a verification by email functionality by linking a gmail account set up for this purpose. 
+    - When the user registers, he or she will receive a verification email sent to their email address. 
+    - By clicking on this link, the user is taken to a 'confirmation page'; the user is invited to click 'confirm', at which point the email address is verified. 
+    - The account is now validated, and the new user can log in as required.
+
+- 4.3. Could not be assessed: prevent non-admin users from acessing the data store.
+    - Solution: admin level credentials are required to access the admin section, which is where I implemented the product management.
+    - The default role given to anyone signing up is customer; when the customer has verified their account and signs in, he or she can access ony their own data.
+    - Testing: it is only possible to access admin with super-user credentials. It is not possible to access admin with, for example, customer credentials. 
+
+- 4.4. Could not be assessed: apply role-based login and registration functionality
+    - Solution: users are assigned the 'customer' role during registration, as per the built-in Django system. 
+    - It is only possible to access the admin with super-user access 
+    - Super-users can access the admin account, where they can add, delete or modify products, product variants and prices, as well as user details
+
+- 4.6. Could not be assessed: use role-based log to determine whether users are allowed to access restricted content
+    - Solution: access to profile details and order history are only available to registered users who are verified and logged-in; access to admin is available only to users with super-user credentials. 
+    - Users who are not logged in, or who purchase as a guest user, cannot access any account details, including order history and address book. 
+    - Customers who are logged in can access only their own order history and address book  
+    - Any user logging in with a customer account cannot access the admin section at all; super-user credentials are required for this 
+
+## Resubmission: backlog
+I added a separate column to the backlog for this resubmission to clarify exactly what I changed in order to fulfil the missing criteria. This column is called 'Done: resubmission.' The functionality for 4.3, 4.4 and 4.6 was already present, but as I did not fulfil 4.1 properly in my original submission, it could not be seen. 
 
 # Deployment
 
