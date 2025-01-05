@@ -6,11 +6,11 @@
 **Link to deployed site:**  https://coffee-and-honey-p5-fc5ef8bcd788.herokuapp.com/ 
 
 
-## A note on Testing
+## A Note on Testing
 I have separated the results of my site testing into a different file called Test Results that covers lighthouse testing, code validators and a detailed overview of the site's functionality here: [Test Results](test-results.md).
 
 ## Resubmission
-Unfortunately, I failed my first attempt at this project; I failed criteria 1.7 and 4.1, which meant that 4.3, 4.4 and 4.6 could not be assessed. I have added an overview of my fixes to these criteria to the end of this ReadMe.  
+I failed criteria 1.7 and 4.1, hence this resubmission. Additionally, my failure at 4.1 means that 4.3, 4.4 and 4.6 could not be assessed. I have added an overview of my fixes to these criteria to the end of this ReadMe.  
 
 ## Why 'Coffee and Honey', and what is it?
 
