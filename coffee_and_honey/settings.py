@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", '')
 # SECURITY WARNING: don't run with debug turned on in production!
 # Debug is True for Gitpod and dev
 # Debug is False for production and submission
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['https://8000-richprich-coffeeandhone-vdd3sltlmyu.ws.codeinstitute-ide.net',  # noqa
                 '8000-richprich-coffeeandhone-mqbn4aejdcg.ws.codeinstitute-ide.net', # noqa
