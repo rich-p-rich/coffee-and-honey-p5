@@ -9,9 +9,6 @@
 ## A Note on Testing
 I have separated the results of my site testing into a different file called Test Results that covers lighthouse testing, code validators and a detailed overview of the site's functionality here: [Test Results](test-results.md).
 
-## Resubmission
-I failed criteria 1.7 and 4.1, hence this resubmission. Additionally, my failure at 4.1 means that 4.3, 4.4 and 4.6 could not be assessed. I have added an overview of my fixes to these criteria to the end of this ReadMe.  
-
 ## Why 'Coffee and Honey', and what is it?
 
 One of my hobbies is beekeeping, and I briefly considered setting up a website that sells beekeeping equipment; however, I thought there are more possibilities in cafe-style business, such as bookings (tables, function room and hive-tours) than in a straight-forward e-commerce shop, so decided to merge my two ideas and interests. This has some parallels in real-life: many bakeries where I live in southern Germany sell jars of honey from local beekeepers (although these bakeries do not usually have an online presence) and I thought that would be an interesting add-on to the type of coffee shops that are familiar to me from England and Ireland.  
